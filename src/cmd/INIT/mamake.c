@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *               This software is part of the ast package               *
-*          Copyright (c) 1994-2011 AT&T Intellectual Property          *
+*          Copyright (c) 1994-2013 AT&T Intellectual Property          *
 *                      and is licensed under the                       *
 *                 Eclipse Public License, Version 1.0                  *
 *                    by AT&T Intellectual Property                     *
@@ -25,7 +25,7 @@
  * coded for portability
  */
 
-static char id[] = "\n@(#)$Id: mamake (AT&T Research) 2011-08-31 $\0\n";
+static char id[] = "\n@(#)$Id: mamake (AT&T Research) 2013-04-29 $\0\n";
 
 #if _PACKAGE_ast
 
@@ -33,7 +33,7 @@ static char id[] = "\n@(#)$Id: mamake (AT&T Research) 2011-08-31 $\0\n";
 #include <error.h>
 
 static const char usage[] =
-"[-?\n@(#)$Id: mamake (AT&T Research) 2011-08-31 $\n]"
+"[-?\n@(#)$Id: mamake (AT&T Research) 2013-04-29 $\n]"
 USAGE_LICENSE
 "[+NAME?mamake - make abstract machine make]"
 "[+DESCRIPTION?\bmamake\b reads \amake abstract machine\a target and"
@@ -1614,7 +1614,7 @@ make(Rule_t* r)
 			continue;
 		case KEY('d','o','n','e'):
 			q = rule(expand(buf, t));
-			if (q != r)
+			if (q != r && t[0] != '$')
 				report(2, "improper done statement", t, (unsigned long)0);
 			attributes(r, v);
 			if (cmd && state.active && (state.force || r->time < z || !r->time && !z))

@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -1150,7 +1150,7 @@ static int terminit(Pfd_t *fdp)
 #endif
 	if(device_open(blkno,in,fdp,out)<0)
 		return(-1);
-	while(--count>0)
+	while(count-->0)
 		InterlockedIncrement(&pdev->count);
 	return(0);
 }

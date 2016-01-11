@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -192,9 +192,9 @@ static void logfd(int level, const char *msg, Pproc_t *pp, int fd)
 	else
 		name = "UNKNOWN";
 	if(pp==P_CP)
-		logmsg(level, "%s: fd=%d noclose=%d type=%(fdtype)s slot=%d handle=%p ref=%d devno=%d oflag=0x%x maxfd=%d name=%s", msg, fd, pp!=P_CP, fdp->type, slot, Phandle(fd), fdp->refcount, fdp->devno, fdp->oflag, pp->maxfds, name);
+		logmsg(level, "%s: fd=%d noclose=%d type=%(fdtype)s fdp=%d handle=%p ref=%d devno=%d oflag=0x%x maxfd=%d name=%s", msg, fd, pp!=P_CP, fdp->type, slot, Phandle(fd), fdp->refcount, fdp->devno, fdp->oflag, pp->maxfds, name);
 	else
-		logmsg(level, "%s: fd=%d noclose=%d type=%(fdtype)slot=%d ref=%d devno=%d oflag=0x%x maxfd=%d fname='%s' pname='%s'", msg, fd, pp!=P_CP, fdp->type, slot, fdp->refcount, fdp->devno, fdp->oflag, pp->maxfds, name, pp->prog_name);
+		logmsg(level, "%s: fd=%d noclose=%d type=%(fdtype)s fdp=%d ref=%d devno=%d oflag=0x%x maxfd=%d fname='%s' pname='%s'", msg, fd, pp!=P_CP, fdp->type, slot, fdp->refcount, fdp->devno, fdp->oflag, pp->maxfds, name, pp->prog_name);
 }
 
 int fdpclose(register Pfd_t *fdp)
@@ -207,7 +207,7 @@ int fdpclose(register Pfd_t *fdp)
 		index = fdp->index;
 		if(type>=FDTYPE_NONE)
 		{
-			logmsg(0, "fdpclose2 slot=%d type=%(fdtype)s index=%d xxslot=%d", file_slot(fdp), type, index, fdp->extra16[0]);
+			logmsg(0, "fdpclose2 fdp=%d type=%(fdtype)s index=%d xxslot=%d", file_slot(fdp), type, index, fdp->extra16[0]);
 
 			return(-1);
 		}
@@ -223,10 +223,10 @@ int fdpclose(register Pfd_t *fdp)
 			if((t=(Blocktype[index]&BLK_MASK))==BLK_FILE || t==BLK_DIR)
 				block_free(index);
 			else
-				logmsg(0, "fdpclose3 r=%d index=%d type=%(fdtype)s slot=%d btype=%x otype=%d btype=%x", r, index, type, file_slot(fdp), Blocktype[index]&BLK_MASK, Blocktype[index]>>4, Blocktype[index]);
+				logmsg(0, "fdpclose3 fdp=%d ref=%d index=%d type=%(fdtype)s btype=%x otype=%d btype=%x", file_slot(fdp), r, index, type, Blocktype[index]&BLK_MASK, Blocktype[index]>>4, Blocktype[index]);
 		}
 		if(r< -1)
-			logmsg(0, "fdpclose ref=%d index=%d type=%(fdtype)s slot=%d", r, index, type, file_slot(fdp));
+			logmsg(0, "fdpclose fdp=%d ref=%d index=%d type=%(fdtype)s", file_slot(fdp), r, index, type);
 		fdp->index = 0;
 		fdp->type = FDTYPE_NONE;
 		fdp->refcount = -1;
@@ -248,7 +248,7 @@ static int pclose(register Pproc_t *pp, int fd, int noclose)
 			fdp = 0;
 			if(ret < Share->nfiles)
 				fdp = getfdp(pp,fd);
-			logmsg(0, "pclose invalid_fd slot=%d fd=%d type=%(fdtype)s ref=%d oflag=0x%x fname='%s' pid=%x-%d maxfd=%d name='%s'", ret, fd, fdp?fdp->type:FDTYPE_NONE, fdp?fdp->refcount:-2, fdp?fdp->oflag:0xdead, fdp?((char*)block_ptr(fdp->index)):"UNKNOWN", pp->ntpid, pp->pid, pp->maxfds, pp->prog_name);
+			logmsg(0, "pclose invalid_fd fd=%d fdp=%d type=%(fdtype)s ref=%d oflag=0x%x fname='%s' pid=%x-%d ppid=%d maxfd=%d name='%s'", fd, ret, fdp?fdp->type:FDTYPE_NONE, fdp?fdp->refcount:-2, fdp?fdp->oflag:0xdead, fdp?((char*)block_ptr(fdp->index)):"UNKNOWN", pp->ntpid, pp->pid, pp->ppid, pp->maxfds, pp->prog_name);
 			setfdslot(pp,fd,-1);
 		}
 		errno = EBADF;
@@ -264,15 +264,15 @@ static int pclose(register Pproc_t *pp, int fd, int noclose)
 		{
 			SetLastError(0);
 			if(ret=WaitForSingleObject(hp,1000)!=WAIT_OBJECT_0)
-				logerr(0, "ret=%d pclose WaitForSingleObject: %s fd=%d fdp_slot=%d type=%(fdtype)s ref=%d oflag=%d fname=%s pslot=%d pid=%x-%d name=%s cmd=%s", name, fd, file_slot(fdp), fdp->type, fdp->refcount, fdp->oflag, (char*)block_ptr(fdp->index), proc_slot(pp), pp->ntpid, pp->pid, pp->prog_name, pp->cmd_line);
+				logerr(0, "ret=%d pclose WaitForSingleObject: %s fd=%d fdp=%d type=%(fdtype)s ref=%d oflag=%d fname=%s pslot=%d pid=%x-%d name=%s cmd=%s", name, fd, file_slot(fdp), fdp->type, fdp->refcount, fdp->oflag, (char*)block_ptr(fdp->index), proc_slot(pp), pp->ntpid, pp->pid, pp->prog_name, pp->cmd_line);
 		}
 		else
-			logerr(0, "pclose CreateMutex %s failed: fd=%d fdp_slot=%d type=%(fdtype)s ref=%d oflag=%d fname=%s pslot=%d pid=%x-%d name=%s cmd=%s", name, fd, file_slot(fdp), fdp->type, fdp->refcount, fdp->oflag, (char*)block_ptr(fdp->index), proc_slot(pp), pp->ntpid, pp->pid, pp->prog_name, pp->cmd_line);
+			logerr(0, "pclose CreateMutex %s failed: fd=%d fdp=%d type=%(fdtype)s ref=%d oflag=%d fname=%s pslot=%d pid=%x-%d name=%s cmd=%s", name, fd, file_slot(fdp), fdp->type, fdp->refcount, fdp->oflag, (char*)block_ptr(fdp->index), proc_slot(pp), pp->ntpid, pp->pid, pp->prog_name, pp->cmd_line);
 	}
 
 	if(fdslot(pp,fd) < 0)
 	{
-		logmsg(0, "close %d slot=%d pid=%x-%d maxfd=%d name='%s'", fd, fdslot(pp, fd), pp->ntpid, pp->pid, pp->maxfds,pp->prog_name);
+		logmsg(0, "close %d fdp=%d pid=%x-%d maxfd=%d name='%s'", fd, fdslot(pp, fd), pp->ntpid, pp->pid, pp->maxfds,pp->prog_name);
 		ret = -1;
 		goto done;
 	}
@@ -383,7 +383,15 @@ static int _Dup2(int fd, int fd2)
 		resetcloexec(newfd);
 		incr_refcount(fdp);
 		Phandle(newfd) = Fs_dup(fd,fdp,&Xhandle(newfd),1);
-		sethandle(fdp,newfd);
+		if (Phandle(newfd))
+			sethandle(fdp,newfd);
+		else
+		{
+			decr_refcount(fdp);
+			setfdslot(P_CP, newfd, -1);
+			newfd = -1;
+			errno = EINVAL;
+		}
 	}
 	else
 		errno = EMFILE;
@@ -655,7 +663,7 @@ int fstat(int fd, struct stat *st)
 		if(st->st_blksize == 0)
 		{
 			st->st_blksize = 8192;
-			st->st_blocks = (st->st_size+511) >> 9;
+			st->st_blocks = (long)((ST_SIZE(st)+511) >> 9);
 		}
 		st->st_reserved = fdp->mnt;
 		if(osp)
@@ -723,7 +731,7 @@ ssize_t write(int fd, char *buf, size_t nbyte)
 		return(-1);
 	}
 	if (fdp->type == FDTYPE_DIR)
-		logmsg(LOG_IO+3, "writable_dir slot=%d fd=%d ref=%d oflag=0x%x net=0x%x index=%d fname='%s'",file_slot(fdp), fd, fdp->refcount, fdp->oflag, fdp->socknetevents, fdp->index, (fdp->index?((char*)block_ptr(fdp->index)):"UNKNOWN"));
+		logmsg(LOG_IO+3, "writable_dir fdp=%d fd=%d ref=%d oflag=0x%x net=0x%x index=%d fname='%s'",file_slot(fdp), fd, fdp->refcount, fdp->oflag, fdp->socknetevents, fdp->index, (fdp->index?((char*)block_ptr(fdp->index)):"UNKNOWN"));
 	sigdefer(1);
 	if(fdp->oflag&O_APPEND)
 	{
@@ -904,7 +912,7 @@ int fdfindslot(void)
 			if(Pfdtab[i].index || Pfdtab[i].type != FDTYPE_NONE)
 			{
 				if(Pfdtab[i].index || Pfdtab[i].type<FDTYPE_NONE)
-					logmsg(0, "findslot slot=%d index=%d type=%(fdtype)s xxslot=%d", i, Pfdtab[i].index, Pfdtab[i].type,  Pfdtab[i].extra16[0]);
+					logmsg(0, "findslot fdp=%d index=%d type=%(fdtype)s xxslot=%d", i, Pfdtab[i].index, Pfdtab[i].type,  Pfdtab[i].extra16[0]);
 				continue;
 			}
 			Pfdtab[i].type = FDTYPE_INIT;
@@ -918,7 +926,7 @@ int fdfindslot(void)
 		if(InterlockedDecrement(lp)<0 && ((x=Pfdtab[i].index)>0 || Pfdtab[i].type!=FDTYPE_NONE))
 		{
 			if(Pfdtab[i].type!=FDTYPE_NONE)
-				logmsg(0, "findslot2 slot=%d cnt=%d index=%d type=%(fdtype)s xxslot=%d", i, *lp, x, Pfdtab[i].type, Pfdtab[i].extra16[0]);
+				logmsg(0, "findslot2 fdp=%d cnt=%d index=%d type=%(fdtype)s xxslot=%d", i, *lp, x, Pfdtab[i].type, Pfdtab[i].extra16[0]);
 			else if(x)
 			{
 				Pfdtab[i].index = 0;

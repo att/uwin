@@ -2,7 +2,7 @@
 
 USAGE=$'
 [-1p0s8U?
-@(#)$Id: uwin-base (AT&T Research) 2012-07-25 $
+@(#)$Id: uwin-base (AT&T Research) 2012-08-08 $
 ]
 '$USAGE_LICENSE$'
 [+NAME?uwin-base - base UWIN binary installation sear]
@@ -34,6 +34,9 @@ USAGE=$'
     the \asear\a into the new UWIN instance. It then passes control to
     \bphase2\b which executes in the new UWIN instance and re-starts the
     UWIN master service.]
+[+?If \bphase1.sh\b or \bphase2.sh\b are run directly then they must be
+    called with these argument appended:: \a-- package release version\a,
+    e.g., \auwin-base M.m YYYY-MM-DD\a.]
 [+?Files currently open or in use by any process in windows (e.g.,
     \b.dll\b and \b.exe\b files) cannot be modified in any way. The
     \bphase1\b => \bphase2\b dance ensures that UWIN installation
@@ -52,7 +55,7 @@ USAGE=$'
 [17:root|Root?The UWIN instance root directory.]:[directory]
 [18:trace?Set the phase1 uwin log debug trace level to \alevel\a.]:[level]
 
-[ name[=value] ... ] package release version
+[ name[=value] ... ]
 
 [+FILES]
     {
@@ -249,7 +252,7 @@ do	case $OPT in
 done
 shift $OPTIND-1
 if	(( $# != 3 ))
-then	err_exit "[ option ... -- ] <package> <release> <version> operands expected"
+then	err_exit "[ option ... -- ] <package> <release> <version> operands expected [ $#" "$*" "]"
 fi
 [[ $SHELL == /ksh ]] || err_exit "A failed UWIN installation init.exe may be running -- kill it and try to install again."
 

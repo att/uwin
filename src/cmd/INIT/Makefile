@@ -47,7 +47,6 @@ $(LIBDIR)/make :INSTALLDIR: package.mk PROBE.mk TEST.mk WWW.mk \
 cc ld ldd :PACKAGE_INIT: mamake.c proto.c ratz.c release.c
 
 :: RELEASE hosttype.tst p.c hello.c \
-	ar.ibm.risc \
 	cc.specialize cc.pentium4 \
 	ldd.cygwin.i386 \
 	cc.darwin.i386 cc.darwin.i386-64 cc.darwin ldd.darwin \

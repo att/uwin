@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -1283,11 +1283,15 @@ int connect(int fd, struct sockaddr *addr, int addrlen)
 #define WSANO_RECOVERY		(WSABASEERR+1003)
 #define WSANO_DATA		(WSABASEERR+1004)
 #endif /* !WSAEINVAL */
-struct err_map {
+
+struct err_map
+{
 	int eai_err;
 	int win_err;
 	char *eai_str;
-} err_map[] = {
+}
+err_map[] =
+{
 	{ EAI_AGAIN, WSATRY_AGAIN, "temporary failure in name resolution" },
 	{ EAI_BADFLAGS, WSAEINVAL , "invalid flags or parameters" },
 	{ EAI_FAIL, WSANO_RECOVERY, "non-recoverable failure in name resolution" },
@@ -1736,26 +1740,32 @@ inet_pton4(const char *src, u_char *dst)
 	saw_digit = 0;
 	octets = 0;
 	*(tp = tmp) = 0;
-	while ((ch = *src++) != 0) {
+	while ((ch = *src++) != 0)
+	{
 		const char *pch;
 
-		if ((pch = strchr(digits, ch)) != NULL) {
+		if ((pch = strchr(digits, ch)) != NULL)
+		{
 			u_int new = *tp * 10 + (int)(pch - digits);
 
 			if (new > 255)
 				return (0);
-			if (! saw_digit) {
+			if (! saw_digit)
+			{
 				if (++octets > 4)
 					return (0);
 				saw_digit = 1;
 			}
 			*tp = new;
-		} else if (ch == '.' && saw_digit) {
+		}
+		else if (ch == '.' && saw_digit)
+		{
 			if (octets == 4)
 				return (0);
 			*++tp = 0;
 			saw_digit = 0;
-		} else
+		}
+		else
 			return (0);
 	}
 	if (octets < 4)
@@ -1798,12 +1808,14 @@ inet_pton6(const char *src, u_char *dst)
 	curtok = src;
 	saw_xdigit = count_xdigit = 0;
 	val = 0;
-	while ((ch = *src++) != 0) {
+	while ((ch = *src++) != 0)
+	{
 		const char *pch;
 
 		if ((pch = strchr((xdigits = xdigits_l), ch)) == NULL)
 			pch = strchr((xdigits = xdigits_u), ch);
-		if (pch != NULL) {
+		if (pch != NULL)
+		{
 			if (count_xdigit >= 4)
 				return (0);
 			val <<= 4;
@@ -1814,14 +1826,18 @@ inet_pton6(const char *src, u_char *dst)
 			count_xdigit++;
 			continue;
 		}
-		if (ch == ':') {
+		if (ch == ':')
+		{
 			curtok = src;
-			if (!saw_xdigit) {
+			if (!saw_xdigit)
+			{
 				if (colonp)
 					return (0);
 				colonp = tp;
 				continue;
-			} else if (*src == 0) {
+			}
+			else if (*src == 0)
+			{
 				return (0);
 			}
 			if (tp + sizeof(int16_t) > endp)
@@ -1833,8 +1849,8 @@ inet_pton6(const char *src, u_char *dst)
 			val = 0;
 			continue;
 		}
-		if (ch == '.' && ((tp + INET_ADDRSZ) <= endp) &&
-		    inet_pton4(curtok, tp) > 0) {
+		if (ch == '.' && ((tp + INET_ADDRSZ) <= endp) && inet_pton4(curtok, tp) > 0)
+		{
 			tp += INET_ADDRSZ;
 			saw_xdigit = 0;
 			count_xdigit = 0;
@@ -1842,13 +1858,15 @@ inet_pton6(const char *src, u_char *dst)
 		}
 		return (0);
 	}
-	if (saw_xdigit) {
+	if (saw_xdigit)
+	{
 		if (tp + sizeof(int16_t) > endp)
 			return (0);
 		*tp++ = (u_char) (val >> 8) & 0xff;
 		*tp++ = (u_char) val & 0xff;
 	}
-	if (colonp != NULL) {
+	if (colonp != NULL)
+	{
 		/*
 		 * Since some memmove()'s erroneously fail to handle
 		 * overlapping regions, we'll do the shift by hand.
@@ -1856,7 +1874,8 @@ inet_pton6(const char *src, u_char *dst)
 		const int n = (int)(tp - colonp);
 		int i;
 
-		for (i = 1; i <= n; i++) {
+		for (i = 1; i <= n; i++)
+		{
 			endp[- i] = colonp[n - i];
 			colonp[n - i] = 0;
 		}
@@ -1890,7 +1909,8 @@ int inet_pton(int af, const char *src, void *dst)
 	else if (init_pton)	/* Not implemented by windows do it ourselves */
 #else
 	{
-		switch (af) {
+		switch (af)
+		{
 		case AF_INET:
 			return inet_pton4(src, dst);
 		case AF_INET6:
@@ -1924,7 +1944,8 @@ inet_ntop4(const u_char *src, char *dst, size_t size)
 	ssize_t l;
 
 	l = sfsprintf(tmp, size, fmt, src[0], src[1], src[2], src[3]);
-	if (l <= 0 || l >= (int)size) {
+	if (l <= 0 || l >= (int)size)
+	{
 		errno = ENOSPC;
 		return (NULL);
 	}
@@ -1965,21 +1986,27 @@ inet_ntop6(const u_char *src, char *dst, size_t size)
 		words[i / 2] |= (src[i] << ((1 - (i % 2)) << 3));
 	best.base = -1;
 	cur.base = -1;
-	for (i = 0; i < (INET6_ADDRSZ / sizeof(int16_t)); i++) {
-		if (words[i] == 0) {
+	for (i = 0; i < (INET6_ADDRSZ / sizeof(int16_t)); i++)
+	{
+		if (words[i] == 0)
+		{
 			if (cur.base == -1)
 				cur.base = i, cur.len = 1;
 			else
 				cur.len++;
-		} else {
-			if (cur.base != -1) {
+		}
+		else
+		{
+			if (cur.base != -1)
+			{
 				if (best.base == -1 || cur.len > best.len)
 					best = cur;
 				cur.base = -1;
 			}
 		}
 	}
-	if (cur.base != -1) {
+	if (cur.base != -1)
+	{
 		if (best.base == -1 || cur.len > best.len)
 			best = cur;
 	}
@@ -1991,11 +2018,14 @@ inet_ntop6(const u_char *src, char *dst, size_t size)
 	 */
 	tp = tmp;
 	ep = tmp + sizeof(tmp);
-	for (i = 0; i < (INET6_ADDRSZ / sizeof(int16_t)) && tp < ep; i++) {
+	for (i = 0; i < (INET6_ADDRSZ / sizeof(int16_t)) && tp < ep; i++)
+	{
 		/* Are we inside the best run of 0x00's? */
 		if (best.base != -1 && i >= best.base &&
-		    i < (best.base + best.len)) {
-			if (i == best.base) {
+		    i < (best.base + best.len))
+		    {
+			if (i == best.base)
+			{
 				if (tp + 1 >= ep)
 					return (NULL);
 				*tp++ = ':';
@@ -2003,14 +2033,16 @@ inet_ntop6(const u_char *src, char *dst, size_t size)
 			continue;
 		}
 		/* Are we following an initial run of 0x00s or any real hex? */
-		if (i != 0) {
+		if (i != 0)
+		{
 			if (tp + 1 >= ep)
 				return (NULL);
 			*tp++ = ':';
 		}
 		/* Is this address an encapsulated IPv4? */
 		if (i == 6 && best.base == 0 &&
-		    (best.len == 6 || (best.len == 5 && words[5] == 0xffff))) {
+		    (best.len == 6 || (best.len == 5 && words[5] == 0xffff)))
+		    {
 			if (!inet_ntop4(src+12, tp, (size_t)(ep - tp)))
 				return (NULL);
 			tp += (int)strlen(tp);
@@ -2022,7 +2054,8 @@ inet_ntop6(const u_char *src, char *dst, size_t size)
 		tp += advance;
 	}
 	/* Was it a trailing run of 0x00's? */
-	if (best.base != -1 && (best.base + best.len) == (INET6_ADDRSZ / sizeof(int16_t))) {
+	if (best.base != -1 && (best.base + best.len) == (INET6_ADDRSZ / sizeof(int16_t)))
+	{
 		if (tp + 1 >= ep)
 			return (NULL);
 		*tp++ = ':';
@@ -2034,7 +2067,8 @@ inet_ntop6(const u_char *src, char *dst, size_t size)
 	/*
 	 * Check for overflow, copy, and we're done.
 	 */
-	if ((size_t)(tp - tmp) > size) {
+	if ((size_t)(tp - tmp) > size)
+	{
 		errno = ENOSPC;
 		return (NULL);
 	}
@@ -3317,7 +3351,9 @@ ssize_t recvmsg(int fd, struct msghdr* msg, int flags)
 				return -1;
 			}
 		}
-	} else {
+	}
+	else
+	{
 		acc.header.ntpid=acc.header.nfds=0;
 	}
 	for (i = 0; i < msg->msg_iovlen; i++)
@@ -3516,9 +3552,9 @@ ssize_t sendmsg(int fd, struct msghdr* msg, int flags)
 			errno = EBADMSG;
 			goto bad;
 		}
-	} else {
-		acc.header.ntpid=acc.header.nfds=0;
 	}
+	else
+		acc.header.ntpid=acc.header.nfds=0;
 	if (datalen > 0)
 	{
 		offset = 0;
@@ -3628,12 +3664,14 @@ int shutdown(int fd, int how)
 		if(fdp->sigio)
 		{
 			Pfdtab[fdp->sigio-2].socknetevents |=FD_CLOSE;
-			if(Pfdtab[fdp->sigio-2].socknetevents&(1<<7))
+			if(Pfdtab[fdp->sigio-2].socknetevents&FD_BLOCK)
 			{
 				if(!SetEvent(hp))
 					logerr(0, "SetEvent");
 			}
 		}
+		/* Signal other end of pipe that this side has closed */
+		pipewakeup(fd,fdp,NULL,NULL,FD_CLOSE,0);
 		return(0);
 	}
 

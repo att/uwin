@@ -517,6 +517,7 @@ extern Pproc_t *proc_create(DWORD);
 extern ssize_t get_uwin_slots(Pproc_t*, int, HANDLE);
 extern int proc_active(Pproc_t*);
 extern Pproc_t *proc_init(DWORD,int);
+extern void proc_uninit(Pproc_t*);
 extern Pproc_t *proc_locked(pid_t);
 extern Pproc_t *proc_getlocked(pid_t, int);
 extern Pproc_t *proc_ntgetlocked(DWORD, int);
@@ -529,7 +530,6 @@ extern void proc_reparent(Pproc_t*,int);
 extern void proc_setntpid(Pproc_t*,DWORD);
 extern void proc_setcmdline(Pproc_t*,char *const[]);
 extern Procfile_t* procfile(char*, int, int*, int*, int*, unsigned int*);
-extern HANDLE procselect(int, Pfd_t*, int, HANDLE);
 extern int proc_tty(Pproc_t*, int, char*, size_t);
 extern void reset_winsock(void);	/* winsock cleanup */
 extern int is_administrator(void);

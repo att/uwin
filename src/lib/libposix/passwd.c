@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2011 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -29,7 +29,7 @@
  * AT&T Labs
  */
 
-static const char id_passwd[] = "\n@(#)passwd (AT&T Labs) 2011-02-24\0\n";
+static const char id_passwd[] = "\n@(#)passwd (AT&T Labs) 2012-12-12\0\n";
 
 #define getpwnam_r	___getpwnam_r
 #define getgrnam_r	___getgrnam_r
@@ -69,7 +69,7 @@ typedef struct Fmap_s
 	char		type;
 	char		mem;
 	size_t		lsize;
-	off_t		fsize;
+	ssize_t		fsize;
 	char*		first;
 	char*		current;
 	const char*	filename;
@@ -246,7 +246,7 @@ static void* fmopen(register Fmap_t* fp)
 	}
 	if (fstat(fp->fd, &statb) < 0)
 		goto drop;
-	if (fp->first && fp->fsize < statb.st_size)
+	if (fp->first && fp->fsize < ST_SIZE(&statb))
 	{
 		if (fp->mem)
 		{
@@ -257,7 +257,7 @@ static void* fmopen(register Fmap_t* fp)
 			munmap((void*)fp->first, fp->fsize);
 		fp->first = 0;
 	}
-	fp->fsize = statb.st_size;
+	fp->fsize = (ssize_t)ST_SIZE(&statb);
 	if (!fp->first)
 	{
 		if (!fp->fsize)

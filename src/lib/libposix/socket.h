@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -249,6 +249,7 @@ typedef struct _WSAQuerySetA
 #define FD_CONNECT	(1 << 4)
 #define FD_CLOSE	(1 << 5)
 #define FD_QOS		(1 << 6)
+#define FD_BLOCK	(1 << 7)
 #define FD_GROUP_QOS	(1 << 7)
 #define FD_ROUTING_INTERFACE_CHANGE (1 << 8)
 #define FD_ADDRESS_LIST_CHANGE (1 << 9)

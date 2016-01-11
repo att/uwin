@@ -1229,15 +1229,14 @@ ssize_t logsrc(int level, const char* file, int line, const char* format, ...)
 			cur = end;
 		*cur++ = '\r';
 		*cur++ = '\n';
-		if (Share && Share->backlog > 0)
+		if (Share && Share->backlog)
+			Sleep(500);
+		if (!Share || !Share->backlog)
 		{
-			Sleep(400);
-			if (Share->backlog > 0)
-				Share->backlog = 0;
+			logwrite(buf, (int)(cur - buf));
+			if (Share && !Share->backlog && (sz = GetFileSize(state.log, &hz)) != INVALID_FILE_SIZE && sz > (LOGCHUNK_OLD + 2 * LOGCHUNK_NEW))
+				logback(level);
 		}
-		logwrite(buf, (int)(cur - buf));
-		if (Share && !Share->backlog && (sz = GetFileSize(state.log, &hz)) != INVALID_FILE_SIZE && sz > (LOGCHUNK_OLD + 2 * LOGCHUNK_NEW))
-			logback(level);
 	}
 	SetLastError(err);
 	return (ssize_t)(cur - buf);

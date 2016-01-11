@@ -902,7 +902,7 @@ void  proc_orphan(pid_t parent)
 		 * any stopped children send SIGHUP followed by a
 		 * SIGCONT signal
 		 */
-		//logmsg(LOG_PROC+3,"orphan slot=%d pid=%x-%d state=%(state)s",proc_slot(proc),proc->ntpid,proc->pid,proc->state);
+		//logmsg(LOG_PROC+3,"orphan slot=%d pid=%x-%d ppid=%d state=%(state)s",proc_slot(proc),proc->ntpid,proc->pid,proc->ppid,proc->state);
 		if (proc->ppid==P_CP->pid)
 			ph2 = proc->ph;
 		else
@@ -1298,7 +1298,7 @@ int sendsig(register Pproc_t *pp,int sig)
 		UWIN_EVENT_S(ename, pp->ntpid);
 		if(!(hp=OpenEvent(EVENT_MODIFY_STATE|SYNCHRONIZE,FALSE,ename)))
 		{
-			logerr(0, "OpenEvent %s sevent=%04x sig=%d failed", ename, pp->sevent, sig);
+			logerr(0, "OpenEvent %s sevent=%04x sig=%d failed state=%(state)s name=%s", ename, pp->sevent, sig, pp->state, pp->prog_name);
 			if(sig==SIGKILL)
 				r = terminate_proc((DWORD)pp->ntpid, sig);
 			else
@@ -1751,6 +1751,7 @@ Pproc_t *proc_init(DWORD ntpid, int inexec)
 	proc->test = pproc->test;
 	proc->wow = pproc->wow;
 	proc->type = pproc->type & PROCTYPE_ISOLATE;
+	proc->ntpid = ntpid; /* needed for proc_ununit() */
 	if((proc->curdir=pproc->curdir) >=0)
 	{
 		int ref,ocurdir;
@@ -1761,7 +1762,7 @@ Pproc_t *proc_init(DWORD ntpid, int inexec)
 			setcurdir(-1, 0, 0, 0);
 			if((proc->curdir=pproc->curdir) >=0)
 				InterlockedIncrement(&Pfdtab[proc->curdir].refcount);
-			logmsg(0,"proc_init oref=%d ocurdir=%d,'%s' curdir=%d,'%s' ref=%d ppcurdir=%d'%s' ref=%d",ref,ocurdir,((ocurdir>0&&ocurdir<Share->nfiles)?(fdname(ocurdir)):"bad_ocurdir"),proc->curdir,fdname(proc->curdir),Pfdtab[proc->curdir].refcount,pproc->curdir,((pproc->curdir>0&&pproc->curdir<Share->nfiles)?(fdname(pproc->curdir)):"bad_pproc->curdir"));
+			logmsg(0,"proc_init oref=%d ocurdir=%d,'%s' curdir=%d,'%s' ref=%d ppcurdir=%d'%s' ref=%d",ref,ocurdir,((ocurdir>0&&ocurdir<Share->nfiles)?(fdname(ocurdir)):"bad_ocurdir"),proc->curdir,fdname(proc->curdir),Pfdtab[proc->curdir].refcount,pproc->curdir,((pproc->curdir>0&&pproc->curdir<Share->nfiles)?(fdname(pproc->curdir)):"bad_pproc->curdir"),Pfdtab[pproc->curdir].refcount);
 		}
 		else
 		{
@@ -1806,6 +1807,46 @@ Pproc_t *proc_init(DWORD ntpid, int inexec)
 	proc->siginfo.sigign  = pproc->siginfo.sigign;
 	proc->posixapp = POSIX_PARENT;	/* parent process is a posix application */
 	return(proc);
+}
+
+static int handle_type(int type)
+{
+	switch(type)
+	{
+	case FDTYPE_FIFO: case FDTYPE_EPIPE: case FDTYPE_EFIFO:
+		return HT_PIPE; break;
+	case FDTYPE_NPIPE:
+		return HT_NPIPE; break;
+	case FDTYPE_CONSOLE:
+		return HT_OCONSOLE; break;
+	case FDTYPE_CONNECT_UNIX: case FDTYPE_CONNECT_INET:
+		return HT_SOCKET; break;
+	case FDTYPE_DIR:
+		return HT_DIR; break;
+	case FDTYPE_FILE: case FDTYPE_TFILE: case FDTYPE_XFILE:
+		return HT_FILE; break;
+	case FDTYPE_AUDIO: case FDTYPE_MODEM: case FDTYPE_MOUSE:
+		return HT_COMPORT; break;
+	default:
+		return HT_UNKNOWN; break;
+	}
+}
+
+/*
+ * Undo operations done in proc_init()
+ */
+void
+proc_uninit(Pproc_t *proc)
+{
+	int	fd;
+
+	if(proc->curdir>=0)
+		fdpclose(&Pfdtab[proc->curdir]);
+	if(proc->rootdir>=0)
+		fdpclose(&Pfdtab[proc->rootdir]);
+	for(fd=0; fd < proc->maxfds; fd++)
+		if(fdslot(proc,fd)>=0 && !iscloexec(fd))
+			decr_refcount(getfdp(proc,fd));
 }
 
 /*
@@ -2443,14 +2484,14 @@ int uname(register struct utsname* ut)
 			case 3:
 				name = sys;
 				name[0] = 'W';
-				name[1] = '6' + osinfo.dwMinorVersion;
+				name[1] = (char)('6' + osinfo.dwMinorVersion);
 				name[2] = 0;
 				break;
 			default:
 				name = sys;
 				name[0] = 'W';
 				name[1] = '1';
-				name[2] = '1' + osinfo.dwMinorVersion - 4;
+				name[2] = (char)('1' + osinfo.dwMinorVersion - 4);
 				name[3] = 0;
 				break;
 			}

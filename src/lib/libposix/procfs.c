@@ -111,14 +111,14 @@ static ssize_t get_ofiles(Pproc_t* pp, int fid, HANDLE hp)
 	char* 	name;
 	char	buf[256];
 
-	n = sfsprintf(buf, sizeof(buf), "SLOT REFS INDX TYPE      OFLAGS NAME\n");
+	n = sfsprintf(buf, sizeof(buf), "FDSLOT REFS INDX TYPE      OFLAGS NAME\n");
 	WriteFile(hp, buf, (DWORD)n, &w, 0);
 	r = w;
 	for (i = 0; i < Share->nfiles; i++)
 		if (Pfdtab[i].refcount >= 0)
 		{
 			name = Pfdtab[i].index > 0 ? fdname(i) : "";
-			n = sfsprintf(buf, sizeof(buf), "%4d %4d% %4d %(fdtype)s\t%07o\t%s\n", i, Pfdtab[i].refcount+1, Pfdtab[i].index, Pfdtab[i].type, Pfdtab[i].oflag, name);
+			n = sfsprintf(buf, sizeof(buf), "  %4d %4d% %4d %(fdtype)s\t%07o\t%s\n", i, Pfdtab[i].refcount+1, Pfdtab[i].index, Pfdtab[i].type, Pfdtab[i].oflag, name);
 			WriteFile(hp, buf, (DWORD)n, &w, 0);
 			r += w;
 		}
@@ -189,11 +189,11 @@ static ssize_t disp_uwin_block(Pproc_t* pp, int fid, HANDLE hp)
 	char	*bp;
 	char	*h, *he, *a, *ae;
 	char	*nl;
-    int		i, offset, n, w;
+	int	i, offset, w;
+	DWORD	n;
 	char outbuf[80];
-	char abuf[22], hbuf[45];
 
-	if (!fid || ((Blocktype[fid]&BLK_MASK)==BLK_FREE))
+	if (!fid  || (fid > Share->nfiles) || ((Blocktype[fid]&BLK_MASK)==BLK_FREE))
 		return 0;
 	bp = block_ptr(fid);
 	h = &outbuf[6];
@@ -204,21 +204,21 @@ static ssize_t disp_uwin_block(Pproc_t* pp, int fid, HANDLE hp)
 	n = w = offset = 0;
 	memset(outbuf, ' ', sizeof(outbuf));
 	sfsprintf(outbuf, sizeof(outbuf), "%04x: ", offset);
-	outbuf[n] = ' ';
-    for (i=0; i < (int)Share->block_size; i++) {
-        h += sfsprintf(h, (he-h), "%02.2x", (*bp&0xff));
+	for (i=0; i < (int)Share->block_size; i++)
+	{
+		h += sfsprintf(h, (he-h), "%02.2x", (*bp&0xff));
 		a += sfsprintf(a, (ae-a), "%c", (isprint(*bp&0xff) ?  (*bp) : '.'));
-        if ((i%4) == 3)
+		if ((i%4) == 3)
 		{
 			*h++ = ' ';
 			*a++ = ' ';
 		}
 		bp++;
-        if ((i%16) == 15)
+		if ((i%16) == 15)
 		{
 			a += sfsprintf(++a, (ae-a), "%s", nl);
-			n = a - outbuf;
-			WriteFile(hp, outbuf, (DWORD)n, &n, 0);
+			n = (DWORD)(a - outbuf);
+			WriteFile(hp, outbuf, n, &n, 0);
 			w += n;
 			h = &outbuf[6];
 			he = h + 37;
@@ -227,15 +227,14 @@ static ssize_t disp_uwin_block(Pproc_t* pp, int fid, HANDLE hp)
 			offset += 16;
 			memset(outbuf, ' ', sizeof(outbuf));
 			sfsprintf(outbuf, sizeof(outbuf), "%04x: ", offset);
-			outbuf[n] = ' ';
 		}
-    }
-    if (i%16 != 0)
+	}
+	if (i%16 != 0)
 	{
-		*a=*h=' ';
+		*a = *h = ' ';
 		a += sfsprintf(a, (ae-a), "%s", nl);
-		n = a - outbuf;
-		WriteFile(hp, outbuf, (DWORD)n, &n, 0);
+		n = (DWORD)(a - outbuf);
+		WriteFile(hp, outbuf, n, &n, 0);
 		w += n;
 	}
 	return w;
@@ -312,7 +311,7 @@ static ssize_t get_uwin_block(Pproc_t* pp, int fid, HANDLE hp)
 		b += sfsprintf(b, e-b, "UNKNOWN=%d%s", type, nl);
 		break;
 	}
-	if (n = (int)(b - buf))
+	if (n = (ssize_t)(b - buf))
 		WriteFile(hp, buf, (DWORD)n, &w, 0);
 	else
 		w = 0;
@@ -322,14 +321,20 @@ static ssize_t get_uwin_block(Pproc_t* pp, int fid, HANDLE hp)
 ssize_t get_uwin_slots(Pproc_t* pp, int fid, HANDLE hp)
 {
 	ssize_t	r;
-	int n;
+	DWORD	n;
+	char	buf[22];
 
 	if (fid > 0)
 		r = get_uwin_block(pp, fid, hp);
 	else
+	{
+		n = (DWORD)sfsprintf(buf, sizeof(buf), " SLOT TYPE   INFO\n");
+		WriteFile(hp, buf, n, &n, 0);
+		r = n;
 		for (fid = 1, r = 0; fid < Share->nfiles; fid++)
 			if ((Blocktype[fid]&BLK_MASK) != BLK_FREE)
 				r += get_uwin_block(pp, fid, hp);
+	}
 	return r;
 }
 
@@ -1796,7 +1801,7 @@ fail:
 typedef struct
 {
 	HANDLE		ph;	/* pipe handle */
-    	int		wfd;	/* stdout of trace command */
+	int		wfd;	/* stdout of trace command */
 	HANDLE		th;	/* dev_thread handle */
 } dev_arg_t;
 
@@ -2568,12 +2573,12 @@ int procstat(Path_t* ip, const char* path, struct stat* st, int flags)
 	case S_IFDIR:
 		st->st_mode |= pf->tree == PROCDIR_pid_fd ? (S_IRUSR|S_IXUSR) : (S_IRUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH);
 		st->st_nlink = 2;
-		st->st_size = 512;
+		ST_SIZE(st) = 512;
 		goto typed;
 	default:
 		st->st_mode |= S_IRUSR|S_IRGRP|S_IROTH;
 		st->st_nlink = 1;
-		st->st_size = 0;
+		ST_SIZE(st) = 0;
 	typed:
 		if (pp)
 		{
@@ -2591,7 +2596,7 @@ int procstat(Path_t* ip, const char* path, struct stat* st, int flags)
 		if (!(flags & (P_LSTAT|P_NOFOLLOW)) && pf->txt(pp, fid, buf, sizeof(buf)) > 0 && !stat(buf, st))
 			goto done;
 		st->st_mode |= S_IRUSR|S_IRGRP|S_IROTH;
-		st->st_size = ip ? ip->shortcut : 0;
+		ST_SIZE(st) = ip ? ip->shortcut : 0;
 		if (pp)
 			goto typed;
 		st->st_uid = 0;

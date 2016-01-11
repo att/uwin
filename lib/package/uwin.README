@@ -788,6 +788,7 @@ Tue Oct 29 10:06:32 1991  Phil Nelson  (phil at cs.wwu.edu)
 
 :::::::: cc ::::::::
 
+12-08-24 fix ', ' typo => ',' (should this be a cpp warning?)
 11-12-13 add -O[0-9] target compiler specific mappings
 
 :::::::: fvwm ::::::::
@@ -38774,6 +38775,13 @@ Thu May  6 11:38:00 1982  Walter F. Tichy  <wft@purdue>
 
 :::::::: libposix ::::::::
 
+13-02-01  fixed unix socket shutdown -- this eliminates the sftp hang problem
+13-01-28  return EINVAL when a dup fails on otherwise valid fd
+13-01-28  corrected losing handles when doing fork/exec on windows 7 based systems
+13-01-28  eliminated hung process when sending signals to a process
+12-12-12  fixed /var/log/uwin overflow logic
+12-08-27  Fixed bug removing symbolic links created by windows commands or
+	  CreatSymbolicLink().
 12-07-31  Added dump of block contents and type of all slots to /proc/uwin/.
 12-07-25  Added ability to use poll(2) on /proc/<pid>/ to wait to process
 	  termination.

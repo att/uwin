@@ -1,0 +1,29 @@
+/* : : generated from /home/RESEARCH/gsf/tst/package/uwin/src/lib/libstdio/features/stdio by iffe version 2011-03-17 : : */
+#ifndef _def_stdio_stdio
+#define _def_stdio_stdio	1
+#define _sys_types	1	/* #include <sys/types.h> ok */
+#define _LIB__ast	1	/* ast.lib is a library */
+#define _siz_fpos_t	8
+#define _FILE_cnt	1	/* field FILE._cnt exists */
+#define _FILE_ptr	1	/* field FILE._ptr exists */
+#define _FILE_file	1	/* field FILE._file exists */
+#define _FILE_flag	1	/* field FILE._flag exists */
+#if _FILE__cnt && ! _FILE_cnt
+#define _FILE_cnt	1
+#define _cnt		__cnt
+#endif
+#if _FILE__ptr && ! _FILE_ptr
+#define _FILE_ptr	1
+#define _ptr		__ptr
+#endif
+#if _FILE__flag && ! _FILE_flag
+#define _FILE_flag	1
+#define _flag		__flag
+#endif
+#if _FILE__file && ! _FILE_file
+#define _FILE_file	1
+#define _file		__file
+#endif
+
+#define _hdr_stdio	1	/* #include <stdio.h> ok */
+#endif

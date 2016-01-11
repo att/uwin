@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -32,6 +32,8 @@
 #include	"uwin_keys.h"
 
 #define FZ	10000000	/* FILETIME/sec == 100 nsec / sec */
+
+#define ST_SIZE(st)	(((struct stat64*)(st))->st_size)
 
 #ifdef extern
 #   undef extern
@@ -431,12 +433,14 @@ extern ssize_t filewrite(int, Pfd_t*, char *, size_t);
 extern int filefstat(int, Pfd_t*, struct stat*);
 extern int ttyfstat(int, Pfd_t*, struct stat*);
 extern int pipefstat(int, Pfd_t*, struct stat*);
+extern void pipewakeup(int, Pfd_t*, Pfifo_t*, HANDLE, int, int);
 extern int fileclose(int, Pfd_t*, int);
 extern off64_t filelseek (int, Pfd_t*, off64_t, int);
 extern off64_t pipelseek (int, Pfd_t*, off64_t, int);
 extern off64_t ttylseek (int, Pfd_t*, off64_t, int);
 extern off64_t nulllseek (int, Pfd_t*, off64_t, int);
 extern HANDLE procopen(Pfd_t*, const char*, int);
+extern HANDLE procselect(int, Pfd_t *, int, HANDLE);
 extern ssize_t procwrite(int, Pfd_t*, char *, size_t);
 
 extern char *pathreal(const char*,int, Path_t*);

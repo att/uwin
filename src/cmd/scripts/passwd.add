@@ -1,3 +1,0 @@
-root:x:0:13:Built-in account for administering the computer/domain:/home/root:/usr/bin/ksh
-daemon:x:1:1:daemons:/:/dev/null
-installer:x:4:4:trusted installer:/:/dev/null

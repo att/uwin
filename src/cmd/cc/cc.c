@@ -9,7 +9,7 @@
 #define MTA_TYPE_DEFAULT		"win32"
 
 static const char cc_usage[] =
-"[-?\n@(#)$Id: cc (AT&T Labs Research) 2011-12-13 $\n]"
+"[-?\n@(#)$Id: cc (AT&T Labs Research) 2012-12-08 $\n]"
 USAGE_LICENSE
 "[+NAME?cc - invoke the C or C++ compiler]"
 "[+DESCRIPTION?\bcc\b invokes an underlying C or C++ compiler and/or "
@@ -2288,7 +2288,7 @@ int main(int argc, char *argv[])
 			/* pass through options */
 			if ((ch = opt_info.arg[0])!=0)
 			{
-				if (opt_info.arg[1]==', ')
+				if (opt_info.arg[1]==',')
 					opt_info.arg += 2;
 				else if (ch=='p' && opt_info.arg[1]=='/')
 					opt_info.arg++;

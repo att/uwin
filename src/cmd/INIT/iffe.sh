@@ -1,7 +1,7 @@
 ########################################################################
 #                                                                      #
 #               This software is part of the ast package               #
-#          Copyright (c) 1994-2012 AT&T Intellectual Property          #
+#          Copyright (c) 1994-2013 AT&T Intellectual Property          #
 #                      and is licensed under the                       #
 #                 Eclipse Public License, Version 1.0                  #
 #                    by AT&T Intellectual Property                     #
@@ -30,7 +30,7 @@ case $-:$BASH_VERSION in
 esac
 
 command=iffe
-version=2012-07-17 # update in USAGE too #
+version=2013-03-06 # update in USAGE too #
 
 compile() # $cc ...
 {
@@ -600,6 +600,7 @@ exclude()
 
 all=0
 apis=
+apisame=
 binding="-dy -dn -Bdynamic -Bstatic -Wl,-ashared -Wl,-aarchive -call_shared -non_shared '' -static"
 complete=0
 config=0
@@ -715,7 +716,7 @@ set=
 case `(getopts '[-][123:xyz]' opt --xyz; echo 0$opt) 2>/dev/null` in
 0123)	USAGE=$'
 [-?
-@(#)$Id: iffe (AT&T Research) 2012-07-17 $
+@(#)$Id: iffe (AT&T Research) 2013-03-06 $
 ]
 '$USAGE_LICENSE$'
 [+NAME?iffe - C compilation environment feature probe]
@@ -893,6 +894,8 @@ case `(getopts '[-][123:xyz]' opt --xyz; echo 0$opt) 2>/dev/null` in
 		when \aNAME\a_API is >= \aYYYYMMDD\a (\aNAME\a is \aname\a
 		converted to upper case). If \aNAME\a_API is not defined
 		then \asymbol\a maps to the newest \aYYYYMMDD\a for \aname\a.]
+	[+api \aname1\a = \aname2\a?Set the default \aname1\a api version to
+		the \aname2\a api version.]
 	[+define \aname\a [ (\aarg,...\a) ]] [ \avalue\a ]]?Emit a macro
 		\b#define\b for \aname\a if it is not already defined. The
 		definition is passed to subsequent tests.]
@@ -2241,8 +2244,8 @@ $lin
 	case $arg in
 	'')	case $op in
 		api)	arg=-
-			case $1:$2 in
-			[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]*:[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9])
+			case $1:$2:$3 in
+			[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]*:[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]:*)
 				a=$1
 				shift
 				case " $apis " in
@@ -2285,6 +2288,9 @@ $lin
 					eval api_sym_${a}='$'syms
 					shift
 				done
+				;;
+			[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]*:=:[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]*)
+				apisame="$apisame $1 $3"
 				;;
 			*)	echo "$command: $op: expected: name YYYYMMDD symbol ..." >&$stderr
 				;;
@@ -3025,6 +3031,16 @@ int x;
 									echo "#define ${API}_VERSION	${ver}"
 								done
 							esac
+							set x x $apisame
+							while	:
+							do	case $# in
+								[0123])	break ;;
+								esac
+								shift 2
+								echo "#ifndef _API_${1}"
+								echo "#define _API_${1}	_API_${2}"
+								echo "#endif"
+							done
 							case $apis in
 							?*)	for api in $apis
 								do	API=`echo $api | tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ`
@@ -4467,8 +4483,8 @@ nam &/g' \
 #endif/'
 					;;
 				typ)	case $p in
-					"")	x= ;;
-					*)	x="$p " ;;
+					"")	x= r='*' ;;
+					*)	x="$p " r= ;;
 					esac
 					is typ "$x$v"
 					{
@@ -4492,7 +4508,7 @@ $x$v v; i = 1; v = i;"
 $tst
 $ext
 $inc
-struct xxx { $x$v mem; };
+struct xxx { $x$v$r mem; };
 static struct xxx v;
 struct xxx* f() { return &v; }"
 						;;

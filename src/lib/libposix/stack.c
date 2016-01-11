@@ -523,7 +523,7 @@ ssize_t uwin_stack_process(pid_t pid, void* ph, const char* sep, char* buf, size
 	ss.sep = strcmp(sep, "\n") ? sep : "\n\t";
 	ss.ptr = ss.buf = buf;
 	ss.end = buf + size - 1;
-logmsg(0, "stack_proc pid=%d ph=%x", pid, ph);
+//logmsg(0, "stack_proc pid=%d ph=%x", pid, ph);
 	if (!ph)
 	{
 		if (!pid)
@@ -548,7 +548,7 @@ logmsg(0, "stack_proc pid=%d ph=%x", pid, ph);
 	ss.pid = pid;
 	ss.ph = ph;
 	ss.context = 0;
-logmsg(0, "uwin_stack_process ntpid=%d ph=%x stackstate init=%d table access=%x", ss.pid, ss.ph, stackstate.initialized, stackstate.SymGetModuleInfo64);
+//logmsg(0, "uwin_stack_process ntpid=%d ph=%x stackstate init=%d table access=%x", ss.pid, ss.ph, stackstate.initialized, stackstate.SymGetModuleInfo64);
 	if (stackstate.initialized < 0)
 	{
 		errno = ENOSYS;

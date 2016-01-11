@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -30,14 +30,14 @@
 #define O_is_exe	O_EXCL
 #define O_has_w_w	O_NOCTTY
 
-#define FD_READ         (1 << 0)	/* 0x01 */
-#define FD_WRITE        (1 << 1)	/* 0x02 */
+#define FD_READ		(1 << 0)	/* 0x01 */
+#define FD_WRITE	(1 << 1)	/* 0x02 */
 #define FD_CEVT		(1 << 2)	/* 0x04 */
 #define FD_REVT		(1 << 3)	/* 0x08 */
 #define FD_OPEN		(1 << 4) 	/* 0x10 */
-#define FD_CLOSE        (1 << 5) 	/* 0x20 */
+#define FD_CLOSE	(1 << 5) 	/* 0x20 */
 #define FD_SEVT		(1 << 6)	/* 0x40 */
-#define FD_BLOCK        (1 << 7) 	/* 0x80 */
+#define FD_BLOCK	(1 << 7) 	/* 0x80 */
 
 #define SECURITY_DESCRIPTOR_MAX	(4*1024)
 
@@ -264,7 +264,7 @@ int fileclose(int fd, Pfd_t* fdp, int noclose)
 				type = HT_OCONSOLE;
 		}
 		if (hp && (r = closehandle(hp, type) ? 0 : -1) < 0)
-			logerr(0, "closehandle fd=%d handle=%p type=0x%04x", fd, hp, type);
+			logerr(0, "closehandle fd=%d handle=%p type=0x%04x fdp=%d type=%(fdtype)s ref=%d", fd, hp, type, file_slot(fdp), fdp->type, fdp->refcount);
 skip:
 		if (Xhandle(fd))
 			closehandle(Xhandle(fd), HT_FILE|HT_PIPE);
@@ -274,7 +274,7 @@ skip:
 		if (fdp->index)
 			DeleteFile(fdname(file_slot(fdp)));
 		else
-			logmsg(0, "fileclose_cdelete: fd=%d slot=%d type=%(fdtype)s oflag=0x%x ref=%d noclose=%d", fd, file_slot(fdp), fdp->type, fdp->oflag, fdp->refcount, noclose);
+			logmsg(0, "fileclose_cdelete: fd=%d fdp=%d type=%(fdtype)s oflag=0x%x ref=%d noclose=%d", fd, file_slot(fdp), fdp->type, fdp->oflag, fdp->refcount, noclose);
 	}
 	if (fdp->oflag & (O_is_exe|O_has_w_w))
 	{
@@ -352,7 +352,7 @@ static HANDLE pipeevent(int fd, Pfd_t *fdp)
 	return(event);
 }
 
-static void pipewakeup(int fd, Pfd_t* fdp, Pfifo_t* ffp, HANDLE event, int type, int reset)
+void pipewakeup(int fd, Pfd_t* fdp, Pfifo_t* ffp, HANDLE event, int type, int reset)
 {
 	int n = 0;
 	if(ffp && ffp->lwrite!=ffp->lread)
@@ -369,7 +369,7 @@ static void pipewakeup(int fd, Pfd_t* fdp, Pfifo_t* ffp, HANDLE event, int type,
 
 		if (slot > Share->nfiles)
 		{
-			logmsg(1, "pwakeup_bad_slot slot=%d type=0x%x fdp=%d sigio=%d evts=0x%x oflg=0x%x", slot, type, file_slot(fdp), fdp->sigio, fdp->socknetevents, fdp->oflag);
+			logmsg(1, "pwakeup_bad_slot fdp=%d type=0x%x fdp=%d sigio=%d evts=0x%x oflg=0x%x", slot, type, file_slot(fdp), fdp->sigio, fdp->socknetevents, fdp->oflag);
 			goto end_gone;
 		}
 		fdp_oflag = fdp->oflag;
@@ -565,7 +565,7 @@ static int nullfstat(int fd, register Pfd_t *fdp, struct stat *sp)
 	{
 		sp->st_mode = S_IFCHR|(sp->st_mode&(S_ISUID|S_ISGID|S_ISVTX|S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IWGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH));
 		sp->st_rdev = 0;
-		sp->st_size = 0;
+		ST_SIZE(sp) = 0;
 		sp->st_dev = 1;
 		sp->st_ino = fdp->type-2;
 	}
@@ -677,7 +677,6 @@ static int dirlink_count(char *path)
 static int byhandle_to_unix(register BY_HANDLE_FILE_INFORMATION *info, register struct stat *sp,unsigned long hash)
 {
 	struct timespec tv;
-	__int64 *sz = (__int64*)(&sp->st_size);
 	unix_time(&info->ftLastWriteTime,&sp->st_mtim,1);
 	unix_time(&info->ftLastAccessTime,&sp->st_atim,1);
 	unix_time(&info->ftCreationTime,&sp->st_ctim,1);
@@ -693,9 +692,9 @@ static int byhandle_to_unix(register BY_HANDLE_FILE_INFORMATION *info, register 
 			sp->st_ctim = sp->st_mtim;
 	}
 	if((info->dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)&& !info->nFileSizeLow)
-		*sz = 512;
+		ST_SIZE(sp) = 512;
 	else
-		*sz = QUAD(info->nFileSizeHigh,info->nFileSizeLow);
+		ST_SIZE(sp) = QUAD(info->nFileSizeHigh,info->nFileSizeLow);
 	sp->st_mode = (info->dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)?S_IFDIR:S_IFREG;
 	if(Share->Platform==VER_PLATFORM_WIN32_NT)
 		sp->st_dev = info->dwVolumeSerialNumber;
@@ -709,7 +708,6 @@ static int byhandle_to_unix(register BY_HANDLE_FILE_INFORMATION *info, register 
 static int finddata_to_unix(register WIN32_FIND_DATA *info, register struct stat *sp)
 {
 	struct timespec tv;
-	__int64 *sz = (__int64*)(&sp->st_size);
 	unix_time(&info->ftLastWriteTime,&sp->st_mtim,1);
 	unix_time(&info->ftLastAccessTime,&sp->st_atim,1);
 	unix_time(&info->ftCreationTime,&sp->st_ctim,1);
@@ -725,9 +723,9 @@ static int finddata_to_unix(register WIN32_FIND_DATA *info, register struct stat
 			sp->st_ctim = sp->st_mtim;
 	}
 	if((info->dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)&& !info->nFileSizeLow)
-		*sz = 512;
+		ST_SIZE(sp) = 512;
 	else
-		*sz = QUAD(info->nFileSizeHigh,info->nFileSizeLow);
+		ST_SIZE(sp) = QUAD(info->nFileSizeHigh,info->nFileSizeLow);
 	sp->st_mode = (info->dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)?S_IFDIR:S_IFREG;
 	sp->st_dev = info->ftCreationTime.dwHighDateTime;
 	sp->st_nlink = 1;
@@ -1169,7 +1167,7 @@ found:
 	fdp->type = FDTYPE_EFIFO;
 	oflag &= O_ACCMODE;
 #if 0
-	logmsg(0, "fifo found i=%d name=%s index=%d nread=%d nwrite=%d oflag=%d blocked=%d h1=0x%x h2=0x%x", i, ip->path, file_slot(fdp), ffp->nread, ffp->nwrite, oflag, ffp->blocked, ffp->low, ffp->high);
+	logmsg(0, "fifo found i=%d name='%s' index=%d nread=%d nwrite=%d oflag=%d blocked=%d h1=0x%x h2=0x%x", i, ip->path, file_slot(fdp), ffp->nread, ffp->nwrite, oflag, ffp->blocked, ffp->low, ffp->high);
 #endif
 	if(ffp->blocked==1 && ((ffp->nread<0 && oflag!=O_WRONLY) || (ffp->nwrite<0 && oflag!=O_RDONLY)))
 	{
@@ -1580,7 +1578,7 @@ void *Fs_open(Pfd_t* fdp,const char *pathname,HANDLE *extra,int flags,mode_t mod
 	setupflags(flags, &info_flags, &oflags, &cflags);
 	info.oflags = oflags;
 	if (fdp->index > 0 && fdp->index < Share->nblocks)
-		logmsg(0,"Fs_open fdpslot=%d index=%d",file_slot(fdp),fdp->index);
+		logmsg(0,"Fs_open fdp=%d index=%d",file_slot(fdp),fdp->index);
 	if(fdp->index = block_alloc(BLK_FILE))
 	{
 		info.path = fdname(file_slot(fdp));
@@ -3174,18 +3172,38 @@ int unlink(const char *pathname)
 	Path_t info;
 	char *path;
 	int sigsys,r = -1;
+	DWORD fattr;
+	int pflg=P_FILE|P_NOFOLLOW|P_EXIST|P_NOHANDLE|P_STAT;
 	if(Share->Platform == VER_PLATFORM_WIN32_NT)
 		info.oflags = DELETE;
 	else
 		info.oflags = GENERIC_WRITE;
 	info.hp = 0;
 	sigsys = sigdefer(1);
-	if(path = pathreal(pathname,P_FILE|P_NOFOLLOW|P_EXIST|P_DELETE|P_NOHANDLE|P_STAT,&info))
+	/*
+	 * Do not use P_DELETE if the file was created by mklink. It
+	 * causes the file pointed to by the symlink to be deleted.
+	 */
+	if((fattr = GetFileAttributes(pathname)) != INVALID_FILE_ATTRIBUTES)
+	{
+		if (!(fattr & FILE_ATTRIBUTE_REPARSE_POINT))
+			pflg |= P_DELETE;
+	} else
+		pflg |= P_DELETE;
+
+	if(path = pathreal(pathname,pflg,&info))
 		r = 0;
 	else if(errno==EBUSY && Share->Platform != VER_PLATFORM_WIN32_NT)
 		r = 0;
 	else if(errno==EISDIR)
 		errno = EPERM;
+	if (!(pflg&P_DELETE))
+	{
+		if (r=DeleteFile(path))
+			r=0;
+		else
+			r = unix_err(GetLastError());
+	}
 	sigcheck(sigsys);
 	if(info.type==FDTYPE_REG)
 		return(regdelete(path,info.wow));
@@ -3395,7 +3413,8 @@ void *Fs_pipe (Pfd_t *fdp0, Pfd_t *fdp1, HANDLE *out, HANDLE *xp0, HANDLE *xp1)
 		else if(Share->Platform==VER_PLATFORM_WIN32_NT)
 			logerr(0, "SetNamedPipeHandleState");
 		return(hpin);
-	}
+	} else
+		logerr(0, "pipe CreatePipe failed");
 	errno = unix_err(GetLastError());
 	return(NULL);
 }
@@ -3414,6 +3433,8 @@ HANDLE Fs_dup(int fd, Pfd_t *fdp, HANDLE *extra,int mode)
 	BOOL inherit = (mode&1);
 	if(fdp->type==FDTYPE_AUDIO)
 		return(audio_dup(fd,fdp,mode));
+	if (fdp->type==FDTYPE_PROC)
+		return Phandle(fd);
 	if(mode&2)
 		access |= DUPLICATE_CLOSE_SOURCE;
 if((mode&2) && Share->Platform==VER_PLATFORM_WIN32_NT)
@@ -3439,13 +3460,13 @@ if((mode&2) && Share->Platform==VER_PLATFORM_WIN32_NT)
 		dest = hp;
 	else if(hp && !DuplicateHandle(proc,hp,proc,&dest,0,inherit,access))
 	{
-		logerr(0, "DuplicateHandle fd=%d phandle=%p proc=%p type=%d", fd, hp, proc, fdp->type);
+		logerr(0, "DuplicateHandle fd=%d phandle=%p proc=%p fdp=%d type=%(fdtype)s ref=%d", fd, hp, proc, file_slot(fdp), fdp->type, fdp->refcount);
 		return(0);
 	}
 	if((hp = Xhandle(fd)) && !DuplicateHandle(proc,hp,proc,extra,0,inherit,access))
 	{
 		*extra = 0;
-		logerr(0, "DuplicateHandle fd=%d xhandle=%p proc=%p type=%d", fd, hp, proc, fdp->type);
+		logerr(0, "DuplicateHandle fd=%d xhandle=%p proc=%p type=%d fdp=%d type=%(fdtype)s ref=%d", fd, hp, proc, fdp->type, file_slot(fdp), fdp->type, fdp->refcount);
 		return(0);
 	}
 	if(fdp->type==FDTYPE_CONNECT_INET)
@@ -3455,7 +3476,7 @@ if((mode&2) && Share->Platform==VER_PLATFORM_WIN32_NT)
 
 #include	"ostat.h"
 
-static int common_stat(const char *pathname, struct stat *sp,int flags)
+static int common_stat(const char *pathname, struct stat *sp, int flags)
 {
 	register char *path;
 	WIN32_FIND_DATA fdata, *fp;
@@ -3498,7 +3519,7 @@ static int common_stat(const char *pathname, struct stat *sp,int flags)
 	if(info.type==FDTYPE_DIR && info.rootdir<0)
 	{
 		sp->st_mode = S_IFDIR|S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IWGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH;
-		sp->st_size = 512;
+		ST_SIZE(sp) = 512;
 		goto done;
 	}
 	if(info.type==FDTYPE_MOUSE)
@@ -3590,16 +3611,16 @@ static int common_stat(const char *pathname, struct stat *sp,int flags)
 		sp->st_mode = info.mode|(sp->st_mode&(S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IWGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH));
 		if(S_ISLNK(info.mode))
 		{
-			sp->st_size = info.size;
+			ST_SIZE(sp) = info.size;
 			ret = 0;
 			goto done;
 		}
 		else if(S_ISFIFO(info.mode))
-			sp->st_size = 0;
+			ST_SIZE(sp) = 0;
 		else if(S_ISCHR(info.mode) || S_ISBLK(info.mode))
 		{
 			sp->st_rdev = make_rdev(info.name[0],info.name[1]);
-			sp->st_size = 0;
+			ST_SIZE(sp) = 0;
 			if(info.type==FDTYPE_NULL || info.type==FDTYPE_ZERO || info.type==FDTYPE_FULL)
 			{
 				sp->st_dev = 1;
@@ -3631,8 +3652,8 @@ skip:
 		if((path[1]==':' && path[2]=='\\' && path[4]==0) && (attr=GetFileAttributes(path))>0 && (attr&FILE_ATTRIBUTE_DIRECTORY))
 		{
 			sp->st_mode = S_IFDIR|S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IWGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH;
-			if (sp->st_size == 0)
-				sp->st_size=512;
+			if (ST_SIZE(sp) == 0)
+				ST_SIZE(sp)=512;
 			if (sp->st_nlink == 0)
 				sp->st_nlink=1;
 			ret = 0;
@@ -3654,7 +3675,7 @@ done:
 	if(sp->st_blksize==0)
 	{
 		sp->st_blksize = 8192;
-		sp->st_blocks = (sp->st_size+511)>>9;
+		sp->st_blocks = (long)(ST_SIZE(sp)+511)>>9;
 	}
 	sp->st_reserved = info.mount_index;
 	sp->st_extra[0] = sizeof(char*) == 8 && info.wow == 32 && !(info.flags & P_WOW);
@@ -3666,12 +3687,12 @@ done:
 
 int stat(const char *path, struct stat *buf)
 {
-	return(common_stat(path, buf,P_EXIST|P_STAT));
+	return(common_stat(path, buf, P_EXIST|P_STAT));
 }
 
 int stat64(const char *path, struct stat64 *buf)
 {
-	return(common_stat(path, (struct stat*)buf,P_EXIST|P_STAT));
+	return(common_stat(path, (struct stat*)buf, P_EXIST|P_STAT));
 }
 
 int lstat(const char *path, struct stat *buf)
@@ -4965,7 +4986,7 @@ static ssize_t piperead(int fd, Pfd_t* fdp, char *buff, size_t asize)
 		else
 			fdp->socknetevents |= FD_BLOCK;
 		waitval=WaitForSingleObject(P_CP->sigevent,timeout);
-		if (fdp->type == EPIPE && (fdp->socknetevents & FD_CLOSE))
+		if (fdp->type == FDTYPE_EPIPE && (fdp->socknetevents & FD_CLOSE))
 		{
 			fdp->sigio = 0;
 			errno = EINTR;
@@ -5221,6 +5242,7 @@ static ssize_t pipewrite2(int fd, register Pfd_t* fdp, char *buff, size_t asize)
 	FILETIME *tp=0;
 	int timeout,sigsys,n,size,insize,left,r=0,used=0;
 	Pfifo_t *ffp=0;
+
 	if(asize > INT_MAX)
 		asize = INT_MAX;
 	left = insize = (int)asize;
@@ -5387,7 +5409,7 @@ int pipefstat(int fd, Pfd_t *fdp, struct stat *sp)
 	sp->st_uid = P_CP->uid;
 	sp->st_gid = P_CP->egid;
 	sp->st_ino = 2+(file_slot(fdp));
-	sp->st_size = 0;
+	ST_SIZE(sp) = 0;
 	mt.dwHighDateTime = 0;
 	if(!GetFileTime(Phandle(fd),&ct,&at,&mt) ||  mt.dwHighDateTime==0)
 	{
@@ -5430,9 +5452,9 @@ int filefstat(int fd, Pfd_t *fdp, struct stat *st)
 	else
 	{
 		logerr(LOG_IO+4, "fstat getfileinfo failed");
-		st->st_size = GetFileSize(hp,NULL);
-		if(st->st_size==(size_t)(-1) && GetLastError())
-			st->st_size = 0;
+		ST_SIZE(st) = GetFileSize(hp,NULL);
+		if(ST_SIZE(st)==(size_t)(-1) && GetLastError())
+			ST_SIZE(st) = 0;
 		if(GetFileTime(hp,&ct,&at,&mt))
 		{
 			unix_time(&mt,&st->st_mtim,1);
@@ -5572,7 +5594,7 @@ static int dirfstat (int fd,Pfd_t* fdp, struct stat *sp)
 		{
 			logerr(0, "FindFirstFile name=%s", name);
 			sp->st_mode = S_IFDIR|S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IWGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH;
-			sp->st_size = 512;
+			ST_SIZE(sp) = 512;
 		}
 	}
 	sp->st_nlink = dirlink_count(name);
@@ -5957,7 +5979,7 @@ void incr_refcount(Pfd_t *fdp)
 		break;
 	    case FDTYPE_NONE:
 	    case FDTYPE_NONE+1:
-		logmsg(0, "incr_refcount invalid type=%(fdtype)s ref=%d slot=%d oflag=0x%x name='%s'", fdp->type, fdp->refcount, (file_slot(fdp)), fdp->oflag, ((char*)block_ptr(fdp->index)));
+		logmsg(0, "incr_refcount invalid type=%(fdtype)s ref=%d fdp=%d oflag=0x%x name='%s'", fdp->type, fdp->refcount, file_slot(fdp), fdp->oflag, ((char*)block_ptr(fdp->index)));
 		return;
 	}
 	if(pdev)
@@ -5965,7 +5987,7 @@ void incr_refcount(Pfd_t *fdp)
 	goto done;
 bad:
 	if(!state.init)
-		logmsg(2, "incr_refcount bad devno=%d type=%(fdtype)s fno=%d", fdp->devno, fdp->type, file_slot(fdp));
+		logmsg(2, "incr_refcount bad devno=%d fdp=%d type=%(fdtype)s ref=%d", fdp->devno, file_slot(fdp), fdp->type, fdp->refcount);
 done:
 	InterlockedIncrement(&fdp->refcount);
 }
@@ -5978,7 +6000,7 @@ void decr_refcount(Pfd_t *fdp)
 	int index = fdp->index;
 	if((r=InterlockedDecrement(&fdp->refcount))<0)
 	{
-		logmsg(0,"decrref index=%d r=%d slot=%d type=%(fdtype)s btype=0x%x name=%s", index,r,fdp-Pfdtab,(Blocktype[index]&BLK_MASK),Blocktype[index],index?block_ptr(index):"unknown");
+		logmsg(0,"decr_refcount index=%d ref=%d fdp=%d type=%(fdtype)s btype=0x%x name=%s", index,r,file_slot(fdp),fdp->type,(Blocktype[index]&BLK_MASK),Blocktype[index],index?block_ptr(index):"unknown");
 		InterlockedIncrement(&fdp->refcount);
 	}
 	switch(fdp->type)
@@ -6005,7 +6027,7 @@ void decr_refcount(Pfd_t *fdp)
 		break;
 	    case FDTYPE_NONE:
 	    case FDTYPE_NONE+1:
-		logmsg(0, "decr_refcount invalid type=%(fdtype)s ref=%d slot=%d oflag=0x%x name='%s'", fdp->type, fdp->refcount, (file_slot(fdp)), fdp->oflag, ((char*)block_ptr(fdp->index)));
+		logmsg(0, "decr_refcount invalid type=%(fdtype)s ref=%d fdp=%d oflag=0x%x name='%s'", fdp->type, fdp->refcount, (file_slot(fdp)), fdp->oflag, ((char*)block_ptr(fdp->index)));
 		return;
 	}
 	if(pdev)

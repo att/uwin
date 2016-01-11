@@ -1,0 +1,19 @@
+/* : : generated from /home/RESEARCH/gsf/tst/package/uwin/src/lib/libscreen/features/screen by iffe version 2011-03-17 : : */
+#ifndef _def_screen_screen
+#define _def_screen_screen	1
+#define _sys_types	1	/* #include <sys/types.h> ok */
+#define _LIB_ast	1	/* ../../../lib/ast.lib is a library */
+#define _hdr_unistd	1	/* #include <unistd.h> ok */
+#define _hdr_stdlib	1	/* #include <stdlib.h> ok */
+#define _hdr_stddef	1	/* #include <stddef.h> ok */
+#define _hdr_time	1	/* #include <time.h> ok */
+#define _sys_time	1	/* #include <sys/time.h> ok */
+#define _sys_times	1	/* #include <sys/times.h> ok */
+#define _typ_wchar_t	1	/* wchar_t is a type */
+#define _lib_bcopy	1	/* bcopy() in default lib(s) */
+#define _lib_memcpy	1	/* memcpy() in default lib(s) */
+#define _hdr_termio	1	/* #include <termio.h> ok */
+#define _lib_select	1	/* select() has standard 5 arg interface */
+#define _typ_winsize	1	/* BSD window size */
+#define _proto_open	1	/* open() has a vararg prototype */
+#endif

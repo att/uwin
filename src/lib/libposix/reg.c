@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -1049,7 +1049,7 @@ int regfstat(int fd, Pfd_t* fdp, struct stat *sp)
 	}
 	if (n < 0)
 		n = nvalues * (maxname + maxvalue + sizeof(DWORD));
-	sp->st_size = n;
+	ST_SIZE(sp) = n;
 	sp->st_ino = hashpath(0, path, nsubs, 0);
 	sp->st_dev = update.dwLowDateTime;
 	if (hp == HKEY_REG)
@@ -1402,6 +1402,35 @@ again:
 	return(1);
 }
 
+static int regvalnext(register DIRSYS* dirp, struct dirent* ep)
+{
+	register Registry_t *rp = (Registry_t*)(dirp+1);
+	DWORD type;
+	LONG r;
+	int i;
+	if(rp->dots < 3)
+	{
+		dirp->flen = rp->dots++;
+		for (i = 0; i < dirp->flen; i++)
+			dirp->fname[i] = '.';
+		return(1);
+	}
+	i = rp->index++;
+	dirp->flen = NAME_MAX;
+	if((r=RegEnumValue(dirp->handle, i, dirp->fname, &dirp->flen, NULL, &type, 0, 0)))
+	{
+		if(r!=ERROR_NO_MORE_ITEMS)
+		{
+			errno = unix_err(r);
+			SetLastError(r);
+			logerr(0, "RegEnumKeyEx");
+		}
+		return(0);
+	}
+	ep->d_fileno = hashpath(rp->hash, dirp->fname, 0, 0);
+	return(1);
+}
+
 static void regdirclose(DIRSYS* dirp)
 {
 	if (dirp->handle)
@@ -1415,15 +1444,18 @@ DIRSYS* reginit(const char* path, int wow)
 	register int r;
 	int offset = dllinfo._ast_libversion < 5 ? 4 : 0;
 	char *last;
+	char *dp, *vp;
 	HANDLE hp;
-	if(!(hp=keyopen(path,wow,0,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH,0,0)))
+	logmsg(0, "AHA#%d %s", __LINE__, path);
+	if(!(hp=keyopen(path,wow,0,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH,&dp,&vp)))
 		return 0;
+	logmsg(0, "AHA#%d %s: dp=%s vp=%s", __LINE__, path, dp, vp);
 	if(dirp = malloc(sizeof(DIRSYS)+sizeof(Registry_t)))
 	{
 		rp = (Registry_t*)(dirp+1);
 		memset(dirp,0,sizeof(DIRSYS)+sizeof(Registry_t));
 		dirp->closef = regdirclose;
-		dirp->getnext = regdirnext;
+		dirp->getnext = dp && !vp ? regvalnext : regdirnext;
 		dirp->handle = hp;
 		dirp->fname = dirp->entry.d_name-offset;
 		rp->clen = sizeof(rp->class);

@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -548,7 +548,7 @@ HANDLE dev_gethandle(Pdev_t *pdev, HANDLE handle)
 			closehandle (hp2,HT_PROC);
 	}
 	else
-		logerr(0, "open_proc");
+		logerr(0, "open_proc ntpid=%x", pdev->NtPid);
 	return(hp);
 }
 
@@ -2467,6 +2467,8 @@ int free_term(Pdev_t *pdev, int noclose)
 		blocks[pdev->minor] = 0;
 		block_free(blkno);
 	}
+	if (proc)
+		closehandle(proc, HT_PROC);
 	return(0);
 }
 
@@ -2929,6 +2931,8 @@ int free_pty(Pdev_t *pdev, int noclose)
 		blocks[pdev->minor] = 0;
 		block_free(blkno);
 	}
+	if (proc)
+		closehandle(proc, HT_PROC);
 	return(0);
 }
 

@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -623,7 +623,7 @@ static void set_exec_event(Pproc_t *proc, int who)
 		closehandle(event,HT_EVENT);
 	}
 	else if(proc->phandle)
-		logerr(0, "%s %s failed", who>0 ? "wait_thread_Event" : "dup2_init_Event slot=%d ph=%p", ename, proc_slot(proc), proc->phandle);
+		logerr(0, "%s %s failed state=%s name=%s", who>0 ? "wait_thread_Event" : "dup2_init_Event pid=%d slot=%d ph=%p", ename, proc->pid, proc_slot(proc), proc->phandle, proc->state, proc->prog_name);
 }
 
 /*
@@ -740,13 +740,13 @@ int dup_to_init(Pproc_t *proc, int slot)
 			}
 			else
 			{
-				logerr(0,"origphx origph=%p slot=%d pid=%x-%d state=%(state)s name=%s",origph,proc_slot(proc),proc->ntpid,proc->pid,proc->state,proc->prog_name);
+				logerr(0,"getexitcode origphx origph=%p me=%x toproc=%x slot=%d pid=%x-%d state=%(state)s name=%s",origph,me,toproc,proc_slot(proc),proc->ntpid,proc->pid,proc->state,proc->prog_name);
 				proc->origph = 0;
 			}
 		}
 		return(1);
 	}
-	logerr(0, "DuplicateHandle handle=%p:%p toproc=%p init=%d toproc=%d", origph, ph, toproc,init,proc_ptr(slot)->ntpid);
+	logerr(0, "dup_to_init DuplicateHandle handle=%p:%p toproc=%p init=%d toproc=%d", origph, ph, toproc,init,proc_ptr(slot)->ntpid);
 	if(!init)
 		closehandle(toproc,HT_PROC);
 	else if(WaitForSingleObject(toproc,0)==0)
@@ -1289,7 +1289,7 @@ static int proc_cleanup(void)
 		}
 		if((Blocktype[i]&BLK_MASK) != BLK_PROC || pp->state!=procstate)
 		{
-			logmsg(0,"xxx btype=0%x state=%d-%d",Blocktype[i],procstate,pp->state);
+			logmsg(0,"xxx btype=0%x state=%(state)s-%(state)s",Blocktype[i],procstate,pp->state);
 			goto cont;
 		}
 		if(pp->inuse<=0)
@@ -2463,6 +2463,7 @@ static int vcopy(Vmalloc_t* vm, void* addr, size_t size, Vmdisc_t* dp)
 
 void post_wait_thread(Pproc_t *pp, int i)
 {
+	int r;
 	if(!pp->wait_threadid)
 		thwait = start_wait_thread(i,&pp->wait_threadid);
 	else
@@ -2491,12 +2492,13 @@ void post_wait_thread(Pproc_t *pp, int i)
 				n *= 2;
 		}
 	}
-	if((i=WaitForSingleObject(waitevent,2000))!=WAIT_OBJECT_0)
+	if((r=WaitForSingleObject(waitevent,2000))!=WAIT_OBJECT_0)
 	{
-		if(i>WAIT_OBJECT_0)
+		if(r>WAIT_OBJECT_0)
 		{
-			i=WaitForSingleObject(waitevent,2000);
-			logmsg(0, "WaitForSingleObject timeout i=%d",i);
+			Pproc_t *p = proc_ptr(i);
+			r=WaitForSingleObject(waitevent,2000);
+			logmsg(0, "WaitForSingleObject waitevent=%p timeout pid=%d state=%(state)s name=%s r=%d", waitevent, p->pid, p->state, p->prog_name, r);
 		}
 		else
 			logerr(0, "WaitForSingleObject waitevent=%p",waitevent);
@@ -2534,6 +2536,22 @@ pid_t set_unixpid(Pproc_t *proc)
 	return(pid);
 }
 
+
+/*
+ * Releases all allocations done by start_proc()
+ */
+static void stop_proc(Pproc_t *proc)
+{
+	if (proc->traceflags)
+		closehandle(proc->trace, HT_UNKNOWN);
+	proc_uninit(proc);
+	InterlockedDecrement(&proc->inuse);
+	proc->maxfds = 0;
+	proc->pid = 1;
+	if((proc->ntpid>=2) && proc->fdtab)
+		free((void*)proc->fdtab);
+	proc_release(proc);
+}
 
 static STARTUPINFO xinfo;
 
@@ -2953,7 +2971,7 @@ static Pproc_t* start_proc(char* title, char* cmdname, char* cmdline, char* cons
 					closehandle(pinfo.hProcess,HT_PROC);
 					closehandle(pinfo.hThread,HT_THREAD);
 					proc->state = PROCSTATE_TERMINATE;
-					proc_release(proc);
+					stop_proc(proc);
 					return(0);
 				}
 				fork_err++;
@@ -2965,7 +2983,7 @@ static Pproc_t* start_proc(char* title, char* cmdname, char* cmdline, char* cons
 						logerr(0, "VirtualQueryEx addr=%08x", addr);
 					else if(copytochild(minfo.BaseAddress, minfo.RegionSize)<0)
 					{
-						logmsg(0,"copytochild minfo failed");
+						logerr(0,"copytochild minfo failed");
 						if(addr!=arg_argv)
 						{
 							arg_argv = addr;
@@ -2986,12 +3004,34 @@ static Pproc_t* start_proc(char* title, char* cmdname, char* cmdline, char* cons
 		post_wait_thread(pp,i);
 		if((exeflags & EXE_FORK) || P_CP->vfork)
 		{
-			if(!(hp = OpenThread(THREAD_QUERY_INFORMATION|THREAD_SUSPEND_RESUME|THREAD_GET_CONTEXT|THREAD_SET_CONTEXT, FALSE, pinfo.dwThreadId)) || hp == INVALID_HANDLE_VALUE)
+			/*
+			 * TEMP HACK
+			 * Share->Version = (MajorVersion<<8) | MinorVersion
+			 * On Windows XP this causes ssh connections to
+			 * immediately terminate. Workaround is to
+			 * correct thread handle loss is to have different
+			 * implementation for XP vs later windows versions.
+			 * MajorVersion
+			 *    5         Server 2003, XP, and 2000
+			 *    6         Vista, Server 2008 & 2012, Windows7 & 8
+			 */
+			if ((Share->Version>>8) > 5)
 			{
-				logerr(0, "start_proc OpenThread failed");
-				return(0);
+				/* Windows 7 and later systems */
+				if(!(hp = OpenThread(THREAD_QUERY_INFORMATION|THREAD_SUSPEND_RESUME|THREAD_GET_CONTEXT|THREAD_SET_CONTEXT, FALSE, pinfo.dwThreadId)) || hp == INVALID_HANDLE_VALUE)
+				{
+					logerr(0, "start_proc OpenThread failed");
+					return(0);
+				}
+				closehandle(pinfo.hThread, HT_THREAD);
+				proc->phandle = hp;
+				pinfo.hThread = hp;
 			}
-			proc->phandle = hp;
+			else
+			{
+				/* Windows XP based systems */
+				proc->phandle = pinfo.hThread;
+			}
 			goto done;
 		}
 		ResumeThread(pinfo.hThread);
@@ -3024,19 +3064,7 @@ static Pproc_t* start_proc(char* title, char* cmdname, char* cmdline, char* cons
 		if(err!=ERROR_BAD_FORMAT && err!= ERROR_BAD_EXE_FORMAT)
 			logerr(LOG_PROC+3, "CreateProcess %s failed", cmdname);
 		errno = unix_err(err);
-		for(i=0; i < maxfd; i++)
-			if(fdslot(P_CP,i)>=0 && !iscloexec(i))
-				decr_refcount(getfdp(P_CP,i));
-		if(proc->curdir >=0)
-			fdpclose(&Pfdtab[proc->curdir]);
-		if(proc->rootdir >=0)
-			fdpclose(&Pfdtab[proc->rootdir]);
-		InterlockedDecrement(&proc->inuse);
-		proc->maxfds = 0;
-		proc->pid = 1;
-		if((exeflags & EXE_FORK) && proc->fdtab)
-			free((void*)proc->fdtab);
-		proc_release(proc);
+		stop_proc(proc);
 		proc = 0;
 		SetLastError(err);
 		return(0);
@@ -3059,7 +3087,7 @@ static Pproc_t* start_proc(char* title, char* cmdname, char* cmdline, char* cons
 				{
 					memcpy(&hp,phandle,sizeof(HANDLE));
 					if(!closehandle(hp,HT_PIPE))
-						logerr(0, "closehandle P %2d/%-2d %p", i, maxfd, hp);
+						logerr(0, "closehandle P %2d/%-2d %p fdp=%x slot=%d %(fdtype)s ref=%d index=%x", i, maxfd, hp, fdp, file_slot(fdp), fdp->type, fdp->refcount, fdp->index);
 				}
 			}
 			phandle += sizeof(HANDLE);

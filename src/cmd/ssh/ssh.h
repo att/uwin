@@ -104,7 +104,7 @@
  * primary group.
  */
 #ifndef SSH_PRIVSEP_USER
-#define SSH_PRIVSEP_USER		"sshd"
+#define SSH_PRIVSEP_USER		"Guest"
 #endif
 
 /* Minimum modulus size (n) for RSA keys. */

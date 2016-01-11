@@ -1,7 +1,7 @@
 /***********************************************************************
 *                                                                      *
 *              This software is part of the uwin package               *
-*          Copyright (c) 1996-2012 AT&T Intellectual Property          *
+*          Copyright (c) 1996-2013 AT&T Intellectual Property          *
 *                         All Rights Reserved                          *
 *                     This software is licensed by                     *
 *                      AT&T Intellectual Property                      *
@@ -614,7 +614,8 @@ static void suspend_proc(int sig)
 	BOOL  sa_flags ;
 	register Pproc_t *proc;
 	P_CP->state = PROCSTATE_STOPPED;
-	P_CP->exitcode = 0177|(sig<<8);
+	//P_CP->exitcode = 0177|(sig<<8);
+	P_CP->exitcode = sig;
 	logmsg(LOG_PROC+3, "suspend_proc exitcode 0x%x", P_CP->exitcode);
 	P_CP->notify = 1;
 	sa_flags = TRUE;
@@ -779,7 +780,11 @@ static void process_signal(void)
 	struct Resume resume;
 	resume = rinfo;
 	rinfo.blocked = 0;
-	processsig();
+	if (processsig())
+	{
+		logmsg(0, "processsig returned 1 main_thread=%p curr_tid=%04x proc_exec_exit=%d", main_thread, GetCurrentThreadId(), proc_exec_exit);
+		return;
+	}
 	if(!CreateThread(NULL,8192,resume_execution,(void*)&resume,0,&tid))
 		logerr(0, "CreateThread for resume");
 	/* just loop until resume execution takes over */
@@ -1009,16 +1014,16 @@ static DWORD WINAPI sig_thread(void* arg)
 
 		if(ret==WAIT_FAILED)
 		{
-			logerr(0, "WaitForMultipleObjects");
+			logerr(0, "WaitForMultipleObjects nwait=%d", nwait);
 			if((ret=WaitForSingleObject(objects[0],1))==WAIT_FAILED)
 			{
-				logmsg(0, "sevent fails hp=%p", objects[0]);
+				logerr(0, "sevent fails hp=%p sevent=%p", objects[0], P_CP->sevent);
 				closehandle(objects[0],HT_EVENT);
 				P_CP->sevent = objects[0] = mkevent(UWIN_EVENT_S(name, P_CP->ntpid),NULL);
 			}
 			else if(objects[1] && (ret=WaitForSingleObject(objects[1],1))==WAIT_FAILED)
 			{
-				logmsg(0, "alarm event fails hp=%p", objects[1]);
+				logmsg(0, "alarm event fails hp=%p alarm=%p", objects[1], P_CP->alarmevent);
 				closehandle(objects[1],HT_EVENT);
 				P_CP->alarmevent = objects[1] = mkevent(UWIN_EVENT_ALARM(name),NULL);
 			}
