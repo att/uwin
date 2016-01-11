@@ -1,0 +1,11 @@
+include ../../../lesstif.mk
+
+.SOURCE.h:      ../../../include/Motif-2.1 ../../../lib/Mrm-2.1
+
+.SOURCE.a:      ../../../lib/Mrm-2.1 ../../../lib/Xm-2.1 ../../../lib/Uil-2.1
+
+nuil::	Attribute.c Callback.c Expression.c ExpressionList.c FakeWidget.c \
+	Include.c MrmTypes.c glue.c lex.l \
+	main.c yacc.y -lMrm -lXm -lUil -Bstatic -lXt -Bdynamic 
+
+::	newuil.c Makefile.in Makefile.am 

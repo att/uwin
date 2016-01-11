@@ -1,0 +1,46 @@
+exec 2> /var/log/rc; PS4=':$LINENO: '; set -x
+: /etc/rc start :
+> /var/log/utmp
+> /var/log/utmpx
+ifs=$IFS
+IFS=
+set -- /.deleted/'.;'*
+if	[[ -e $1 ]]
+then	chmod 666 "$@"
+	rm -rf "$@"
+fi
+set -- /[c-z]/.deleted/'.;'*
+if	[[ -e $1 ]]
+then	chmod 666 "$@"
+	rm -rf "$@"
+fi
+chmod 666 /var/log/uwin
+if	[[ -f /etc/fstab ]]
+then	mount -a
+fi
+if	[[ -d /msdev && ! -d /platformsdk && ! -d /msdev/vc/platformsdk ]]
+then	set -- /?/'Program Files'/*platform*sdk*/include
+	[[ -d $1 ]] && ln -s "${1%/*}" /msdev/vc/platformsdk	
+fi
+: kill any running { at.svc inetd sshd } processes :
+IFS=$ifs
+set -- $(ps -eo pid+8,comm | egrep -w 'at\.svc|inetd|sshd' | cut -c1-8)
+if	[[ $1 ]]
+then	kill -9 $*
+fi
+IFS=
+/etc/inetd
+
+: check /etc/group :
+[[ ! -e /etc/group.add && -e /etc/group ]] && grep -q Interactive /etc/group  && grep Interactive /etc/group | sed -e s/Interactive/tty/ > /etc/group.add
+
+: let uwin init acquiesce :
+sleep 3
+
+: check rc.d scripts :
+if	[[ -d /etc/rc.d ]]
+then	for i in ~(N)/etc/rc.d/!(*.*)
+	do	[[ -x $i ]] && "$i" start
+	done
+fi
+: /etc/rc done :

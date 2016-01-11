@@ -1,0 +1,27 @@
+# The NEW terminal capabilities for COLOR
+#
+# X11R6.4 color xterm uses:
+#       :Co#8:pa#0:op=\E[m:Sb=\E[4%dm:Sf=\E[3%dm:
+#
+# jjs  1-99
+
+
+back_color_erase,   "bce"   "ut"    Screen erased with background color
+can_change,     "ccc"   "cc"    Terminal can re-define existing colors
+hue_lightness_saturation,   "hls"   "hl"    Terminal uses only HLS colors (Tek)
+
+max_colors,     "colors"    "Co"    Maximum number of colors on the screen
+max_pairs,      "pairs" "pa"    Maximum number of color-pairs on the screen
+no_color_video,     "ncv"   "NC"    Video attrs that cannot be used with colors
+
+color_names,        "colornm"   "Yw"    Give name for color #1
+initialize_color,   "initc" "IC"    Set color #1 to RGB #2, #3, #4
+initialize_pair,    "initp" "Ip"    Set color-pair #1 to fg #2, bg #3
+orig_colors,        "oc"    "oc"    Set all color(-pair)s to the original ones
+orig_pair,      "op"    "op"    Set default color-pair to the original one
+set_a_background,   "setab" "AB"    Set background color to #1 using ANSI ascape
+set_a_foreground,   "setaf" "AF"    Set foreground color to #1 using ANSI escape
+set_background,     "setb"  "Sb"    Set background color to #1
+set_color_pair,     "scp"   "sp"    Set current color pair to #1
+set_foreground,     "setf"  "Sf"    Set foreground color to #1
+

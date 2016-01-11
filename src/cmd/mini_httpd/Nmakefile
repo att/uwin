@@ -1,0 +1,69 @@
+:PACKAGE: --noseparate-include
+
+USE_SSL == 1
+
+LDFLAGS = -s
+
+:ALL:
+
+$(ETCDIR) :INSTALLDIR: mini_httpd
+
+mini_httpd :: mini_httpd.8 mini_httpd.c match.c tdate_parse.c -lssl -lcrypto -lcrypt
+
+mime_encodings.h: mime_encodings.txt
+	$(SED) < $(*) > $(<) \
+	  -e 's/#.*//' -e 's/[ 	]*$//' -e '/^$/d' \
+	  -e 's/[ 	][ 	]*/", 0, "/' -e 's/^/{ "/' -e 's/$/", 0 },/'
+
+mime_types.h: mime_types.txt
+	$(SED) < $(*) > $(<) \
+	  -e 's/#.*//' -e 's/[ 	]*$//' -e '/^$/d' \
+	  -e 's/[ 	][ 	]*/", 0, "/' -e 's/^/{ "/' -e 's/$/", 0 },/'
+
+htpasswd :: htpasswd.1 htpasswd.c -lcrypt
+
+.SOURCE.lic : $$(PATH:/:/ /G:D:X=lib/package)
+
+%.pem : %.cnf
+	openssl req -batch -new -x509 -days 3650 -nodes -config $(>) -out $(<) -keyout $(<)
+	openssl x509 -subject -dates -fingerprint -noout -in $(<)
+	chmod 600 $(<)
+
+%.cnf : %.lic
+	. $(>)
+	cat > $(<) <<!
+	$("#") openssl certificate -config file generated from ${license_file}
+
+	RANDFILE = $(%).rnd
+
+	[ req ]
+	default_bits = 1024
+	encrypt_key = yes
+	distinguished_name = req_dn
+	x509_extensions = cert_type
+
+	[ req_dn ]
+	countryName			= US
+	countryName_default		= US
+	countryName_min			= 2
+	countryName_max			= 2
+
+	stateOrProvinceName		= ${license.location##*' '}
+	stateOrProvinceName_default	= ${license.location##*' '}
+
+	localityName			= ${license.location%' '*}
+
+	organizationName		= ${license.parent} ${license.corporation}
+	organizationName_default	= Research
+
+	organizationalUnitName          = ${license.organization}
+	organizationalUnitName_default	= Research
+
+	commonName			= ${license.domain}
+	emailAddress			= ${license.author%%+*}@${license.domain}
+
+	[ cert_type ]
+	nsCertType = server
+	!
+
+:: README Makefile index.html mini_httpd.cnf scripts

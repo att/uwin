@@ -1,0 +1,306 @@
+12-07-31  Added dump of block contents and type of all slots to /proc/uwin/.
+12-07-25  Added ability to use poll(2) on /proc/<pid>/ to wait to process
+	  termination.
+12-07-13  Corrected incorrect event synchronization names, causing scp and
+	  sftp to hang.
+12-06-29  Corrected false pipeline memory fault errors.
+12-05-11  Finally get 32 and 64 bit working (again).  Don't change
+	  sizeof(struct sigaction)!!
+12-04-23  Corrected processing of windows error codes for socket processing.
+12-04-22  Fix reg wow lookup logic when default now found.
+12-04-17  Correct support for UNIX sockets for send/recv, sendmsg/recvmsg,
+	  and sendto/recvfrom
+12-04-13  Correct process fork when user is not a member of the Windows
+	  administrators group.
+12-03-19  Added /proc/<pid>/stack to display stack of running process.
+12-03-19  Added /proc/<pid>/trace to trace running process via trace -p<pid>.
+12-02-24  Added writable /proc/ files.
+12-02-24  Switch from __UWIN_DEBUG__ env to /proc/<pid>/debug.
+12-02-24  Drop Share->debug.
+12-01-30  Added support for UNIX_STREAM sockets to use recvfrom().
+12-01-10  Corrected exit code processing for shell processes.
+11-12-24  Added win32 clone support -- still under evaluation.
+11-12-13  Co-opted ast aso (async operation) library, vmalloc TBD.
+11-11-29  Corrected timing issue in pipes when wakeup wasn't completed before
+	  the awakened process started.
+11-10-21  Fixed problem with killing a process when it is exec'ing another process.
+11-09-16  Corrected signal process to conform to default posix specificationis.
+11-09-14  Corrected fpathconf processing when fd refers to a pipe.
+11-09-09  Corrected recvfrom for socketpair().
+11-08-16  Merge experimental RtlCloneUserProcess(): posix.ini::clone.
+11-08-09  Reorganize spawnve.c for RtlCloneUserProcess().
+11-08-09  Fix state.log logic in log.c.
+11-07-25  Add 32 bit btowc().
+11-07-22  kill(-1,SIGKILL) loops until all procs but self are gone.
+11-07-22  { uwin_stack_process() uwin_stack_thread() } proto => uwin.h
+11-06-27  Fix bug that prevented a priveleged process from reading non-readable file.
+11-06-20  Fix /reg and /reg/FOO pwd logic.  Add /reg/HKEY_LOCAL_MACHINE, /reg/HKLM,
+	  /reg/lm virtual symlinks.
+11-06-17  Fix pathmap.c wow leakage for non-wow 32 bit win32.
+11-06-14  Sync spawnveg() with ast pgid -1: setsid() -2: setpgrp() && tcsetpgid().
+11-06-13  Add 'vpath - /#option/[no]isolate' for 32/64 isolation
+11-03-17  --- Release 4.6 ---
+11-03-16  Add [no]name[=value] parse for posix.ini.
+11-03-03  Handle /usr=>/u32 and /var=>/v32 wow 32/64 views.
+11-03-03  Handle W7 symbolic link read (no creat (yet?)).
+11-02-11  Add eject.c for removeable drive umount().
+10-12-08  Registry cleanup:
+		{ CurrentVersion RunningVersion } => Release
+		UserInfo/.../UserActiveHomePath => Install/.../Home
+		UserInfo/.../InstallRoot => Install/.../Root
+		UWIN_foo => Packages/.../foo = YYYY-MM-DD
+10-11-30  Cleaned up process initialization, now only one log file per uwin
+	  instantiation, bootstrap moves previous uwin log to uwin.old.
+	  Bootstrap log messages identified by B1. Added State_t state to
+	  cache initialization info and avoid duplication.
+10-11-19  Add UWIN_SHARED_* common defintions to <uwin_share.h>.
+10-11-19  Renamed <uwinserv.h> => <uwin_serve.h> and install like <uwin_*.h>.
+10-11-18  Add LOG_BOOTSTRAP message level for uwin.log messages during
+	  installation/bootstrap.
+10-11-16  Changed log*() for Bootstrap!=0 to list all level<=2 messages and
+	  to keep all messages in /c/temp/uwin.log.
+10-11-12  Update passwd.c and uwinserv.h to support ums as the piper server.
+10-11-03  Corrected errno value for return from rename(2) to conform to a posix
+          ruling that ENOENT should be returned instead of ENOTDIR. The ruling
+	  details are available at: http://austingroupbugs.net/view.php?id=324
+10-10-05  Fix readdir (dirnext) to drop (.exe .lnk) suffix if file without
+	  suffix does not exist.
+10-10-04  Create symlinks with 777 mode.
+10-09-24  Corrected process core dumps when killing non UWIN processes.
+10-09-08  Check for process termination to eliminate unnecessary error messages
+10-09-07  Initialized signal thread storage for init's cleanup thread
+10-08-30  Performance optimization when checking existence of a process or
+	  process group by kill(pid, 0)
+10-08-24  Corrected possible derefence of invalid pointers in writev/readv.
+10-08-23  Removed use of windows events for synchronizing the signal and wait
+	  threads
+10-08-19  Enhanced waiting for greater than 62 events with multiple wait threads
+	  for all threads to terminate when an event is signaled. Eliminated
+	  multiple references to same stack variable causing pointer failures.
+10-08-06  Added check to initialize an internal event for poll(), when using
+	  MSVC version 6 compilers.
+10-08-05  Corrected bad pointer problem causing init to terminate, when waiting
+	  for greater than 62 processes.
+10-08-04  Corrected problem with processes continuously running when children
+	  processes terminated by signals.
+10-08-04  Corrected problem with freeing process group leader, while still members
+	  in the group.
+10-08-04  Eliminated loss of file blocks on error condition
+10-07-13  Corrected process group leader termination, when process group was
+	  terminated by a SIGKILL.
+10-07-13  Increased default number of child processes to 124 from 63.
+10-07-13  Increased default number of process slots to 2048 from 1024.
+10-07-09  Changed Blocktype to unsigned short from unsigned char.
+10-07-09  Changed process name from ksh to the script ksh is executing.
+10-06-30  Detected race between pipe closes and pipe wakeup code to eliminate
+	  system failure.
+10-06-30  Detected race between pipe closes and pipe wakeup code to eliminate
+          system failure.
+10-06-29  Increase FDTABSIZE to 2ki.
+10-06-02  Removed password from command line when installing a new user service.
+10-05-07  Corrected process fault when starting a process with execve() and
+          the process has a pty console associated with it.
+10-04-09  Corrected memory corruption due to change in block size
+10-04-05  Increased block size to 1024 and modified all pointers in shared
+	  memory for 64 bit compatibility.
+10-03-30  Corrected removing group leader before all members of the group
+	  have terminated.
+10-03-23  Added /proc/<pid>/stat, /proc/mnts, /proc/swaps and /proc/socket
+	  to add commands lsof(1M), fuser(1M), killall(1M), and prtstat(1M)
+10-03-19  Numerous log message changes have been made to get more consistent
+	  information.
+10-03-18  A bug which occured when the process group list was larger than
+	  CHILD_MAX has been fixed.
+10-03-18  Added /proc/<pid>/stat.
+10-03-18  Fixed a bug in setpgid().
+10-03-15  Fix a bug in deleting a process that has been execed from process
+	  group list.
+10-03-08  A bug in the mwait() function when waiting for 64 or more objects
+	  has been fixed.
+10-03-08  Corrected getaddrinfo processing to eliminate address faults in
+	  sshd caused by fork().
+10-03-05  A bug in which a process group leader could be removed from the
+	  child list before it was waited for has been fixed.
+10-03-02  Corrected bug with using select on writing to pipes.
+10-03-02  A hang bug with read select on pipes has been fixed.
+10-03-01  Updated IP headers to match windows definitions.
+10-02-25  A bug in vfork followed by exec which left the vfork/child on
+	  the parent child list has been fixed.
+10-02-24  Removed services from /etc/services that are security risks.
+10-02-23  Corrected header file mismatches with windows for IPV6 functions,
+	  getaddrinfo and getnameinfo. Added support for inet_ntop and
+	  inet_pton. Added global variables defined in RFC 2553 for IPv6.
+10-02-18  Add ipv6 sockets.
+10-02-15  The extra argument added to proc_reparent() and dup_to_init()
+	  was removed and a different method was used to validate the
+	  the handles are valid.
+10-02-15  When a process exits, the wait thread was terminated.  It is now
+	  shutdown gracefully which fixes a timing problem with Windows V7.
+10-02-15  The send2slot function in spawnve.c was modified to handle sending
+	  from the init process to the init process.
+10-02-12  An extra argument was added to proc_reparent() and dup_to_init()
+	  since the process that invokes this might not hold the handles.
+10-02-10  Modified init process to ensure that critical handles were not
+	  accidently closed.
+10-02-09  Added a few more mutex calls for walking in the proc structure.
+10-02-08  Makde changes for V7 to work around problem caused by
+	  TerminateProcess() not deleting the process.
+10-02-04  Added code to dump the last 256 P() and V() operations for mutex#3
+	  in the case the a mutex timed out.
+10-02-04  A bug in which under rare circumstances, a process with the same
+	  pid is the group id of an existing process group has been fixed.
+10-02-01  More checks have been added to verify the consistency of process
+	  group lists.
+10-01-28  Conditionally compiled code was added that would track the last
+	  256 mutex operations and write the table into the log file when
+	  mutex timeouts and errors occur.
+10-01-27  The log file no longer limits the number of messages from the
+	  init process.
+10-01-20  Sync vmalloc with libast.
+10-01-15  Several bugs in the handling of reference counts for open files
+	  have been fixed.
+10-01-07  Fixed a bug in poll() to prevent bad arguments from causing an
+	  exception.
+09-12-18  Fixed DETACHED_PROCESS logic for xterm windows.
+09-12-15  Checked return code of GetConsoleScreenBufferInfo to avoid screen
+	  color changing to black on black.
+09-12-10  Rewrote proc_cleanup() to handle BLK_FILE blocks.
+09-12-09  Added checks for unreleased BLK_FILE blocks.
+09-12-04  Add __UWIN_DEBUG__=u2 to log untyped level <= 2.
+09-12-04  Change some level 0 warning log messages to level 1.
+09-12-03  Fix the FS:[0] exception handler reset.
+09-12-01  The link count for large directories are cached to improve
+	  performance.
+09-11-30  A bug in which the fork() function could change the value of a
+	  variable on the stack has been fixed.
+09-11-28  Pass exit code to trace_done() so trace(1) can report it.
+09-11-25  Fix _ast_atexit() trace_done() bug that lost trace(1) -c output.
+09-11-20  The type of each block is now kept in a separate array rather
+	  then being stored in the block itself.
+09-11-19  The BLK_CHECK compile options now also keeps line numbers, for
+	  P(), V(), and proc_release.
+09-11-18  All opens of /dev/null now all share the same data block.
+09-11-17  The init process periodically looks for file blocks that are not
+	  referenced by any process and removes them.
+09-11-16  The thread id if the process holding a mutex is now kept in
+	  the shared memory segment.
+09-11-11  Lock bits in the malloc regions are now cleared when copying
+	  from parent to child.
+09-11-05  A timing problem that could cause WaitFor*Obj*() to fail with
+	  an invalid handle has been fixed.
+09-11-04  __UWIN_DEBUG__ [eE] added to control log file stack traces
+		e: enable log stack traces (default)
+		E: disable log stack traces
+09-11-01  Added stack.c to for exception and debugging .pdb stack 
+	  traces and %(stack-exception)s %(stack-thread)s %(stack-process)s.
+09-10-31  Several changes to keep track of processes that abort to clean up
+	  all resources have been made which should eliminate most or all of
+	  the proc_cleanup and proc_unknown messages as well as some others.
+09-10-26  Changes were made to decrease the size of critical regions and to
+	  increase the timeout for mutexes to avoid mutex errors.
+09-10-21  A compile option BLK_CHECK has been added which will display the
+	  location of an allocation that causes memory corruption.
+09-10-21  Several changes to spawnve.c to reduce the number of unknown handles
+	  in the init process.
+09-10-21  __UWIN_DEBUG__ [wW] added to control log file wrapping
+		w: enable log wrap (default)
+		W: disable log wrap
+09-10-20  The curdir and rootdir fields of the proc structure where reduced
+	  to shorts to allow a new field to be added.
+09-10-20  A bug in which the child process count (ncount) could differ from
+	  the actual number has been fixed.
+09-10-16  Fixed import table raw data adjustment in isgui().
+09-10-16  Combined { round() roundof() } into roundof() in fsnt.h.
+09-10-14  Modified close() so that if the file number is greater than 0x1000,
+	  a message will be written to uwin log file.
+09-10-13  Modified the fork() malloc region copying to ignore invalid segments.
+09-10-06  The dup_init_handle thread moved from ums into the init process.
+09-10-06  Calls to _ast_malloc/_ast_free replaced by calls to malloc()/free()
+	  so that they occur in critical regions.
+09-10-05  Extra memory regions reserved to eliminate ocassional fork failures.
+09-10-02  sync'd vmalloc with ast source
+09-09-24  Corrected socket initialization to get correct error code.
+09-09-24  Prevented socket close extraneous error message from invalid handle.
+09-09-22  Improvements to the cleanup code to elminate dead processes.
+09-09-22  Changes to fork() code to eliminate some fork failures.
+09-09-22  Corrected reaping of terminated process to not reap process group
+	  leaders until there are no processes in the process group.
+09-09-21  Changed init's signal status to allow generation of exception
+	  information for memory access violation signals (SIGABRT, SIGIOT,
+	  SIGEMT, SIGFPE, SIGBUS, and SIGSEGV).
+09-09-18  Code was added to restart init within 10 seconds in the event that
+	  it terminates.
+09-09-18  Added init_handle and init_ntpid to Share and stored inheritable
+	  handle to init process in init_handle.
+09-09-17  common.h: corrected isvalid() macro for changed value of FDTYPE_NONE from -1 to 34
+09-09-17  fsnt.c: open handle leak fixes
+	  - fix pipe event handles close logic
+	  - corrected possible loss of event handles in sock_open on error case
+09-09-17  pathmap.c: removed duplicate setting of ERROR_ACCESS_DENIED
+09-09-17  socket.c: multiple fixes
+	  - afunix_connect: corrected error cleanup of handle, extra
+	  - socket: corrected loss of file slot and Pftdab lost on error cases
+          - socketpair: changed socketpair to be bi-directional
+          - common_select: separated two assignments on one line to two lines
+09-09-17  spawnve.c: multiple fixes
+	  - setup_fdtable: dup pipe handles only for close-on-exec pipes
+	  - start_proc: corrected index of phandle array to access the xhandle
+		values, the value of slot is 2 words, not one word.
+	  - start_proc: use setup_fdtable logic to close dup'd pipes
+09-09-15  uwin_mount.h: public part of mnhdr.h
+09-09-15  proc.c: add /proc/debug for debugging
+09-09-14  uwin_share.h: add uwin-header independent header for the uwin shared segment
+09-09-14  log.c: change log file rotation chunks to (16Mi+256Ki+256Ki)
+09-09-14  common.h,fsnt.c: add fake fs for FDTYPE_NONE to make it a valid index
+09-09-14  spawnve.c: periodically close non-uwin process handles in init
+09-09-11  test_init_mount: add
+09-09-09  fsnt.h,fsnt.c: add __FILE__,__LINE__ to badrefcount()
+09-09-09  pathmap.c: add UWIN_NOFOLLOW to uwin_pathmap()
+09-09-03  sig.c: ifdef out pthread code until other parts are implemented.
+09-09-03  spawnve.c: Work around PeekMessage() corruption of Tls values.
+09-09-03  spawnve.c: Fix proc_cleanup(0 typo that did the opposite check.
+09-09-03  pathmap.c: Don't log ERROR_SHARING_VIOLATION movefile() errors.
+09-09-03  log.c: Limit /var/log/uwin size to 3*64K.
+09-08-31  pathmap.c: drop MoveFile() ERROR_SHARING_VIOLATION log messages.
+09-08-28  socket.c,modem.c: Fix pipe logic bugs.
+09-08-21  Fixed .exe logic bug and changed FDTYPE_NONE to (-1).
+09-08-20  Corrected a bug causing process resources to be prematurely released.
+09-08-18  fsnt.c: Fix rename() .deleted dir and errno=0 on error!
+09-08-12  A bug which caused sftp to hang when complete has been fixed.
+09-08-10  Modified posix.dll so that it runs on Server 2003-64 in 32-bit mode.
+09-08-01  Some native programs, such as net, did not display output when run
+	  from an ssh session; this has been fixed.
+09-07-28  A bug with ipc which could cause a block which had been freed to
+	  continue to be used has been fixed.
+09-07-21  A bug which caused negative reference counts for files after process
+	  aborts has been fixed.
+09-07-02  Fix programs related to local user ids vs. network ids.
+09-06-20  Modified posix.dll so that it runs on Vista-64 and V7-64 in 32-bit
+	  mode.
+09-06-10  Many logerr() messages prevented.
+09-06-09  pinit.c: Provide abort() implementation if !_BLD_DLL.
+09-05-25  Added code to the init periodically to recover resources for
+	  blocks from processes that
+09-05-22  Fixed a problem which cause the block slot for the current directory
+	  to be incorrect.
+09-05-31  A bug in which the group id was incorrect when logging in with ssh
+	  has been fixed.
+09-05-19  When posix.dll encounters a user id that is not in /etc/passwd,
+	  it now adds an entry into the /etc/passwd file.
+09-05-15  Rewrote the uwin logging to be consistent and so that it could be
+	  enabled with the environment variable __UWIN_DEBUG__.
+09-05-07  Changes make to improve robustness of fork().
+09-04-20  A long standing bug with shortcuts which could cause a blue screen
+	  when pressing the uwin icon has been fixed.
+09-04-03  A bug in which time was not always returning monotonically increasing
+	  values has been fixed.
+09-03-30  alarm(2) was generating the alarm twice as long as requested and
+	  has been fixed.
+09-03-30  ualarm(2) now interprets its  second parameter correctly.
+09-03-19  A bug in processing of cc -E -C, vs. cpp -E -C has been fixed.
+09-03-03  getinfo.c: dosify log message \n => \r\n for notepad.
+09-02-06  Fixed posix.dll memory problem that showed up with tcl.
+09-02-02  Bootstrap log in /C/temp/uwin.log, all other logs in /var/log/.
+09-02-02  Unify logging and add __UWIN_DEBUG__=<level><subsystem>.
+09-02-02  Jumbo patch to use msvcrt.dll instead of msvcXX.dll.
+09-02-02  --- Release 4.5 ---

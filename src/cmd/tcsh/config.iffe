@@ -1,0 +1,4 @@
+cat{
+	#define POSIX	1
+	#include "config_f.h"
+}end

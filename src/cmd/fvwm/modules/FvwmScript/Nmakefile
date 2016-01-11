@@ -1,0 +1,12 @@
+include ../../fvwm.mk
+
+BINDIR = $(LIBEXECDIR)
+
+.SOURCE : Widgets
+
+FvwmScript :: \
+	FvwmScript.c Instructions.c libyywrap.c scanner.c script.c \
+	CheckBox.c HDipstick.c HScrollBar.c ItemDraw.c List.c \
+	Menu.c MiniScroll.c PopupMenu.c PushButton.c RadioButton.c \
+	Rectangle.c Swallow.c TextField.c Tools.c VDipstick.c \
+	VScrollBar.c Widget.c

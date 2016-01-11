@@ -1,0 +1,5 @@
+11-08-16 forkhelper.c: first release
+11-01-25 ums.c: increase MAXLINE -- we need a better solution
+10-11-30 ums.c: switch to UWIN_KEY_REL
+10-11-19 Rename "uwinserv.h" => <uwin_serve.h>, pull from $(INCLUDEDIR).
+10-11-15 split misc dir into misc and serv

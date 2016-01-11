@@ -1,0 +1,3 @@
+04-06-08 arscan.c,config.iffe: add HAVE_AR_H checks
+04-05-28 stdout messages => `info mam message ...'
+04-05-20 MAM (make abstract machine patch)

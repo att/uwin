@@ -1,0 +1,6 @@
+include "../inetutils.mk"
+
+telnet :: authenc.c commands.c main.c network.c ring.c sys_bsd.c \
+	telnet.c terminal.c tn3270.c utilities.c -ltelnet -linetutils telnet.1
+
+:: Makefile.in

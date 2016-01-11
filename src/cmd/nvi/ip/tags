@@ -1,0 +1,1192 @@
+ABSMARK1	../common/mark.h	/^#define	ABSMARK1	'\\''		\/* Absolute mark name. */
+ABSMARK2	../common/mark.h	/^#define	ABSMARK2	'`'		\/* Absolute mark name. *\/$/
+ADDITIONAL_CHARACTERS	../common/key.c	/^#define	ADDITIONAL_CHARACTERS	4$/
+ADD_SPACE_GOTO	../common/mem.h	/^#define	ADD_SPACE_GOTO(sp, bp, blen, nlen) {				\\/
+ADD_SPACE_RET	../common/mem.h	/^#define	ADD_SPACE_RET(sp, bp, blen, nlen) {				\\$/
+AGV_ALL	../ex/ex.h	/^#define	AGV_ALL		(AGV_AT | AGV_AT_NORANGE | AGV_GL/
+AGV_AT	../ex/ex.h	/^#define	AGV_AT		0x01		\/* @ buffer execution. *\/$/
+AGV_AT_NORANGE	../ex/ex.h	/^#define	AGV_AT_NORANGE	0x02		\/* @ buffer executio/
+AGV_GLOBAL	../ex/ex.h	/^#define	AGV_GLOBAL	0x04		\/* global command. *\/$/
+AGV_V	../ex/ex.h	/^#define	AGV_V		0x08		\/* v command. *\/$/
+ARG	../ex/ex_display.c	/^#define	ARG	"buffers"$/
+ARSIZE	../common/msg.c	/^#define	ARSIZE(a)	sizeof(a) \/ sizeof (*a)$/
+A_ALLOCATED	../common/args.h	/^#define	A_ALLOCATED	0x01	\/* If allocated space. */
+BINC_GOTO	../common/mem.h	/^#define	BINC_GOTO(sp, lp, llen, nlen) {					\\$/
+BINC_RET	../common/mem.h	/^#define	BINC_RET(sp, lp, llen, nlen) {					\\$/
+BITS	../common/key.c	/^#define	BITS	(sizeof(CHAR_T) * 8)$/
+BUILD	../ex/ex_subst.c	/^#define	BUILD(sp, l, len) {						\\$/
+CALLOC	../common/mem.h	/^#define	CALLOC(sp, p, cast, nmemb, size) {				\\$/
+CALLOC_GOTO	../common/mem.h	/^#define	CALLOC_GOTO(sp, p, cast, nmemb, size) {			/
+CALLOC_NOMSG	../common/mem.h	/^#define	CALLOC_NOMSG(sp, p, cast, nmemb, size) {		/
+CALLOC_RET	../common/mem.h	/^#define	CALLOC_RET(sp, p, cast, nmemb, size) {				/
+CBNAME	../common/cut.h	/^#define	CBNAME(sp, cbp, nch) {						\\$/
+CB_LMODE	../common/cut.h	/^#define	CB_LMODE	0x01		\/* Cut was in line mode. */
+CHK_INTR	../vi/v_txt.c	/^#define	CHK_INTR							\\$/
+CHLEN	../vi/vs_relative.c	/^#define	CHLEN(val) (ch = *(u_char *)p++) == '\\t' /
+CH_ABBREVIATED	../common/key.h	/^#define	CH_ABBREVIATED	0x01		\/* Character is from/
+CH_BSEARCH	../common/key.h	/^#define	CH_BSEARCH	'?'		\/* Backward search prompt/
+CH_CURSOR	../common/key.h	/^#define	CH_CURSOR	' '		\/* Cursor character. *\/$/
+CH_ENDMARK	../common/key.h	/^#define	CH_ENDMARK	'$'		\/* End of a range. *\/$/
+CH_EXPROMPT	../common/key.h	/^#define	CH_EXPROMPT	':'		\/* Ex prompt. *\/$/
+CH_FSEARCH	../common/key.h	/^#define	CH_FSEARCH	'\/'		\/* Forward search prompt/
+CH_HEX	../common/key.h	/^#define	CH_HEX		'\\030'		\/* Leading hex character/
+CH_LITERAL	../common/key.h	/^#define	CH_LITERAL	'\\026'		\/* ASCII ^V. *\/$/
+CH_MAPPED	../common/key.h	/^#define	CH_MAPPED	0x02		\/* Character is from a ma/
+CH_NO	../common/key.h	/^#define	CH_NO		'n'		\/* No. *\/$/
+CH_NOMAP	../common/key.h	/^#define	CH_NOMAP	0x04		\/* Do not map the characte/
+CH_NOT_DIGIT	../common/key.h	/^#define	CH_NOT_DIGIT	'a'		\/* A non-isdigit() char/
+CH_QUIT	../common/key.h	/^#define	CH_QUIT		'q'		\/* Quit. *\/$/
+CH_QUOTED	../common/key.h	/^#define	CH_QUOTED	0x08		\/* Character is already q/
+CH_YES	../common/key.h	/^#define	CH_YES		'y'		\/* Yes. *\/$/
+CLEAR_EX_CMD	../ex/ex.h	/^#define	CLEAR_EX_CMD(cmdp) {						\\$/
+CLEAR_EX_PARSER	../ex/ex.h	/^#define	CLEAR_EX_PARSER(cmdp)						\\$/
+CLP	../cl/cl.h	/^#define	CLP(sp)		((CL_PRIVATE *)((sp)->gp->cl_priv/
+CLR_INTERRUPT	../common/key.h	/^#define	CLR_INTERRUPT(sp)						\\$/
+CL_IN_EX	../cl/cl.h	/^#define	CL_IN_EX	0x0001	\/* Currently running ex. /
+CL_RENAME	../cl/cl.h	/^#define	CL_RENAME	0x0002	\/* X11 xterm icon\/windo/
+CL_RENAME_OK	../cl/cl.h	/^#define	CL_RENAME_OK	0x0004	\/* User wants the win/
+CL_SCR_EX_INIT	../cl/cl.h	/^#define	CL_SCR_EX_INIT	0x0008	\/* Ex screen initia/
+CL_SCR_VI_INIT	../cl/cl.h	/^#define	CL_SCR_VI_INIT	0x0010	\/* Vi screen initia/
+CL_SIGHUP	../cl/cl.h	/^#define	CL_SIGHUP	0x0020	\/* SIGHUP arrived. *\/$/
+CL_SIGINT	../cl/cl.h	/^#define	CL_SIGINT	0x0040	\/* SIGINT arrived. *\/$/
+CL_SIGTERM	../cl/cl.h	/^#define	CL_SIGTERM	0x0080	\/* SIGTERM arrived. *\//
+CL_SIGWINCH	../cl/cl.h	/^#define	CL_SIGWINCH	0x0100	\/* SIGWINCH arrived. */
+CL_STDIN_TTY	../cl/cl.h	/^#define	CL_STDIN_TTY	0x0200	\/* Talking to a termi/
+CNO	../vi/vs_refresh.c	/^#define	 CNO	sp->cno			\/* Current file column. */
+COL_OFF	../common/util.h	/^#define	COL_OFF(c, stop)	((stop) - ((c) % (stop)))/
+CSCOPE_CMD_FMT	../ex/ex_cscope.c	/^#define	CSCOPE_CMD_FMT		"cd '%s' && exec cscope -d/
+CSCOPE_DBFILE	../ex/ex_cscope.c	/^#define	CSCOPE_DBFILE		"cscope.out"$/
+CSCOPE_NLINES_FMT	../ex/ex_cscope.c	/^#define	CSCOPE_NLINES_FMT	"cscope: %d lines%1[\\n]/
+CSCOPE_PATHS	../ex/ex_cscope.c	/^#define	CSCOPE_PATHS		"cscope.tpath"$/
+CSCOPE_PROMPT	../ex/ex_cscope.c	/^#define	CSCOPE_PROMPT		">> "$/
+CSCOPE_QUERIES	../ex/ex_cscope.c	/^#define	CSCOPE_QUERIES		"sgdct efi"$/
+CSCOPE_RE_SPACE	../ex/ex_subst.c	/^#define	CSCOPE_RE_SPACE		"([ \\t]|\/\\\\*([^*]|\\/
+CS_EMP	../vi/vi.h	/^#define	CS_EMP	1			\/* Empty line. *\/$/
+CS_EOF	../vi/vi.h	/^#define	CS_EOF	2			\/* End-of-file. *\/$/
+CS_EOL	../vi/vi.h	/^#define	CS_EOL	3			\/* End-of-line. *\/$/
+CS_SOF	../vi/vi.h	/^#define	CS_SOF	4			\/* Start-of-file. *\/$/
+CUT_LINEMODE	../common/cut.h	/^#define	CUT_LINEMODE	0x01		\/* Cut in line mode. */
+CUT_NUMOPT	../common/cut.h	/^#define	CUT_NUMOPT	0x02		\/* Numeric buffer: optio/
+CUT_NUMREQ	../common/cut.h	/^#define	CUT_NUMREQ	0x04		\/* Numeric buffer: requi/
+DBG_FATAL	../common/exf.h	/^#define	DBG_FATAL	0x001	\/* If DNE, error message./
+DBG_NOCACHE	../common/exf.h	/^#define	DBG_NOCACHE	0x002	\/* Ignore the front-end/
+DEC	../vi/v_increment.c	/^#define	DEC	0$/
+DEFAULT_NOPRINT	../common/gs.h	/^#define	DEFAULT_NOPRINT	'\\1'		\/* Emergency non-p/
+DIVIDESTR	../vi/vs_msg.c	/^#define	DIVIDESTR	"+=+=+=+=+=+=+=+"$/
+DOT	../vi/vi.c	/^#define	DOT		(&VIP(sp)->sdot)$/
+DOTMOTION	../vi/vi.c	/^#define	DOTMOTION	(&VIP(sp)->sdotmotion)$/
+EC_INTERRUPT	../common/key.h	/^#define	EC_INTERRUPT	0x001		\/* Checking for inter/
+EC_MAPCOMMAND	../common/key.h	/^#define	EC_MAPCOMMAND	0x002		\/* Apply the command/
+EC_MAPINPUT	../common/key.h	/^#define	EC_MAPINPUT	0x004		\/* Apply the input map/
+EC_MAPNODIGIT	../common/key.h	/^#define	EC_MAPNODIGIT	0x008		\/* Return to a digit/
+EC_QUOTED	../common/key.h	/^#define	EC_QUOTED	0x010		\/* Try to quote next cha/
+EC_RAW	../common/key.h	/^#define	EC_RAW		0x020		\/* Any next character. XXX/
+EC_TIMEOUT	../common/key.h	/^#define	EC_TIMEOUT	0x040		\/* Timeout to next char/
+ENDMESSAGE	../tcl_api/tcl.c	/^#define	ENDMESSAGE							\\$/
+ENTIRE_LINE	../common/cut.c	/^#define	ENTIRE_LINE	0$/
+EQUAL	../ex/ex_tag.c	/^#define	EQUAL		0$/
+EXCMD_RUNNING	../common/gs.h	/^#define	EXCMD_RUNNING(gp)	((gp)->ecq.lh_first->cle/
+EXP	../ex/ex.h	/^#define	EXP(sp)	((EX_PRIVATE *)((sp)->ex_private))/
+EXP_CSCINIT	../ex/ex.h	/^#define	EXP_CSCINIT	0x01		\/* Cscope initialized. /
+E_ABSMARK	../ex/ex.h	/^#define	E_ABSMARK	0x00040000	\/* Set the absolute /
+E_ADDR1	../ex/ex.h	/^#define	E_ADDR1		0x00000001	\/* One address. *\/$/
+E_ADDR2	../ex/ex.h	/^#define	E_ADDR2		0x00000002	\/* Two addresses. *\//
+E_ADDR2_ALL	../ex/ex.h	/^#define	E_ADDR2_ALL	0x00000004	\/* Zero\/two addre/
+E_ADDR2_NONE	../ex/ex.h	/^#define	E_ADDR2_NONE	0x00000008	\/* Zero\/two addr/
+E_ADDR_DEF	../ex/ex.h	/^#define	E_ADDR_DEF	0x00080000	\/* Default addresse/
+E_ADDR_ZERO	../ex/ex.h	/^#define	E_ADDR_ZERO	0x00000010	\/* 0 is a legal ad/
+E_ADDR_ZERODEF	../ex/ex.h	/^#define	E_ADDR_ZERODEF	0x00000020	\/* 0 is default/
+E_AUTOPRINT	../ex/ex.h	/^#define	E_AUTOPRINT	0x00000040	\/* Command always /
+E_BLIGNORE	../ex/ex.h	/^#define	E_BLIGNORE	0x00000800	\/* Ignore blank lin/
+E_CLRFLAG	../ex/ex.h	/^#define	E_CLRFLAG	0x00000080	\/* Clear the print (/
+E_C_BUFFER	../ex/ex.h	/^#define	E_C_BUFFER	0x00001		\/* Buffer name specif/
+E_C_CARAT	../ex/ex.h	/^#define	E_C_CARAT	0x00002		\/*  ^ flag. *\/$/
+E_C_COUNT	../ex/ex.h	/^#define	E_C_COUNT	0x00004		\/* Count specified. */
+E_C_COUNT_NEG	../ex/ex.h	/^#define	E_C_COUNT_NEG	0x00008		\/* Count was signe/
+E_C_COUNT_POS	../ex/ex.h	/^#define	E_C_COUNT_POS	0x00010		\/* Count was signe/
+E_C_DASH	../ex/ex.h	/^#define	E_C_DASH	0x00020		\/*  - flag. *\/$/
+E_C_DOT	../ex/ex.h	/^#define	E_C_DOT		0x00040		\/*  . flag. *\/$/
+E_C_EQUAL	../ex/ex.h	/^#define	E_C_EQUAL	0x00080		\/*  = flag. *\/$/
+E_C_FORCE	../ex/ex.h	/^#define	E_C_FORCE	0x00100		\/*  ! flag. *\/$/
+E_C_HASH	../ex/ex.h	/^#define	E_C_HASH	0x00200		\/*  # flag. *\/$/
+E_C_LIST	../ex/ex.h	/^#define	E_C_LIST	0x00400		\/*  l flag. *\/$/
+E_C_PLUS	../ex/ex.h	/^#define	E_C_PLUS	0x00800		\/*  + flag. *\/$/
+E_C_PRINT	../ex/ex.h	/^#define	E_C_PRINT	0x01000		\/*  p flag. *\/$/
+E_DELTA	../ex/ex.h	/^#define	E_DELTA		0x00100000	\/* Search address wit/
+E_MODIFY	../ex/ex.h	/^#define	E_MODIFY	0x00200000	\/* File name expansio/
+E_MOVETOEND	../ex/ex.h	/^#define	E_MOVETOEND	0x00400000	\/* Move to the end/
+E_NAMEDISCARD	../ex/ex.h	/^#define	E_NAMEDISCARD	0x00001000	\/* Free\/discard/
+E_NEWLINE	../ex/ex.h	/^#define	E_NEWLINE	0x00800000	\/* Found ending <new/
+E_NEWSCREEN	../ex/ex.h	/^#define	E_NEWSCREEN	0x00000100	\/* Create a new sc/
+E_NOAUTO	../ex/ex.h	/^#define	E_NOAUTO	0x00002000	\/* Don't do autoprint/
+E_NOPRDEF	../ex/ex.h	/^#define	E_NOPRDEF	0x00004000	\/* Don't print as de/
+E_NRSEP	../ex/ex.h	/^#define	E_NRSEP		0x00008000	\/* Need to line adjus/
+E_OPTNUM	../ex/ex.h	/^#define	E_OPTNUM	0x00010000	\/* Number edit option/
+E_PRESERVE	../ex/ex.h	/^#define	E_PRESERVE	0x0003f800	\/* Bits to preserve/
+E_SEARCH_WMSG	../ex/ex.h	/^#define	E_SEARCH_WMSG	0x01000000	\/* Display searc/
+E_SECURE	../ex/ex.h	/^#define	E_SECURE	0x00000200	\/* Permission denied /
+E_USELASTCMD	../ex/ex.h	/^#define	E_USELASTCMD	0x02000000	\/* Use the last c/
+E_VIONLY	../ex/ex.h	/^#define	E_VIONLY	0x00000400	\/* Meaningful only in/
+E_VISEARCH	../ex/ex.h	/^#define	E_VISEARCH	0x04000000	\/* It's really a vi/
+E_VLITONLY	../ex/ex.h	/^#define	E_VLITONLY	0x00020000	\/* Use ^V quoting o/
+FALSE	../cl/cl.h	/^#define	FALSE	0$/
+FINDHELP	../ex/ex_cscope.c	/^#define	FINDHELP "\\$/
+FLUSH	../vi/vs_line.c	/^#define	FLUSH {								\\$/
+FL_CLR	../common/util.h	/^#define	FL_CLR(l, f)	((l) &= ~(f))$/
+FL_INIT	../common/util.h	/^#define	FL_INIT(l, f)	(l) = (f)		\/* Specific flag/
+FL_ISSET	../common/util.h	/^#define	FL_ISSET(l, f)	((l) & (f))$/
+FL_SET	../common/util.h	/^#define	FL_SET(l, f)	((l) |= (f))$/
+FMTCOLS	../common/recover.c	/^#define	FMTCOLS	60$/
+FREE_SPACE	../common/mem.h	/^#define	FREE_SPACE(sp, bp, blen) {					\\$/
+FR_CURSORSET	../common/gs.h	/^#define	FR_CURSORSET	0x0001		\/* If lno\/cno value/
+FR_DONTDELETE	../common/gs.h	/^#define	FR_DONTDELETE	0x0002		\/* Don't delete the/
+FR_EXNAMED	../common/gs.h	/^#define	FR_EXNAMED	0x0004		\/* Read\/write renamed/
+FR_NAMECHANGE	../common/gs.h	/^#define	FR_NAMECHANGE	0x0008		\/* If the name chan/
+FR_NEWFILE	../common/gs.h	/^#define	FR_NEWFILE	0x0010		\/* File doesn't really/
+FR_RECOVER	../common/gs.h	/^#define	FR_RECOVER	0x0020		\/* File is being recov/
+FR_TMPEXIT	../common/gs.h	/^#define	FR_TMPEXIT	0x0040		\/* Modified temporary /
+FR_TMPFILE	../common/gs.h	/^#define	FR_TMPFILE	0x0080		\/* If file has no name/
+FR_UNLOCKED	../common/gs.h	/^#define	FR_UNLOCKED	0x0100		\/* File couldn't be l/
+FS_ALL	../common/exf.h	/^#define	FS_ALL		0x001	\/* Write the entire file. */
+FS_APPEND	../common/exf.h	/^#define	FS_APPEND	0x002	\/* Append to the file. */
+FS_FORCE	../common/exf.h	/^#define	FS_FORCE	0x004	\/* Force is set. *\/$/
+FS_OPENERR	../common/exf.h	/^#define	FS_OPENERR	0x008	\/* Open failed, try it a/
+FS_POSSIBLE	../common/exf.h	/^#define	FS_POSSIBLE	0x010	\/* Force could have bee/
+FS_SETALT	../common/exf.h	/^#define	FS_SETALT	0x020	\/* Set alternate file nam/
+F_CLR	../common/util.h	/^#define	F_CLR(p, f)	FL_CLR((p)->flags, f)$/
+F_DEVSET	../common/exf.h	/^#define	F_DEVSET	0x001		\/* mdev\/minode fields in/
+F_FIRSTMODIFY	../common/exf.h	/^#define	F_FIRSTMODIFY	0x002		\/* File not yet modi/
+F_INIT	../common/util.h	/^#define	F_INIT(p, f)	FL_INIT((p)->flags, f)	\/* St/
+F_ISSET	../common/util.h	/^#define	F_ISSET(p, f)	FL_ISSET((p)->flags, f)$/
+F_MODIFIED	../common/exf.h	/^#define	F_MODIFIED	0x004		\/* File is currently di/
+F_MULTILOCK	../common/exf.h	/^#define	F_MULTILOCK	0x008		\/* Multiple processes /
+F_NOLOG	../common/exf.h	/^#define	F_NOLOG		0x010		\/* Logging turned off. */
+F_RCV_NORM	../common/exf.h	/^#define	F_RCV_NORM	0x020		\/* Don't delete recover/
+F_RCV_ON	../common/exf.h	/^#define	F_RCV_ON	0x040		\/* Recovery is possible. /
+F_SET	../common/util.h	/^#define	F_SET(p, f)	FL_SET((p)->flags, f)$/
+F_UNDO	../common/exf.h	/^#define	F_UNDO		0x080		\/* No change since last un/
+GCLP	../cl/cl.h	/^#define	GCLP(gp)	((CL_PRIVATE *)gp->cl_private)$/
+GET_SPACE_GOTO	../common/mem.h	/^#define	GET_SPACE_GOTO(sp, bp, blen, nlen) {				\\/
+GET_SPACE_RET	../common/mem.h	/^#define	GET_SPACE_RET(sp, bp, blen, nlen) {				\\$/
+GLOBAL_CLP	../cl/cl_main.c	/^#define	GLOBAL_CLP \\$/
+GLOBAL_TKP	../tk/tk_main.c	/^#define	GLOBAL_TKP \\$/
+GO_COLUMNS	../common/gs.h	/^#define	GO_COLUMNS	0		\/* Global options: columns./
+GO_LINES	../common/gs.h	/^#define	GO_LINES	1		\/* Global options: lines. *\//
+GO_SECURE	../common/gs.h	/^#define	GO_SECURE	2		\/* Global options: secure. */
+GO_TERM	../common/gs.h	/^#define	GO_TERM		3		\/* Global options: terminal t/
+GREATER	../ex/ex_tag.c	/^#define	GREATER		1$/
+GTKP	../tk/tki.h	/^#define	GTKP(gp)	((TK_PRIVATE *)gp->tk_private)$/
+G_ABBREV	../common/gs.h	/^#define	G_ABBREV	0x0001		\/* If have abbreviations/
+G_BELLSCHED	../common/gs.h	/^#define	G_BELLSCHED	0x0002		\/* Bell scheduled. */
+G_INTERRUPTED	../common/gs.h	/^#define	G_INTERRUPTED	0x0004		\/* Interrupted. *\//
+G_RECOVER_SET	../common/gs.h	/^#define	G_RECOVER_SET	0x0008		\/* Recover system i/
+G_SCRIPTED	../common/gs.h	/^#define	G_SCRIPTED	0x0010		\/* Ex script session. /
+G_SCRWIN	../common/gs.h	/^#define	G_SCRWIN	0x0020		\/* Scripting windows run/
+G_SNAPSHOT	../common/gs.h	/^#define	G_SNAPSHOT	0x0040		\/* Always snapshot fil/
+G_SRESTART	../common/gs.h	/^#define	G_SRESTART	0x0080		\/* Screen restarted. */
+G_TMP_INUSE	../common/gs.h	/^#define	G_TMP_INUSE	0x0100		\/* Temporary buffer i/
+HALFSCREEN	../vi/vi.h	/^#define	HALFSCREEN(sp)				\/* Half text screen. */
+HALFTEXT	../vi/vi.h	/^#define	HALFTEXT(sp)				\/* Half text. *\/	\\$/
+HANDLE_WEIRDNESS	../vi/vs_smap.c	/^#define	HANDLE_WEIRDNESS(cnt) {						\\$/
+HEXC	../vi/v_increment.c	/^#define	HEXC	2$/
+HEXL	../vi/v_increment.c	/^#define	HEXL	3$/
+HMAP	../vi/vi.h	/^#define	HMAP		_HMAP(sp)$/
+INCREMENT	../ex/ex_argv.c	/^#define	INCREMENT	20$/
+INDX_HUP	../cl/cl.h	/^#define	INDX_HUP	0$/
+INDX_INT	../cl/cl.h	/^#define	INDX_INT	1$/
+INDX_MAX	../cl/cl.h	/^#define	INDX_MAX	4	\/* Original signal information/
+INDX_TERM	../cl/cl.h	/^#define	INDX_TERM	2$/
+INDX_WINCH	../cl/cl.h	/^#define	INDX_WINCH	3$/
+INITMESSAGE	../tcl_api/tcl.c	/^#define	INITMESSAGE							\\$/
+INTERRUPTED	../common/key.h	/^#define	INTERRUPTED(sp)							\\$/
+INTERRUPT_CHECK	../common/key.h	/^#define	INTERRUPT_CHECK	100$/
+INTEXT_CHECK	../vi/v_paragraph.c	/^#define	INTEXT_CHECK {							\\$/
+ISCMD	../vi/vi.h	/^#define	ISCMD(p, key)	((p) == &vikeys[key])$/
+ISMOTION	../vi/vi.h	/^#define	ISMOTION(vp)	(vp->rkp != NULL && F_ISSET(v/
+IS_ESCAPE	../ex/ex.h	/^#define	IS_ESCAPE(sp, cmdp, ch)						\\$/
+IS_ONELINE	../vi/vi.h	/^#define	IS_ONELINE(sp)	((sp)->rows == 1)$/
+IS_RESTART	../vi/v_txt.c	/^#define	IS_RESTART	0x01	\/* Reset the incremental /
+IS_RUNNING	../vi/v_txt.c	/^#define	IS_RUNNING	0x02	\/* Incremental search tur/
+IS_SMALL	../vi/vi.h	/^#define	IS_SMALL(sp)	((sp)->t_minrows != (sp)->t_m/
+IS_SPLIT	../vi/vi.h	/^#define	IS_SPLIT(sp)							\\$/
+KEY	../vi/vi.c	/^#define	KEY(key, ec_flags) {						\\$/
+KEYS_WAITING	../common/key.h	/^#define	KEYS_WAITING(sp)	((sp)->gp->i_cnt != 0)$/
+KEY_LEN	../common/gs.h	/^#define	KEY_LEN(sp, ch)							\\$/
+KEY_NAME	../common/gs.h	/^#define	KEY_NAME(sp, ch)						\\$/
+KEY_VAL	../common/gs.h	/^#define	KEY_VAL(sp, ch)							\\$/
+LASTLINE	../vi/vi.h	/^#define LASTLINE(sp) \\$/
+LESS	../ex/ex_tag.c	/^#define	LESS		(-1)$/
+LF_CLR	../common/util.h	/^#define	LF_CLR(f)	FL_CLR(flags, f)$/
+LF_INIT	../common/util.h	/^#define	LF_INIT(f)	FL_INIT(flags, f)	\/* Local var/
+LF_ISSET	../common/util.h	/^#define	LF_ISSET(f)	FL_ISSET(flags, f)$/
+LF_SET	../common/util.h	/^#define	LF_SET(f)	FL_SET(flags, f)$/
+LINE_RESOLVE	../vi/v_txt.c	/^#define	LINE_RESOLVE {							\\$/
+LNO	../vi/vs_refresh.c	/^#define	 LNO	sp->lno			\/* Current file line. *\/$/
+LOG_CORRECT	../vi/v_itxt.c	/^#define	LOG_CORRECT {							\\$/
+LOG_CURSOR_END	../common/log.h	/^#define	LOG_CURSOR_END		2$/
+LOG_CURSOR_INIT	../common/log.h	/^#define	LOG_CURSOR_INIT		1$/
+LOG_ERR	../common/log.c	/^#define	LOG_ERR {							\\$/
+LOG_LINE_APPEND	../common/log.h	/^#define	LOG_LINE_APPEND		3$/
+LOG_LINE_DELETE	../common/log.h	/^#define	LOG_LINE_DELETE		4$/
+LOG_LINE_INSERT	../common/log.h	/^#define	LOG_LINE_INSERT		5$/
+LOG_LINE_RESET_B	../common/log.h	/^#define	LOG_LINE_RESET_B	7$/
+LOG_LINE_RESET_F	../common/log.h	/^#define	LOG_LINE_RESET_F	6$/
+LOG_MARK	../common/log.h	/^#define	LOG_MARK		8$/
+LOG_NOTYPE	../common/log.h	/^#define	LOG_NOTYPE		0$/
+L_ADDED	../common/screen.h	/^#define	L_ADDED		0		\/* Added lines. *\/$/
+L_CHANGED	../common/screen.h	/^#define	L_CHANGED	1		\/* Changed lines. *\/$/
+L_DELETED	../common/screen.h	/^#define	L_DELETED	2		\/* Deleted lines. *\/$/
+L_JOINED	../common/screen.h	/^#define	L_JOINED	3		\/* Joined lines. *\/$/
+L_MOVED	../common/screen.h	/^#define	L_MOVED		4		\/* Moved lines. *\/$/
+L_NAME	../ex/ex_tag.c	/^#define	L_NAME	30		\/* Name. *\/$/
+L_SHIFT	../common/screen.h	/^#define	L_SHIFT		5		\/* Shift lines. *\/$/
+L_SLOP	../ex/ex_tag.c	/^#define	L_SLOP	 4		\/* Leading number plus trailin/
+L_SPACE	../ex/ex_tag.c	/^#define	L_SPACE	 5		\/* Spaces after name, before /
+L_TAG	../ex/ex_tag.c	/^#define	L_TAG	20		\/* Tag. *\/$/
+L_YANKED	../common/screen.h	/^#define	L_YANKED	6		\/* Yanked lines. *\/$/
+MALLOC	../common/mem.h	/^#define	MALLOC(sp, p, cast, size) {					\\$/
+MALLOC_GOTO	../common/mem.h	/^#define	MALLOC_GOTO(sp, p, cast, size) {				\\$/
+MALLOC_NOMSG	../common/mem.h	/^#define	MALLOC_NOMSG(sp, p, cast, size) {				\\$/
+MALLOC_RET	../common/mem.h	/^#define	MALLOC_RET(sp, p, cast, size) {					\\$/
+MAPPED_KEYS_WAITING	../common/key.h	/^#define	MAPPED_KEYS_WAITING(sp)						\\$/
+MAP_FILE	../ex/ex_tag.c	/^#define	MAP_FILE	0$/
+MARK_DELETED	../common/mark.h	/^#define	MARK_DELETED	0x01		\/* Mark was deleted. */
+MARK_USERSET	../common/mark.h	/^#define	MARK_USERSET	0x02		\/* User set this mark./
+MAXCMDNAMELEN	../ex/ex.h	/^#define	MAXCMDNAMELEN	12		\/* Longest command name/
+MAXHOSTNAMELEN	../common/recover.c	/^#define	MAXHOSTNAMELEN	1024$/
+MAXIMUM_SCREEN_COLS	../common/options_f.c	/^#define	MAXIMUM_SCREEN_COLS	500$/
+MAXIMUM_SCREEN_ROWS	../common/options_f.c	/^#define	MAXIMUM_SCREEN_ROWS	500$/
+MAXNUM	../common/msg.c	/^#define	MAXNUM		25$/
+MAXVIKEY	../vi/vi.h	/^#define	MAXVIKEY	126		\/* List of vi commands. *\//
+MAX_ABBREVIATION_EXPANSION	../vi/v_txt.c	/^#define	MAX_ABBREVIATION_EXPANSION	256$/
+MAX_BIT_SEQ	../common/gs.h	/^#define	MAX_BIT_SEQ	128		\/* Max + 1 fast check ch/
+MAX_CHARACTER_COLUMNS	../common/key.h	/^#define	MAX_CHARACTER_COLUMNS	4$/
+MAX_CHAR_T	../common/key.h	/^#define	MAX_CHAR_T	0xff$/
+MAX_FAST_KEY	../common/gs.h	/^#define	MAX_FAST_KEY	254		\/* Max fast check chara/
+MEGABYTE	../ex/ex_source.c	/^#define	MEGABYTE	1048576$/
+MEMMOVE	../common/mem.h	/^#define	MEMMOVE(p, t, len)	memmove(p, t, (len) * s/
+MEMSET	../common/mem.h	/^#define	MEMSET(p, value, len)	memset(p, value, (le/
+MINIMUM_SCREEN_COLS	../common/screen.h	/^#define	MINIMUM_SCREEN_COLS	20$/
+MINIMUM_SCREEN_ROWS	../common/screen.h	/^#define	MINIMUM_SCREEN_ROWS	 1$/
+MINREAD	../ex/ex_script.c	/^#define	MINREAD	1024$/
+MODESIZE	../vi/vs_refresh.c	/^#define	MODESIZE	9$/
+MSTAT_SHOWLAST	../common/msg.h	/^#define	MSTAT_SHOWLAST	0x01	\/* Show the line numb/
+MSTAT_TRUNCATE	../common/msg.h	/^#define	MSTAT_TRUNCATE	0x02	\/* Truncate the file /
+Mcl_main	../cl/cl_main.c	/^main(argc, argv)$/
+Mtk_main	../tk/tk_main.c	/^main(argc, argv)$/
+NADD_SLONG	../common/util.h	/^#define	NADD_SLONG(sp, v1, v2)						\\$/
+NADD_USLONG	../common/util.h	/^#define	NADD_USLONG(sp, v1, v2)						\\$/
+NEEDFILE	../ex/ex.h	/^#define	NEEDFILE(sp, cmdp) {						\\$/
+NEEDNEWLINE	../ex/ex_subst.c	/^#define	NEEDNEWLINE(sp) {						\\$/
+NEEDSP	../ex/ex_subst.c	/^#define	NEEDSP(sp, len, pnt) {						\\$/
+NIL	../perl_api/perlsfio.c	/^#define NIL(type)       ((type)0)$/
+NNFITS	../common/util.h	/^#define	NNFITS(min, cur, add)						\\$/
+NPFITS	../common/util.h	/^#define	NPFITS(max, cur, add)						\\$/
+OCNO	../vi/vs_refresh.c	/^#define	OCNO	vip->ocno		\/* Remembered file column/
+OCTAL	../vi/v_increment.c	/^#define	OCTAL	4$/
+OG_CLR	../common/options.h	/^#define	OG_CLR(gp, o)		((gp)->opts[(o)].o_cur.val)/
+OG_D_STR	../common/options.h	/^#define	OG_D_STR(gp, o)		((gp)->opts[(o)].o_def.st/
+OG_D_VAL	../common/options.h	/^#define	OG_D_VAL(gp, o)		((gp)->opts[(o)].o_def.va/
+OG_ISSET	../common/options.h	/^#define	OG_ISSET(gp, o)		OG_VAL(gp, o)$/
+OG_SET	../common/options.h	/^#define	OG_SET(gp, o)		((gp)->opts[(o)].o_cur.val)/
+OG_STR	../common/options.h	/^#define	OG_STR(gp, o)		((gp)->opts[(o)].o_cur.str)/
+OG_VAL	../common/options.h	/^#define	OG_VAL(gp, o)		((gp)->opts[(o)].o_cur.val)/
+OI	../common/options.c	/^#define	OI(indx, str) {							\\$/
+OLNO	../vi/vs_refresh.c	/^#define	OLNO	vip->olno		\/* Remembered file line. /
+ONE_FOR_EOF	../cl/cl_read.c	/^#define	ONE_FOR_EOF	1$/
+OOBLNO	../common/mark.h	/^#define	OOBLNO		0		\/* Out-of-band line number. */
+OPT_ADISP	../common/options.h	/^#define	OPT_ADISP	0x001		\/* Always display the op/
+OPT_ALWAYS	../common/options.h	/^#define	OPT_ALWAYS	0x002		\/* Always call the supp/
+OPT_GLOBAL	../common/options.h	/^#define	OPT_GLOBAL	0x01		\/* Option is global. *\//
+OPT_NDISP	../common/options.h	/^#define	OPT_NDISP	0x004		\/* Never display the opt/
+OPT_NOSAVE	../common/options.h	/^#define	OPT_NOSAVE	0x008		\/* Mkexrc command doesn/
+OPT_NOSET	../common/options.h	/^#define	OPT_NOSET	0x010		\/* Option may not be set/
+OPT_NOUNSET	../common/options.h	/^#define	OPT_NOUNSET	0x020		\/* Option may not be u/
+OPT_NOZERO	../common/options.h	/^#define	OPT_NOZERO	0x040		\/* Option may not be se/
+OPT_SELECTED	../common/options.h	/^#define	OPT_SELECTED	0x02		\/* Selected for displa/
+OS_DEF	../common/options.h	/^#define	OS_DEF		0x01		\/* Set the default value. */
+OS_NOFREE	../common/options.h	/^#define	OS_NOFREE	0x02		\/* Don't free the old str/
+OS_STR	../common/options.h	/^#define	OS_STR		0x04		\/* Set to string argument. /
+OS_STRDUP	../common/options.h	/^#define	OS_STRDUP	0x08		\/* Copy then set to strin/
+OUTCH	../ex/ex_subst.c	/^#define	OUTCH(ch, nltrans) {						\\$/
+O_CLR	../common/options.h	/^#define	O_CLR(sp, o)		o_set(sp, o, 0, NULL, 0)$/
+O_D_CLR	../common/options.h	/^#define	O_D_CLR(sp, o)		o_set(sp, o, OS_DEF, NULL,/
+O_D_ISSET	../common/options.h	/^#define	O_D_ISSET(sp, o)	O_D_VAL(sp, o)$/
+O_D_SET	../common/options.h	/^#define	O_D_SET(sp, o)		o_set(sp, o, OS_DEF, NULL,/
+O_D_STR	../common/options.h	/^#define	O_D_STR(sp, o)		O_V(sp, o, o_def.str)$/
+O_D_VAL	../common/options.h	/^#define	O_D_VAL(sp, o)		O_V(sp, o, o_def.val)$/
+O_ISSET	../common/options.h	/^#define	O_ISSET(sp, o)		O_VAL(sp, o)$/
+O_NUMBER_FMT	../vi/vi.h	/^#define	O_NUMBER_FMT	"%7lu "			\/* O_NUMBER format/
+O_NUMBER_LENGTH	../vi/vi.h	/^#define	O_NUMBER_LENGTH	8$/
+O_SET	../common/options.h	/^#define	O_SET(sp, o)		o_set(sp, o, 0, NULL, 1)$/
+O_STR	../common/options.h	/^#define	O_STR(sp, o)		O_V(sp, o, o_cur.str)$/
+O_V	../common/options.h	/^#define	O_V(sp, o, fld)							\\$/
+O_VAL	../common/options.h	/^#define	O_VAL(sp, o)		O_V(sp, o, o_cur.val)$/
+PROMPTCHAR	../ex/ex.h	/^#define	PROMPTCHAR	':'		\/* Prompt using a colon. /
+QREM	../common/key.c	/^#define	QREM(len) {							\\$/
+RCV_EMAIL	../common/exf.h	/^#define	RCV_EMAIL	0x01	\/* Send the user email, IF/
+RCV_ENDSESSION	../common/exf.h	/^#define	RCV_ENDSESSION	0x02	\/* End the file sessi/
+RCV_PERIOD	../common/exf.h	/^#define	RCV_PERIOD	120		\/* Sync every two minutes/
+RCV_PRESERVE	../common/exf.h	/^#define	RCV_PRESERVE	0x04	\/* Preserve backup file/
+RCV_SNAPSHOT	../common/exf.h	/^#define	RCV_SNAPSHOT	0x08	\/* Snapshot the recover/
+REALLOC	../common/mem.h	/^#define	REALLOC(sp, p, cast, size) {					\\$/
+REM	../common/msg.c	/^#define	REM	(blen - mlen)$/
+RE_C_CSCOPE	../common/screen.h	/^#define	RE_C_CSCOPE	0x0001		\/* Compile cscope pat/
+RE_C_SEARCH	../common/screen.h	/^#define	RE_C_SEARCH	0x0002		\/* Compile search rep/
+RE_C_SILENT	../common/screen.h	/^#define	RE_C_SILENT	0x0004		\/* No error messages./
+RE_C_SUBST	../common/screen.h	/^#define	RE_C_SUBST	0x0008		\/* Compile substitute /
+RE_C_TAG	../common/screen.h	/^#define	RE_C_TAG	0x0010		\/* Compile ctag pattern./
+RE_WSTART	../common/screen.h	/^#define	RE_WSTART	"[[:<:]]"	\/* Ex\/vi: not-in-wor/
+RE_WSTOP	../common/screen.h	/^#define	RE_WSTOP	"[[:>:]]"$/
+RLNO	../cl/cl.h	/^#define	RLNO(sp, lno)	(sp)->woff + (lno)$/
+SCNO	../vi/vs_refresh.c	/^#define	SCNO	vip->sc_col		\/* Current screen colum/
+SCREEN_COLS	../vi/vi.h	/^#define	SCREEN_COLS(sp)				\/* Screen columns. *\//
+SC_ARGNOFREE	../common/screen.h	/^#define	SC_ARGNOFREE	0x00002000	\/* Argument list /
+SC_ARGRECOVER	../common/screen.h	/^#define	SC_ARGRECOVER	0x00004000	\/* Argument list/
+SC_AT_SET	../common/screen.h	/^#define	SC_AT_SET	0x00008000	\/* Last at buffer se/
+SC_COMEDIT	../common/screen.h	/^#define	SC_COMEDIT	0x00010000	\/* Colon command-li/
+SC_EX	../common/screen.h	/^#define	SC_EX		0x00000001	\/* Ex editor. *\/$/
+SC_EXIT	../common/screen.h	/^#define	SC_EXIT		0x00000200	\/* Exiting (not force/
+SC_EXIT_FORCE	../common/screen.h	/^#define	SC_EXIT_FORCE	0x00000400	\/* Exiting (forc/
+SC_EX_GLOBAL	../common/screen.h	/^#define	SC_EX_GLOBAL	0x00020000	\/* Ex: executing /
+SC_EX_SILENT	../common/screen.h	/^#define	SC_EX_SILENT	0x00040000	\/* Ex: batch scri/
+SC_EX_WAIT_NO	../common/screen.h	/^#define	SC_EX_WAIT_NO	0x00080000	\/* Ex: don't wai/
+SC_EX_WAIT_YES	../common/screen.h	/^#define	SC_EX_WAIT_YES	0x00100000	\/* Ex:    do wa/
+SC_FSWITCH	../common/screen.h	/^#define	SC_FSWITCH	0x00000800	\/* Switch underlyin/
+SC_READONLY	../common/screen.h	/^#define	SC_READONLY	0x00200000	\/* Persistent read/
+SC_RE_SEARCH	../common/screen.h	/^#define	SC_RE_SEARCH	0x00400000	\/* Search RE has /
+SC_RE_SUBST	../common/screen.h	/^#define	SC_RE_SUBST	0x00800000	\/* Substitute RE h/
+SC_SCRIPT	../common/screen.h	/^#define	SC_SCRIPT	0x01000000	\/* Shell script wind/
+SC_SCR_CENTER	../common/screen.h	/^#define	SC_SCR_CENTER	0x00000080	\/* Center the li/
+SC_SCR_EX	../common/screen.h	/^#define	SC_SCR_EX	0x00000004	\/* Screen is in ex m/
+SC_SCR_EXWROTE	../common/screen.h	/^#define	SC_SCR_EXWROTE	0x00000010	\/* Ex overwrite/
+SC_SCR_REDRAW	../common/screen.h	/^#define	SC_SCR_REDRAW	0x00000040	\/* Refresh. *\/$/
+SC_SCR_REFORMAT	../common/screen.h	/^#define	SC_SCR_REFORMAT	0x00000020	\/* Reformat (r/
+SC_SCR_TOP	../common/screen.h	/^#define	SC_SCR_TOP	0x00000100	\/* Top the line if /
+SC_SCR_VI	../common/screen.h	/^#define	SC_SCR_VI	0x00000008	\/* Screen is in vi m/
+SC_SSWITCH	../common/screen.h	/^#define	SC_SSWITCH	0x00001000	\/* Switch screens. /
+SC_STATUS	../common/screen.h	/^#define	SC_STATUS	0x02000000	\/* Welcome message. /
+SC_STATUS_CNT	../common/screen.h	/^#define	SC_STATUS_CNT	0x04000000	\/* Welcome messa/
+SC_TINPUT	../common/screen.h	/^#define	SC_TINPUT	0x08000000	\/* Doing text input./
+SC_TINPUT_INFO	../common/screen.h	/^#define	SC_TINPUT_INFO	0x10000000	\/* Doing text i/
+SC_VI	../common/screen.h	/^#define	SC_VI		0x00000002	\/* Vi editor. *\/$/
+SDEC	../vi/v_increment.c	/^#define	SDEC	1$/
+SEARCH_CSCOPE	../common/screen.h	/^#define	SEARCH_CSCOPE	0x0001		\/* Search for a csc/
+SEARCH_EOL	../common/screen.h	/^#define	SEARCH_EOL	0x0002		\/* Offset past EOL is /
+SEARCH_FILE	../common/screen.h	/^#define	SEARCH_FILE	0x0004		\/* Search the entire /
+SEARCH_INCR	../common/screen.h	/^#define	SEARCH_INCR	0x0008		\/* Search incremental/
+SEARCH_MSG	../common/screen.h	/^#define	SEARCH_MSG	0x0010		\/* Display search mess/
+SEARCH_PARSE	../common/screen.h	/^#define	SEARCH_PARSE	0x0020		\/* Parse the search /
+SEARCH_SET	../common/screen.h	/^#define	SEARCH_SET	0x0040		\/* Set search directio/
+SEARCH_TAG	../common/screen.h	/^#define	SEARCH_TAG	0x0080		\/* Search for a tag pa/
+SEARCH_WMSG	../common/screen.h	/^#define	SEARCH_WMSG	0x0100		\/* Display search-wra/
+SEQ_FUNCMAP	../common/seq.h	/^#define	SEQ_FUNCMAP	0x01		\/* If unresolved functi/
+SEQ_NOOVERWRITE	../common/seq.h	/^#define	SEQ_NOOVERWRITE	0x02		\/* Don't replace ex/
+SEQ_SCREEN	../common/seq.h	/^#define	SEQ_SCREEN	0x04		\/* If screen specific. */
+SEQ_USERDEF	../common/seq.h	/^#define	SEQ_USERDEF	0x08		\/* If user defined. *\//
+SETSIG	../tk/tk_main.c	/^#define	SETSIG(signal, handler, off) {					\\$/
+SHELLECHO	../ex/ex_argv.c	/^#define	SHELLECHO	"echo "$/
+SHELLOFFSET	../ex/ex_argv.c	/^#define	SHELLOFFSET	(sizeof(SHELLECHO) - 1)$/
+SHIFT	../common/key.c	/^#define	SHIFT	(BITS - BITS % 3)$/
+SIGBLOCK	../common/gs.h	/^#define	SIGBLOCK \\$/
+SIGUNBLOCK	../common/gs.h	/^#define	SIGUNBLOCK \\$/
+SINGLE_CHAR_COMMANDS	../ex/ex.c	/^#define	SINGLE_CHAR_COMMANDS	"\\004!#&*<=>@~"$/
+SIZE_HMAP	../vi/vi.h	/^#define	SIZE_HMAP(sp)	(VIP(sp)->srows + 1)$/
+SKIP_PAST_NEWLINE	../ex/ex_tag.c	/^#define	SKIP_PAST_NEWLINE(p, back)	while (p < back/
+SMAP_CACHE	../vi/vi.h	/^#define	SMAP_CACHE(smp)		((smp)->c_ecsize != 0)$/
+SMAP_FLUSH	../vi/vi.h	/^#define	SMAP_FLUSH(smp)		((smp)->c_ecsize = 0)$/
+STANDARD_TAB	../common/key.h	/^#define	STANDARD_TAB	6$/
+SUB_FIRST	../ex/ex_subst.c	/^#define	SUB_FIRST	0x01		\/* The 'r' flag isn't rea/
+SUB_MUSTSETR	../ex/ex_subst.c	/^#define	SUB_MUSTSETR	0x02		\/* The 'r' flag is req/
+TABCH	../vi/vs_line.c	/^#define	TABCH	'-'$/
+TAB_OFF	../vi/vi.h	/^#define	TAB_OFF(c)	COL_OFF((c), O_VAL(sp, O_TABSTO/
+TAB_RESET	../vi/vs_relative.c	/^#define	TAB_RESET {							\\$/
+TAGF_ERR	../ex/tag.h	/^#define	TAGF_ERR	0x01	\/* Error occurred. *\/$/
+TAGF_ERR_WARN	../ex/tag.h	/^#define	TAGF_ERR_WARN	0x02	\/* Error reported. *\//
+TAG_CSCOPE	../ex/tag.h	/^#define	TAG_CSCOPE	0x01	\/* Cscope tag. *\/$/
+TCC	../tcl_api/tcl.c	/^#define	TCC(name, function) {						\\$/
+TEMPORARY_FILE_STRING	../common/gs.h	/^#define	TEMPORARY_FILE_STRING	"\/tmp"	\/* Default /
+TERM_PUSH_SHIFT	../common/key.c	/^#define	TERM_PUSH_SHIFT	30$/
+TKP	../tk/tki.h	/^#define	TKP(sp)		((TK_PRIVATE *)((sp)->gp->tk_priv/
+TK_LLINE_IV	../tk/tki.h	/^#define	TK_LLINE_IV	0x0001	\/* Last line is in inv/
+TK_SCR_VI_INIT	../tk/tki.h	/^#define	TK_SCR_VI_INIT	0x0002	\/* Vi screen initia/
+TK_SIGHUP	../tk/tki.h	/^#define	TK_SIGHUP	0x0004	\/* SIGHUP arrived. *\/$/
+TK_SIGINT	../tk/tki.h	/^#define	TK_SIGINT	0x0008	\/* SIGINT arrived. *\/$/
+TK_SIGTERM	../tk/tki.h	/^#define	TK_SIGTERM	0x0010	\/* SIGTERM arrived. *\//
+TK_SIGWINCH	../tk/tki.h	/^#define	TK_SIGWINCH	0x0020	\/* SIGWINCH arrived. */
+TMAP	../vi/vi.h	/^#define	TMAP		_TMAP(sp)$/
+TOPMASK	../common/key.c	/^#define	TOPMASK	(BITS % 3 == 2 ? 3 : 1) << (BITS -/
+TRACE	../common/util.c	/^TRACE(sp, fmt, va_alist)$/
+TRUE	../cl/cl.h	/^#define	TRUE	1$/
+TXT_ADDNEWLINE	../common/key.h	/^#define	TXT_ADDNEWLINE	0x00000001	\/* Replay start/
+TXT_AICHARS	../common/key.h	/^#define	TXT_AICHARS	0x00000002	\/* Leading autoind/
+TXT_ALTWERASE	../common/key.h	/^#define	TXT_ALTWERASE	0x00000004	\/* Option: altwe/
+TXT_APPENDEOL	../common/key.h	/^#define	TXT_APPENDEOL	0x00000008	\/* Appending aft/
+TXT_AUTOINDENT	../common/key.h	/^#define	TXT_AUTOINDENT	0x00000010	\/* Autoindent s/
+TXT_BACKSLASH	../common/key.h	/^#define	TXT_BACKSLASH	0x00000020	\/* Backslashes e/
+TXT_BEAUTIFY	../common/key.h	/^#define	TXT_BEAUTIFY	0x00000040	\/* Only printable/
+TXT_BS	../common/key.h	/^#define	TXT_BS		0x00000080	\/* Backspace returns t/
+TXT_CEDIT	../common/key.h	/^#define	TXT_CEDIT	0x00000100	\/* Can return TERM_C/
+TXT_CNTRLD	../common/key.h	/^#define	TXT_CNTRLD	0x00000200	\/* Control-D is a c/
+TXT_CNTRLT	../common/key.h	/^#define	TXT_CNTRLT	0x00000400	\/* Control-T is an /
+TXT_CR	../common/key.h	/^#define	TXT_CR		0x00000800	\/* CR returns the buff/
+TXT_DOTTERM	../common/key.h	/^#define	TXT_DOTTERM	0x00001000	\/* Leading '.' ter/
+TXT_EMARK	../common/key.h	/^#define	TXT_EMARK	0x00002000	\/* End of replacemen/
+TXT_EOFCHAR	../common/key.h	/^#define	TXT_EOFCHAR	0x00004000	\/* ICANON set, ret/
+TXT_ESCAPE	../common/key.h	/^#define	TXT_ESCAPE	0x00008000	\/* Escape returns t/
+TXT_FILEC	../common/key.h	/^#define	TXT_FILEC	0x00010000	\/* Option: filec. */
+TXT_INFOLINE	../common/key.h	/^#define	TXT_INFOLINE	0x00020000	\/* Editing the in/
+TXT_MAPINPUT	../common/key.h	/^#define	TXT_MAPINPUT	0x00040000	\/* Apply the inpu/
+TXT_NLECHO	../common/key.h	/^#define	TXT_NLECHO	0x00080000	\/* Echo the newline/
+TXT_NUMBER	../common/key.h	/^#define	TXT_NUMBER	0x00100000	\/* Number the line./
+TXT_OVERWRITE	../common/key.h	/^#define	TXT_OVERWRITE	0x00200000	\/* Overwrite cha/
+TXT_PROMPT	../common/key.h	/^#define	TXT_PROMPT	0x00400000	\/* Display a prompt/
+TXT_RECORD	../common/key.h	/^#define	TXT_RECORD	0x00800000	\/* Record for repla/
+TXT_REPLACE	../common/key.h	/^#define	TXT_REPLACE	0x01000000	\/* Replace; don't /
+TXT_REPLAY	../common/key.h	/^#define	TXT_REPLAY	0x02000000	\/* Replay the last /
+TXT_RESOLVE	../common/key.h	/^#define	TXT_RESOLVE	0x04000000	\/* Resolve the tex/
+TXT_SEARCHINCR	../common/key.h	/^#define	TXT_SEARCHINCR	0x08000000	\/* Incremental /
+TXT_SHOWMATCH	../common/key.h	/^#define	TXT_SHOWMATCH	0x10000000	\/* Option: showm/
+TXT_TTYWERASE	../common/key.h	/^#define	TXT_TTYWERASE	0x20000000	\/* Option: ttywe/
+TXT_WRAPMARGIN	../common/key.h	/^#define	TXT_WRAPMARGIN	0x40000000	\/* Option: wrap/
+UNMAP_TST	../vi/v_txt.c	/^#define	UNMAP_TST							\\$/
+UPDATE_CURSOR	../vi/vs_refresh.c	/^#define	UPDATE_CURSOR	0x01			\/* Update the cursor/
+UPDATE_POSITION	../vi/v_txt.c	/^#define	UPDATE_POSITION(sp, tp) {					\\$/
+UPDATE_SCREEN	../vi/vs_refresh.c	/^#define	UPDATE_SCREEN	0x02			\/* Flush to screen. /
+USAGE	../cl/cl_funcs.c	/^#define	USAGE "\\$/
+VC_BUFFER	../vi/vi.h	/^#define	VC_BUFFER	0x00000200	\/* The buffer was se/
+VC_C1RESET	../vi/vi.h	/^#define	VC_C1RESET	0x00000400	\/* Reset C1SET flag/
+VC_C1SET	../vi/vi.h	/^#define	VC_C1SET	0x00000800	\/* Count 1 was set. */
+VC_C2SET	../vi/vi.h	/^#define	VC_C2SET	0x00001000	\/* Count 2 was set. */
+VC_ISDOT	../vi/vi.h	/^#define	VC_ISDOT	0x00002000	\/* Command was the do/
+VIP	../vi/vi.h	/^#define	VIP(sp)	((VI_PRIVATE *)((sp)->vi_private))/
+VIP_CUR_INVALID	../vi/vi.h	/^#define	VIP_CUR_INVALID	0x0001	\/* Cursor position/
+VIP_DIVIDER	../vi/vi.h	/^#define	VIP_DIVIDER	0x0002	\/* Divider line was di/
+VIP_N_EX_PAINT	../vi/vi.h	/^#define	VIP_N_EX_PAINT	0x0004	\/* Clear and repain/
+VIP_N_EX_REDRAW	../vi/vi.h	/^#define	VIP_N_EX_REDRAW	0x0008	\/* Schedule SC_SCR/
+VIP_N_REFRESH	../vi/vi.h	/^#define	VIP_N_REFRESH	0x0010	\/* Repaint (from SMA/
+VIP_N_RENUMBER	../vi/vi.h	/^#define	VIP_N_RENUMBER	0x0020	\/* Renumber screen /
+VIP_RCM_LAST	../vi/vi.h	/^#define	VIP_RCM_LAST	0x0040	\/* Cursor drawn to th/
+VIP_S_MODELINE	../vi/vi.h	/^#define	VIP_S_MODELINE	0x0080	\/* Skip next modeli/
+VIP_S_REFRESH	../vi/vi.h	/^#define	VIP_S_REFRESH	0x0100	\/* Skip next refresh/
+VI_FHEADER	../common/recover.c	/^#define	VI_FHEADER	"X-vi-recover-file: "$/
+VI_INIT_IGNORE	../tk/tki.h	/^#define	VI_INIT_IGNORE(sp)						\\$/
+VI_PHEADER	../common/recover.c	/^#define	VI_PHEADER	"X-vi-recover-path: "$/
+VI_SCR_CFLUSH	../vi/vi.h	/^#define	VI_SCR_CFLUSH(vip)	vip->ss_lno = OOBLNO$/
+VI_VERSION	../ex/version.h	/^#define	VI_VERSION \\$/
+VMC	../common/msg.c	/^#define	VMC	"VI_MESSAGE_CATALOG"$/
+VM_CMDFAILED	../vi/vi.h	/^#define	VM_CMDFAILED	0x00000001	\/* Command failed/
+VM_COMMASK	../vi/vi.h	/^#define	VM_COMMASK	0x0000000f	\/* Mask for VM flag/
+VM_CUTREQ	../vi/vi.h	/^#define	VM_CUTREQ	0x00000002	\/* Always cut into n/
+VM_LDOUBLE	../vi/vi.h	/^#define	VM_LDOUBLE	0x00000004	\/* Doubled command /
+VM_LMODE	../vi/vi.h	/^#define	VM_LMODE	0x00000008	\/* Motion is line ori/
+VM_RCM	../vi/vi.h	/^#define	VM_RCM		0x00000010	\/* Use relative cursor/
+VM_RCM_MASK	../vi/vi.h	/^#define	VM_RCM_MASK	0x000001f0	\/* Mask for RCM fl/
+VM_RCM_SET	../vi/vi.h	/^#define	VM_RCM_SET	0x00000020	\/* RCM: set to curr/
+VM_RCM_SETFNB	../vi/vi.h	/^#define	VM_RCM_SETFNB	0x00000040	\/* RCM: set to f/
+VM_RCM_SETLAST	../vi/vi.h	/^#define	VM_RCM_SETLAST	0x00000080	\/* RCM: set to /
+VM_RCM_SETNNB	../vi/vi.h	/^#define	VM_RCM_SETNNB	0x00000100	\/* RCM: set to n/
+V_ABS	../vi/vi.h	/^#define	V_ABS		0x00004000	\/* Absolute movement, s/
+V_ABS_C	../vi/vi.h	/^#define	V_ABS_C		0x00008000	\/* V_ABS: if the line/
+V_ABS_L	../vi/vi.h	/^#define	V_ABS_L		0x00010000	\/* V_ABS: if the line/
+V_CHAR	../vi/vi.h	/^#define	V_CHAR		0x00020000	\/* Character (required/
+V_CNT	../vi/vi.h	/^#define	V_CNT		0x00040000	\/* Count (optional, lea/
+V_DOT	../vi/vi.h	/^#define	V_DOT		0x00080000	\/* On success, sets dot/
+V_KEYW	../vi/vi.h	/^#define	V_KEYW		0x00100000	\/* Cursor referenced w/
+V_MOTION	../vi/vi.h	/^#define	V_MOTION	0x00200000	\/* Motion (required, /
+V_MOVE	../vi/vi.h	/^#define	V_MOVE		0x00400000	\/* Command defines mov/
+V_OBUF	../vi/vi.h	/^#define	V_OBUF		0x00800000	\/* Buffer (optional, l/
+V_RBUF	../vi/vi.h	/^#define	V_RBUF		0x01000000	\/* Buffer (required, t/
+V_SECURE	../vi/vi.h	/^#define	V_SECURE	0x02000000	\/* Permission denied /
+WMTSPACE	../vi/v_txt.c	/^#define	WMTSPACE	wmt.offset + wmt.owrite + wmt.ins/
+XTERM_RENAME	../cl/cl.h	/^#define	XTERM_RENAME	"\\033]0;%s\\007"$/
+_HMAP	../vi/vi.h	/^#define	_HMAP(sp)	(VIP(sp)->h_smap)$/
+_TMAP	../vi/vi.h	/^#define	_TMAP(sp)	(VIP(sp)->t_smap)$/
+__INUSE1	../ex/ex.h	/^#define	__INUSE1	0xfffff800	\/* Same name space as/
+__INUSE2	../ex/ex.h	/^#define	__INUSE2	0x000004ff	\/* Same name space as/
+__NL_ARGMAX	../common/msg.c	/^#define	__NL_ARGMAX	20		\/* Set to 9 by System V. /
+addnstr	../cl/cl_bsd.c	/^addnstr(s, n)$/
+api_aline	../common/api.c	/^api_aline(sp, lno, line, len)$/
+api_dline	../common/api.c	/^api_dline(sp, lno)$/
+api_edit	../common/api.c	/^api_edit(sp, file, spp, newscreen)$/
+api_emessage	../common/api.c	/^api_emessage(sp, text)$/
+api_escreen	../common/api.c	/^api_escreen(sp)$/
+api_fscreen	../common/api.c	/^api_fscreen(id, name)$/
+api_getcursor	../common/api.c	/^api_getcursor(sp, mp)$/
+api_getmark	../common/api.c	/^api_getmark(sp, markname, mp)$/
+api_gline	../common/api.c	/^api_gline(sp, lno, linepp, lenp)$/
+api_iline	../common/api.c	/^api_iline(sp, lno, line, len)$/
+api_imessage	../common/api.c	/^api_imessage(sp, text)$/
+api_lline	../common/api.c	/^api_lline(sp, lnop)$/
+api_map	../common/api.c	/^api_map(sp, name, map, len)$/
+api_nextmark	../common/api.c	/^api_nextmark(sp, next, namep)$/
+api_opts_get	../common/api.c	/^api_opts_get(sp, name, value, boolvalue)$/
+api_opts_set	../common/api.c	/^api_opts_set(sp, name, str_value, num_value, bool_/
+api_run_str	../common/api.c	/^api_run_str(sp, cmd)$/
+api_setcursor	../common/api.c	/^api_setcursor(sp, mp)$/
+api_setmark	../common/api.c	/^api_setmark(sp, markname, mp)$/
+api_sline	../common/api.c	/^api_sline(sp, lno, line, len)$/
+api_swscreen	../common/api.c	/^api_swscreen(sp, new)$/
+api_unmap	../common/api.c	/^api_unmap(sp, name)$/
+argv_alloc	../ex/ex_argv.c	/^argv_alloc(sp, len)$/
+argv_comp	../ex/ex_argv.c	/^argv_comp(a, b)$/
+argv_exp0	../ex/ex_argv.c	/^argv_exp0(sp, excp, cmd, cmdlen)$/
+argv_exp1	../ex/ex_argv.c	/^argv_exp1(sp, excp, cmd, cmdlen, is_bang)$/
+argv_exp2	../ex/ex_argv.c	/^argv_exp2(sp, excp, cmd, cmdlen)$/
+argv_exp3	../ex/ex_argv.c	/^argv_exp3(sp, excp, cmd, cmdlen)$/
+argv_fexp	../ex/ex_argv.c	/^argv_fexp(sp, excp, cmd, cmdlen, p, lenp, bpp, ble/
+argv_free	../ex/ex_argv.c	/^argv_free(sp)$/
+argv_init	../ex/ex_argv.c	/^argv_init(sp, excp)$/
+argv_lexp	../ex/ex_argv.c	/^argv_lexp(sp, excp, path)$/
+argv_sexp	../ex/ex_argv.c	/^argv_sexp(sp, bpp, blenp, lenp)$/
+attach	../common/main.c	/^attach(gp)$/
+b_search	../common/search.c	/^b_search(sp, fm, rm, ptrn, plen, eptrn, flags)$/
+bdisplay	../ex/ex_display.c	/^bdisplay(sp)$/
+beep	../cl/cl_bsd.c	/^beep()$/
+binary_search	../ex/ex_tag.c	/^binary_search(string, front, back)$/
+binc	../common/util.c	/^binc(sp, bp, bsizep, min)$/
+bword	../vi/v_word.c	/^bword(sp, vp, type)$/
+cb_rotate	../common/cut.c	/^cb_rotate(sp)$/
+cl_addstr	../cl/cl_funcs.c	/^cl_addstr(sp, str, len)$/
+cl_attr	../cl/cl_funcs.c	/^cl_attr(sp, attribute, on)$/
+cl_baud	../cl/cl_funcs.c	/^cl_baud(sp, ratep)$/
+cl_bell	../cl/cl_funcs.c	/^cl_bell(sp)$/
+cl_clrtoeol	../cl/cl_funcs.c	/^cl_clrtoeol(sp)$/
+cl_cursor	../cl/cl_funcs.c	/^cl_cursor(sp, yp, xp)$/
+cl_deleteln	../cl/cl_funcs.c	/^cl_deleteln(sp)$/
+cl_event	../cl/cl_read.c	/^cl_event(sp, evp, flags, ms)$/
+cl_ex_adjust	../cl/cl_funcs.c	/^cl_ex_adjust(sp, action)$/
+cl_ex_end	../cl/cl_screen.c	/^cl_ex_end(gp)$/
+cl_ex_init	../cl/cl_screen.c	/^cl_ex_init(sp)$/
+cl_fmap	../cl/cl_term.c	/^cl_fmap(sp, stype, from, flen, to, tlen)$/
+cl_freecap	../cl/cl_screen.c	/^cl_freecap(clp)$/
+cl_func_std	../cl/cl_main.c	/^cl_func_std(gp)$/
+cl_getcap	../cl/cl_screen.c	/^cl_getcap(sp, name, elementp)$/
+cl_init	../cl/cl_main.c	/^cl_init(gp)$/
+cl_insertln	../cl/cl_funcs.c	/^cl_insertln(sp)$/
+cl_keyval	../cl/cl_funcs.c	/^cl_keyval(sp, val, chp, dnep)$/
+cl_move	../cl/cl_funcs.c	/^cl_move(sp, lno, cno)$/
+cl_omesg	../cl/cl_term.c	/^cl_omesg(sp, clp, on)$/
+cl_optchange	../cl/cl_term.c	/^cl_optchange(sp, opt, str, valp)$/
+cl_pfmap	../cl/cl_term.c	/^cl_pfmap(sp, stype, from, flen, to, tlen)$/
+cl_putchar	../cl/cl_term.c	/^cl_putchar(ch)$/
+cl_putenv	../cl/cl_screen.c	/^cl_putenv(name, str, value)$/
+cl_quit	../cl/cl_screen.c	/^cl_quit(gp)$/
+cl_read	../cl/cl_read.c	/^cl_read(sp, flags, bp, blen, nrp, tp)$/
+cl_refresh	../cl/cl_funcs.c	/^cl_refresh(sp, repaint)$/
+cl_rename	../cl/cl_funcs.c	/^cl_rename(sp, name, on)$/
+cl_resize	../cl/cl_read.c	/^cl_resize(sp, lines, columns)$/
+cl_screen	../cl/cl_screen.c	/^cl_screen(sp, flags)$/
+cl_ssize	../cl/cl_term.c	/^cl_ssize(sp, sigwinch, rowp, colp, changedp)$/
+cl_suspend	../cl/cl_funcs.c	/^cl_suspend(sp, allowedp)$/
+cl_term_end	../cl/cl_term.c	/^cl_term_end(gp)$/
+cl_term_init	../cl/cl_term.c	/^cl_term_init(sp)$/
+cl_usage	../cl/cl_funcs.c	/^cl_usage()$/
+cl_vi_end	../cl/cl_screen.c	/^cl_vi_end(gp)$/
+cl_vi_init	../cl/cl_screen.c	/^cl_vi_init(sp)$/
+compare	../ex/ex_tag.c	/^compare(s1, s2, back)$/
+create_cs_cmd	../ex/ex_cscope.c	/^create_cs_cmd(sp, pattern, searchp)$/
+cs_bblank	../vi/getc.c	/^cs_bblank(sp, csp)$/
+cs_fblank	../vi/getc.c	/^cs_fblank(sp, csp)$/
+cs_fspace	../vi/getc.c	/^cs_fspace(sp, csp)$/
+cs_init	../vi/getc.c	/^cs_init(sp, csp)$/
+cs_next	../vi/getc.c	/^cs_next(sp, csp)$/
+cs_prev	../vi/getc.c	/^cs_prev(sp, csp)$/
+csc_file	../ex/ex_cscope.c	/^csc_file(sp, csc, name, dirp, dlenp, isolderp)$/
+csc_help	../ex/ex_cscope.c	/^csc_help(sp, cmd)$/
+cscope_add	../ex/ex_cscope.c	/^cscope_add(sp, cmdp, dname)$/
+cscope_display	../ex/ex_cscope.c	/^cscope_display(sp)$/
+cscope_find	../ex/ex_cscope.c	/^cscope_find(sp, cmdp, pattern)$/
+cscope_help	../ex/ex_cscope.c	/^cscope_help(sp, cmdp, subcmd)$/
+cscope_kill	../ex/ex_cscope.c	/^cscope_kill(sp, cmdp, cn)$/
+cscope_reset	../ex/ex_cscope.c	/^cscope_reset(sp, cmdp, notusedp)$/
+cscope_search	../ex/ex_cscope.c	/^cscope_search(sp, tqp, tp)$/
+ctag_file	../ex/ex_tag.c	/^ctag_file(sp, tfp, name, dirp, dlenp)$/
+ctag_search	../ex/ex_tag.c	/^ctag_search(sp, search, slen, tag)$/
+ctag_sfile	../ex/ex_tag.c	/^ctag_sfile(sp, tfp, tqp, tname)$/
+ctag_slist	../ex/ex_tag.c	/^ctag_slist(sp, tag)$/
+cut	../common/cut.c	/^cut(sp, namep, fm, tm, flags)$/
+cut_close	../common/cut.c	/^cut_close(gp)$/
+cut_line	../common/cut.c	/^cut_line(sp, lno, fcno, clen, cbp)$/
+db	../ex/ex_display.c	/^db(sp, cbp, name)$/
+db_append	../common/line.c	/^db_append(sp, update, lno, p, len)$/
+db_delete	../common/line.c	/^db_delete(sp, lno)$/
+db_eget	../common/line.c	/^db_eget(sp, lno, pp, lenp, isemptyp)$/
+db_err	../common/line.c	/^db_err(sp, lno)$/
+db_exist	../common/line.c	/^db_exist(sp, lno)$/
+db_get	../common/line.c	/^db_get(sp, lno, flags, pp, lenp)$/
+db_insert	../common/line.c	/^db_insert(sp, lno, p, len)$/
+db_last	../common/line.c	/^db_last(sp, lnop)$/
+db_set	../common/line.c	/^db_set(sp, lno, p, len)$/
+del	../common/delete.c	/^del(sp, fm, tm, lmode)$/
+e_asp	../common/key.h	/^#define	e_asp	_u_event._e_str.asp$/
+e_c	../common/key.h	/^#define	e_c	_u_event._e_ch.c$/
+e_ch	../common/key.h	/^#define	e_ch	_u_event._e_ch		\/* !!! The structure/
+e_cno	../common/key.h	/^#define	e_cno	_u_event._e_mark.cno1$/
+e_csp	../common/key.h	/^#define	e_csp	_u_event._e_str.csp$/
+e_fcno	../common/key.h	/^#define	e_fcno	_u_event._e_mark.cno1$/
+e_flags	../common/key.h	/^#define	e_flags	_u_event._e_ch.flags$/
+e_flno	../common/key.h	/^#define	e_flno	_u_event._e_mark.lno1	\/* Text regi/
+e_len	../common/key.h	/^#define	e_len	_u_event._e_str.len$/
+e_lno	../common/key.h	/^#define	e_lno	_u_event._e_mark.lno1	\/* Single loc/
+e_memcmp	../common/seq.c	/^e_memcmp(p1, ep, n)$/
+e_tcno	../common/key.h	/^#define	e_tcno	_u_event._e_mark.cno2$/
+e_tlno	../common/key.h	/^#define	e_tlno	_u_event._e_mark.lno2$/
+e_value	../common/key.h	/^#define	e_value	_u_event._e_ch.value$/
+editor	../common/main.c	/^editor(gp, argc, argv)$/
+eword	../vi/v_word.c	/^eword(sp, vp, type)$/
+ex	../ex/ex.c	/^ex(spp)$/
+ex_N_edit	../ex/ex_edit.c	/^ex_N_edit(sp, cmdp, frp, attach)$/
+ex_N_next	../ex/ex_args.c	/^ex_N_next(sp, cmdp)$/
+ex_abbr	../ex/ex_abbrev.c	/^ex_abbr(sp, cmdp)$/
+ex_aci	../ex/ex_append.c	/^ex_aci(sp, cmdp, cmd)$/
+ex_append	../ex/ex_append.c	/^ex_append(sp, cmdp)$/
+ex_args	../ex/ex_args.c	/^ex_args(sp, cmdp)$/
+ex_at	../ex/ex_at.c	/^ex_at(sp, cmdp)$/
+ex_badaddr	../ex/ex.c	/^ex_badaddr(sp, cp, ba, nret)$/
+ex_bang	../ex/ex_bang.c	/^ex_bang(sp, cmdp)$/
+ex_bg	../ex/ex_screen.c	/^ex_bg(sp, cmdp)$/
+ex_buildargv	../ex/ex_args.c	/^ex_buildargv(sp, cmdp, name)$/
+ex_cadd	../ex/ex_util.c	/^ex_cadd(cmdp, ap, arg, len)$/
+ex_cd	../ex/ex_cd.c	/^ex_cd(sp, cmdp)$/
+ex_change	../ex/ex_append.c	/^ex_change(sp, cmdp)$/
+ex_cinit	../ex/ex_util.c	/^ex_cinit(cmdp, cmd_id, naddr, lno1, lno2, force, a/
+ex_cmd	../ex/ex.c	/^ex_cmd(sp)$/
+ex_comlog	../ex/ex.c	/^ex_comlog(sp, ecp)$/
+ex_comm_search	../ex/ex.c	/^ex_comm_search(name, len)$/
+ex_copy	../ex/ex_move.c	/^ex_copy(sp, cmdp)$/
+ex_cscope	../ex/ex_cscope.c	/^ex_cscope(sp, cmdp)$/
+ex_delete	../ex/ex_delete.c	/^ex_delete(sp, cmdp)$/
+ex_discard	../ex/ex.c	/^ex_discard(sp)$/
+ex_display	../ex/ex_display.c	/^ex_display(sp, cmdp)$/
+ex_edit	../ex/ex_edit.c	/^ex_edit(sp, cmdp)$/
+ex_emsg	../ex/ex_util.c	/^ex_emsg(sp, p, which)$/
+ex_equal	../ex/ex_equal.c	/^ex_equal(sp, cmdp)$/
+ex_exec_proc	../ex/ex_shell.c	/^ex_exec_proc(sp, cmdp, cmd, msg, need_newline)$/
+ex_exrc	../ex/ex_init.c	/^ex_exrc(sp)$/
+ex_fflush	../ex/ex_print.c	/^ex_fflush(sp)$/
+ex_fg	../ex/ex_screen.c	/^ex_fg(sp, cmdp)$/
+ex_file	../ex/ex_file.c	/^ex_file(sp, cmdp)$/
+ex_filter	../ex/ex_filter.c	/^ex_filter(sp, cmdp, fm, tm, rp, cmd, ftype)$/
+ex_g_insdel	../ex/ex_global.c	/^ex_g_insdel(sp, op, lno)$/
+ex_g_setup	../ex/ex_global.c	/^ex_g_setup(sp, cmdp, cmd)$/
+ex_getline	../ex/ex_util.c	/^ex_getline(sp, fp, lenp)$/
+ex_global	../ex/ex_global.c	/^ex_global(sp, cmdp)$/
+ex_help	../ex/ex_usage.c	/^ex_help(sp, cmdp)$/
+ex_init	../ex/ex_util.c	/^ex_init(sp)$/
+ex_insert	../ex/ex_append.c	/^ex_insert(sp, cmdp)$/
+ex_is_abbrev	../ex/ex.c	/^ex_is_abbrev(name, len)$/
+ex_is_unmap	../ex/ex.c	/^ex_is_unmap(name, len)$/
+ex_join	../ex/ex_join.c	/^ex_join(sp, cmdp)$/
+ex_ldisplay	../ex/ex_print.c	/^ex_ldisplay(sp, p, len, col, flags)$/
+ex_line	../ex/ex.c	/^ex_line(sp, ecp, mp, isaddrp, errp)$/
+ex_list	../ex/ex_print.c	/^ex_list(sp, cmdp)$/
+ex_load	../ex/ex.c	/^ex_load(sp)$/
+ex_map	../ex/ex_map.c	/^ex_map(sp, cmdp)$/
+ex_mark	../ex/ex_mark.c	/^ex_mark(sp, cmdp)$/
+ex_mkexrc	../ex/ex_mkexrc.c	/^ex_mkexrc(sp, cmdp)$/
+ex_move	../ex/ex_move.c	/^ex_move(sp, cmdp)$/
+ex_ncheck	../ex/ex_util.c	/^ex_ncheck(sp, force)$/
+ex_next	../ex/ex_args.c	/^ex_next(sp, cmdp)$/
+ex_number	../ex/ex_print.c	/^ex_number(sp, cmdp)$/
+ex_open	../ex/ex_open.c	/^ex_open(sp, cmdp)$/
+ex_optchange	../ex/ex_init.c	/^ex_optchange(sp, offset, str, valp)$/
+ex_perl	../ex/ex_perl.c	/^ex_perl(sp, cmdp)$/
+ex_pr	../ex/ex_print.c	/^ex_pr(sp, cmdp)$/
+ex_prchars	../ex/ex_print.c	/^ex_prchars(sp, p, colp, len, flags, repeatc)$/
+ex_preserve	../ex/ex_preserve.c	/^ex_preserve(sp, cmdp)$/
+ex_prev	../ex/ex_args.c	/^ex_prev(sp, cmdp)$/
+ex_print	../ex/ex_print.c	/^ex_print(sp, cmdp, fp, tp, flags)$/
+ex_printf	../ex/ex_print.c	/^ex_printf(sp, fmt, va_alist)$/
+ex_put	../ex/ex_put.c	/^ex_put(sp, cmdp)$/
+ex_puts	../ex/ex_print.c	/^ex_puts(sp, str)$/
+ex_quit	../ex/ex_quit.c	/^ex_quit(sp, cmdp)$/
+ex_range	../ex/ex.c	/^ex_range(sp, ecp, errp)$/
+ex_read	../ex/ex_read.c	/^ex_read(sp, cmdp)$/
+ex_readfp	../ex/ex_read.c	/^ex_readfp(sp, name, fp, fm, nlinesp, silent)$/
+ex_recover	../ex/ex_preserve.c	/^ex_recover(sp, cmdp)$/
+ex_resize	../ex/ex_screen.c	/^ex_resize(sp, cmdp)$/
+ex_rew	../ex/ex_args.c	/^ex_rew(sp, cmdp)$/
+ex_run_file	../ex/ex_init.c	/^ex_run_file(sp, name)$/
+ex_run_str	../ex/ex_init.c	/^ex_run_str(sp, name, str, len, ex_flags, nocopy)$/
+ex_s	../ex/ex_subst.c	/^ex_s(sp, cmdp)$/
+ex_scprint	../ex/ex_print.c	/^ex_scprint(sp, fp, tp)$/
+ex_screen_copy	../ex/ex_init.c	/^ex_screen_copy(orig, sp)$/
+ex_screen_end	../ex/ex_init.c	/^ex_screen_end(sp)$/
+ex_script	../ex/ex_script.c	/^ex_script(sp, cmdp)$/
+ex_sdisplay	../ex/ex_screen.c	/^ex_sdisplay(sp)$/
+ex_set	../ex/ex_set.c	/^ex_set(sp, cmdp)$/
+ex_shell	../ex/ex_shell.c	/^ex_shell(sp, cmdp)$/
+ex_shiftl	../ex/ex_shift.c	/^ex_shiftl(sp, cmdp)$/
+ex_shiftr	../ex/ex_shift.c	/^ex_shiftr(sp, cmdp)$/
+ex_source	../ex/ex_source.c	/^ex_source(sp, cmdp)$/
+ex_stop	../ex/ex_stop.c	/^ex_stop(sp, cmdp)$/
+ex_subagain	../ex/ex_subst.c	/^ex_subagain(sp, cmdp)$/
+ex_subtilde	../ex/ex_subst.c	/^ex_subtilde(sp, cmdp)$/
+ex_tag_Nswitch	../ex/ex_tag.c	/^ex_tag_Nswitch(sp, tp, force)$/
+ex_tag_copy	../ex/ex_tag.c	/^ex_tag_copy(orig, sp)$/
+ex_tag_display	../ex/ex_tag.c	/^ex_tag_display(sp)$/
+ex_tag_first	../ex/ex_tag.c	/^ex_tag_first(sp, tagarg)$/
+ex_tag_free	../ex/ex_tag.c	/^ex_tag_free(sp)$/
+ex_tag_next	../ex/ex_tag.c	/^ex_tag_next(sp, cmdp)$/
+ex_tag_nswitch	../ex/ex_tag.c	/^ex_tag_nswitch(sp, tp, force)$/
+ex_tag_pop	../ex/ex_tag.c	/^ex_tag_pop(sp, cmdp)$/
+ex_tag_prev	../ex/ex_tag.c	/^ex_tag_prev(sp, cmdp)$/
+ex_tag_push	../ex/ex_tag.c	/^ex_tag_push(sp, cmdp)$/
+ex_tag_top	../ex/ex_tag.c	/^ex_tag_top(sp, cmdp)$/
+ex_tagf_alloc	../ex/ex_tag.c	/^ex_tagf_alloc(sp, str)$/
+ex_tcl	../ex/ex_tcl.c	/^ex_tcl(sp, cmdp)$/
+ex_txt	../ex/ex_txt.c	/^ex_txt(sp, tiqh, prompt, flags)$/
+ex_unabbr	../ex/ex_abbrev.c	/^ex_unabbr(sp, cmdp)$/
+ex_undo	../ex/ex_undo.c	/^ex_undo(sp, cmdp)$/
+ex_unknown	../ex/ex.c	/^ex_unknown(sp, cmd, len)$/
+ex_unmap	../ex/ex_map.c	/^ex_unmap(sp, cmdp)$/
+ex_usage	../ex/ex_usage.c	/^ex_usage(sp, cmdp)$/
+ex_v	../ex/ex_global.c	/^ex_v(sp, cmdp)$/
+ex_version	../ex/ex_version.c	/^ex_version(sp, cmdp)$/
+ex_visual	../ex/ex_visual.c	/^ex_visual(sp, cmdp)$/
+ex_viusage	../ex/ex_usage.c	/^ex_viusage(sp, cmdp)$/
+ex_wn	../ex/ex_write.c	/^ex_wn(sp, cmdp)$/
+ex_wq	../ex/ex_write.c	/^ex_wq(sp, cmdp)$/
+ex_write	../ex/ex_write.c	/^ex_write(sp, cmdp)$/
+ex_writefp	../ex/ex_write.c	/^ex_writefp(sp, name, fp, fm, tm, nlno, nch, silent/
+ex_xit	../ex/ex_write.c	/^ex_xit(sp, cmdp)$/
+ex_yank	../ex/ex_yank.c	/^ex_yank(sp, cmdp)$/
+ex_z	../ex/ex_z.c	/^ex_z(sp, cmdp)$/
+exrc_isok	../ex/ex_init.c	/^exrc_isok(sp, sbp, path, rootown, rootid)$/
+exwr	../ex/ex_write.c	/^exwr(sp, cmdp, cmd)$/
+f_altwerase	../common/options_f.c	/^f_altwerase(sp, op, str, valp)$/
+f_columns	../common/options_f.c	/^f_columns(sp, op, str, valp)$/
+f_lines	../common/options_f.c	/^f_lines(sp, op, str, valp)$/
+f_lisp	../common/options_f.c	/^f_lisp(sp, op, str, valp)$/
+f_msgcat	../common/options_f.c	/^f_msgcat(sp, op, str, valp)$/
+f_paragraph	../common/options_f.c	/^f_paragraph(sp, op, str, valp)$/
+f_print	../common/options_f.c	/^f_print(sp, op, str, valp)$/
+f_readonly	../common/options_f.c	/^f_readonly(sp, op, str, valp)$/
+f_recompile	../common/options_f.c	/^f_recompile(sp, op, str, valp)$/
+f_reformat	../common/options_f.c	/^f_reformat(sp, op, str, valp)$/
+f_search	../common/search.c	/^f_search(sp, fm, rm, ptrn, plen, eptrn, flags)$/
+f_section	../common/options_f.c	/^f_section(sp, op, str, valp)$/
+f_ttywerase	../common/options_f.c	/^f_ttywerase(sp, op, str, valp)$/
+f_w1200	../common/options_f.c	/^f_w1200(sp, op, str, valp)$/
+f_w300	../common/options_f.c	/^f_w300(sp, op, str, valp)$/
+f_w9600	../common/options_f.c	/^f_w9600(sp, op, str, valp)$/
+f_window	../common/options_f.c	/^f_window(sp, op, str, valp)$/
+file_add	../common/exf.c	/^file_add(sp, name)$/
+file_aw	../common/exf.c	/^file_aw(sp, flags)$/
+file_backup	../common/exf.c	/^file_backup(sp, name, bname)$/
+file_cinit	../common/exf.c	/^file_cinit(sp)$/
+file_comment	../common/exf.c	/^file_comment(sp)$/
+file_end	../common/exf.c	/^file_end(sp, ep, force)$/
+file_init	../common/exf.c	/^file_init(sp, frp, rcv_name, flags)$/
+file_lock	../common/exf.c	/^file_lock(sp, name, fdp, fd, iswrite)$/
+file_m1	../common/exf.c	/^file_m1(sp, force, flags)$/
+file_m2	../common/exf.c	/^file_m2(sp, force)$/
+file_m3	../common/exf.c	/^file_m3(sp, force)$/
+file_spath	../common/exf.c	/^file_spath(sp, frp, sbp, existsp)$/
+file_write	../common/exf.c	/^file_write(sp, fm, tm, name, flags)$/
+filter_ldisplay	../ex/ex_filter.c	/^filter_ldisplay(sp, fp)$/
+flash	../cl/cl_bsd.c	/^flash()$/
+fword	../vi/v_word.c	/^fword(sp, vp, type)$/
+gdbrefresh	../cl/cl_funcs.c	/^gdbrefresh()$/
+get_paths	../ex/ex_cscope.c	/^get_paths(sp, csc)$/
+getint	../tcl_api/tcl.c	/^getint(interp, msg, s, intp)$/
+getscreenid	../tcl_api/tcl.c	/^getscreenid(interp, spp, id, name)$/
+goto_adjust	../vi/v_scroll.c	/^goto_adjust(vp)$/
+gs_init	../cl/cl_main.c	/^gs_init(name)$/
+h_hup	../cl/cl_main.c	/^h_hup(signo)$/
+h_int	../cl/cl_main.c	/^h_int(signo)$/
+h_term	../cl/cl_main.c	/^h_term(signo)$/
+h_winch	../cl/cl_main.c	/^h_winch(signo)$/
+idlok	../cl/cl_bsd.c	/^idlok(win, bf)$/
+inc_buf	../vi/v_put.c	/^inc_buf(sp, vp)$/
+inc_err	../vi/v_increment.c	/^inc_err(sp, nret)$/
+inword	../vi/vi.h	/^#define	inword(ch)	(isalnum(ch) || (ch) == '_')$/
+io	../vi/v_itxt.c	/^io(sp, vp, cmd)$/
+isblank	../common/key.h	/^#define	isblank(ch)	((ch) == ' ' || (ch) == '\\t')/
+ishex	../vi/v_increment.c	/^#define	ishex(c)	(isdigit(c) || strchr("abcdefABCD/
+isoctal	../vi/v_increment.c	/^#define	isoctal(c)	(isdigit(c) && (c) != '8' && (c/
+keypad	../cl/cl_bsd.c	/^keypad(a, on)$/
+lcmp	../cl/cl_bsd.c	/^lcmp(a, b)$/
+linear_search	../ex/ex_tag.c	/^linear_search(string, front, back)$/
+log_backward	../common/log.c	/^log_backward(sp, rp)$/
+log_cursor	../common/log.c	/^log_cursor(sp)$/
+log_cursor1	../common/log.c	/^log_cursor1(sp, type)$/
+log_end	../common/log.c	/^log_end(sp, ep)$/
+log_err	../common/log.c	/^log_err(sp, file, line)$/
+log_forward	../common/log.c	/^log_forward(sp, rp)$/
+log_init	../common/log.c	/^log_init(sp, ep)$/
+log_line	../common/log.c	/^log_line(sp, lno, action)$/
+log_mark	../common/log.c	/^log_mark(sp, lmp)$/
+log_setline	../common/log.c	/^log_setline(sp)$/
+log_trace	../common/log.c	/^log_trace(sp, msg, rno, p)$/
+lookup_ccmd	../ex/ex_cscope.c	/^lookup_ccmd(name)$/
+mark	../vi/v_mark.c	/^mark(sp, vp, cmd)$/
+mark_end	../common/mark.c	/^mark_end(sp, ep)$/
+mark_find	../common/mark.c	/^mark_find(sp, key)$/
+mark_get	../common/mark.c	/^mark_get(sp, key, mp, mtype)$/
+mark_init	../common/mark.c	/^mark_init(sp, ep)$/
+mark_insdel	../common/mark.c	/^mark_insdel(sp, op, lno)$/
+mark_set	../common/mark.c	/^mark_set(sp, key, value, userset)$/
+mod_rpt	../common/msg.c	/^mod_rpt(sp)$/
+msg_cat	../common/msg.c	/^msg_cat(sp, str, lenp)$/
+msg_close	../common/msg.c	/^msg_close(gp)$/
+msg_cmsg	../common/msg.c	/^msg_cmsg(sp, which, lenp)$/
+msg_open	../common/msg.c	/^msg_open(sp, file)$/
+msg_print	../common/msg.c	/^msg_print(sp, s, needfree)$/
+msghandler	../tcl_api/tcl.c	/^msghandler(sp, mtype, msg, len)$/
+msgq	../common/msg.c	/^msgq(sp, mt, fmt, va_alist)$/
+msgq_status	../common/msg.c	/^msgq_status(sp, lno, flags)$/
+msgq_str	../common/msg.c	/^msgq_str(sp, mtype, str, fmt)$/
+newterm	../cl/cl_bsd.c	/^newterm(a, b, c)$/
+nget_slong	../common/util.c	/^nget_slong(valp, p, endp, base)$/
+nget_uslong	../common/util.c	/^nget_uslong(valp, p, endp, base)$/
+nonblank	../common/util.c	/^nonblank(sp, lno, cnop)$/
+noprev	../vi/v_ch.c	/^noprev(sp)$/
+notfound	../vi/v_ch.c	/^notfound(sp, ch)$/
+o_set	../common/options.c	/^o_set(sp, opt, flags, str, val)$/
+opts_abbcmp	../common/options.c	/^opts_abbcmp(a, b)$/
+opts_cmp	../common/options.c	/^opts_cmp(a, b)$/
+opts_copy	../common/options.c	/^opts_copy(orig, sp)$/
+opts_dump	../common/options.c	/^opts_dump(sp, type)$/
+opts_empty	../common/options.c	/^opts_empty(sp, off, silent)$/
+opts_free	../common/options.c	/^opts_free(sp)$/
+opts_init	../common/options.c	/^opts_init(sp, oargs)$/
+opts_nomatch	../common/options.c	/^opts_nomatch(sp, name)$/
+opts_print	../common/options.c	/^opts_print(sp, op)$/
+opts_save	../common/options.c	/^opts_save(sp, fp)$/
+opts_search	../common/options.c	/^opts_search(name)$/
+opts_set	../common/options.c	/^opts_set(sp, argv, usage)$/
+parse	../ex/ex_cscope.c	/^parse(sp, csc, tqp, matchesp)$/
+perr	../cl/cl_main.c	/^perr(name, msg)$/
+proc_wait	../ex/ex_shell.c	/^proc_wait(sp, pid, cmd, silent, okpipe)$/
+ptym_open	../ex/ex_script.c	/^ptym_open(pts_name)$/
+ptys_open	../ex/ex_script.c	/^ptys_open(fdm, pts_name)$/
+put	../common/put.c	/^put(sp, cbp, namep, cp, rp, append)$/
+rcv_copy	../common/recover.c	/^rcv_copy(sp, wfd, fname)$/
+rcv_email	../common/recover.c	/^rcv_email(sp, fname)$/
+rcv_gets	../common/recover.c	/^rcv_gets(buf, len, fd)$/
+rcv_init	../common/recover.c	/^rcv_init(sp)$/
+rcv_list	../common/recover.c	/^rcv_list(sp)$/
+rcv_mailfile	../common/recover.c	/^rcv_mailfile(sp, issync, cp_path)$/
+rcv_mktemp	../common/recover.c	/^rcv_mktemp(sp, path, dname, perms)$/
+rcv_read	../common/recover.c	/^rcv_read(sp, frp)$/
+rcv_sync	../common/recover.c	/^rcv_sync(sp, flags)$/
+rcv_tmp	../common/recover.c	/^rcv_tmp(sp, ep, name)$/
+re_compile	../ex/ex_subst.c	/^re_compile(sp, ptrn, plen, ptrnp, lenp, rep, flags/
+re_conv	../ex/ex_subst.c	/^re_conv(sp, ptrnp, plenp, replacedp)$/
+re_cscope_conv	../ex/ex_subst.c	/^re_cscope_conv(sp, ptrnp, plenp, replacedp)$/
+re_error	../ex/ex_subst.c	/^re_error(sp, errcode, preg)$/
+re_sub	../ex/ex_subst.c	/^re_sub(sp, ip, lbp, lbclenp, lblenp, match)$/
+re_tag_conv	../ex/ex_subst.c	/^re_tag_conv(sp, ptrnp, plenp, replacedp)$/
+read_prompt	../ex/ex_cscope.c	/^read_prompt(sp, csc)$/
+run_cscope	../ex/ex_cscope.c	/^run_cscope(sp, csc, dbname)$/
+s	../ex/ex_subst.c	/^s(sp, cmdp, s, re, flags)$/
+scr_update	../common/line.c	/^scr_update(sp, lno, op, current)$/
+screen_end	../common/screen.c	/^screen_end(sp)$/
+screen_init	../common/screen.c	/^screen_init(gp, orig, spp)$/
+screen_next	../common/screen.c	/^screen_next(sp)$/
+search_busy	../common/search.c	/^search_busy(sp, btype)$/
+search_init	../common/search.c	/^search_init(sp, dir, ptrn, plen, epp, flags)$/
+search_msg	../common/search.c	/^search_msg(sp, msg)$/
+seq_close	../common/seq.c	/^seq_close(gp)$/
+seq_delete	../common/seq.c	/^seq_delete(sp, input, ilen, stype)$/
+seq_dump	../common/seq.c	/^seq_dump(sp, stype, isname)$/
+seq_find	../common/seq.c	/^seq_find(sp, lastqp, e_input, c_input, ilen, stype/
+seq_mdel	../common/seq.c	/^seq_mdel(qp)$/
+seq_save	../common/seq.c	/^seq_save(sp, fp, prefix, stype)$/
+seq_set	../common/seq.c	/^seq_set(sp, name, nlen, input, ilen, output, olen,/
+set_alt_name	../common/exf.c	/^set_alt_name(sp, name)$/
+set_txt_std	../vi/v_itxt.c	/^set_txt_std(sp, vp, flags)$/
+setsig	../cl/cl_main.c	/^setsig(signo, oactp, handler)$/
+setupterm	../cl/cl_bsd.c	/^setupterm(ttype, fno, errp)$/
+sfdcnewnvi	../perl_api/perlsfio.c	/^sfdcnewnvi(scrp)$/
+sfnviwrite	../perl_api/perlsfio.c	/^sfnviwrite(f, buf, n, disc)$/
+shift	../ex/ex_shift.c	/^shift(sp, cmdp, rl)$/
+sig_end	../cl/cl_main.c	/^sig_end(gp)$/
+sig_init	../cl/cl_main.c	/^sig_init(gp, sp)$/
+sigmsg	../ex/ex_shell.c	/^sigmsg(signo)$/
+sscr_check	../ex/ex_script.c	/^sscr_check(sp)$/
+sscr_end	../ex/ex_script.c	/^sscr_end(sp)$/
+sscr_exec	../ex/ex_script.c	/^sscr_exec(sp, lno)$/
+sscr_getprompt	../ex/ex_script.c	/^sscr_getprompt(sp)$/
+sscr_init	../ex/ex_script.c	/^sscr_init(sp)$/
+sscr_input	../ex/ex_script.c	/^sscr_input(sp)$/
+sscr_insert	../ex/ex_script.c	/^sscr_insert(sp)$/
+sscr_matchprompt	../ex/ex_script.c	/^sscr_matchprompt(sp, lp, line_len, lenp)$/
+sscr_pty	../ex/ex_script.c	/^sscr_pty(amaster, aslave, name, termp, winp)$/
+sscr_setprompt	../ex/ex_script.c	/^sscr_setprompt(sp, buf, len)$/
+start_cscopes	../ex/ex_cscope.c	/^start_cscopes(sp, cmdp)$/
+tag_copy	../ex/ex_tag.c	/^tag_copy(sp, otp, tpp)$/
+tag_msg	../ex/ex_tag.c	/^tag_msg(sp, msg, tag)$/
+tag_pop	../ex/ex_tag.c	/^tag_pop(sp, dtqp, force)$/
+tagf_copy	../ex/ex_tag.c	/^tagf_copy(sp, otfp, tfpp)$/
+tagf_free	../ex/ex_tag.c	/^tagf_free(sp, tfp)$/
+tagq_copy	../ex/ex_tag.c	/^tagq_copy(sp, otqp, tqpp)$/
+tagq_free	../ex/ex_tag.c	/^tagq_free(sp, tqp)$/
+tail	../common/util.c	/^tail(path)$/
+tcl_aline	../tcl_api/tcl.c	/^tcl_aline(clientData, interp, argc, argv)$/
+tcl_dline	../tcl_api/tcl.c	/^tcl_dline(clientData, interp, argc, argv)$/
+tcl_err	../tk/tk_main.c	/^tcl_err(tkp)$/
+tcl_escreen	../tcl_api/tcl.c	/^tcl_escreen(clientData, interp, argc, argv)$/
+tcl_fscreen	../tcl_api/tcl.c	/^tcl_fscreen(clientData, interp, argc, argv)$/
+tcl_getcursor	../tcl_api/tcl.c	/^tcl_getcursor(clientData, interp, argc, argv)$/
+tcl_getmark	../tcl_api/tcl.c	/^tcl_getmark(clientData, interp, argc, argv)$/
+tcl_gline	../tcl_api/tcl.c	/^tcl_gline(clientData, interp, argc, argv)$/
+tcl_iline	../tcl_api/tcl.c	/^tcl_iline(clientData, interp, argc, argv)$/
+tcl_init	../tcl_api/tcl.c	/^tcl_init(gp)$/
+tcl_iscreen	../tcl_api/tcl.c	/^tcl_iscreen(clientData, interp, argc, argv)$/
+tcl_lline	../tcl_api/tcl.c	/^tcl_lline(clientData, interp, argc, argv)$/
+tcl_map	../tcl_api/tcl.c	/^tcl_map(clientData, interp, argc, argv)$/
+tcl_msg	../tcl_api/tcl.c	/^tcl_msg(clientData, interp, argc, argv)$/
+tcl_opts_get	../tcl_api/tcl.c	/^tcl_opts_get(clientData, interp, argc, argv)$/
+tcl_opts_set	../tcl_api/tcl.c	/^tcl_opts_set(clientData, interp, argc, argv)$/
+tcl_setcursor	../tcl_api/tcl.c	/^tcl_setcursor(clientData, interp, argc, argv)$/
+tcl_setmark	../tcl_api/tcl.c	/^tcl_setmark(clientData, interp, argc, argv)$/
+tcl_sline	../tcl_api/tcl.c	/^tcl_sline(clientData, interp, argc, argv)$/
+tcl_swscreen	../tcl_api/tcl.c	/^tcl_swscreen(clientData, interp, argc, argv)$/
+tcl_unmap	../tcl_api/tcl.c	/^tcl_unmap(clientData, interp, argc, argv)$/
+term_init	../cl/cl_main.c	/^term_init(name, ttype)$/
+terminate	../ex/ex_cscope.c	/^terminate(sp, csc, n)$/
+text_free	../common/cut.c	/^text_free(tp)$/
+text_init	../common/cut.c	/^text_init(sp, p, len, total_len)$/
+text_lfree	../common/cut.c	/^text_lfree(headp)$/
+tigetstr	../cl/cl_bsd.c	/^tigetstr(name)$/
+tk_addstr	../tk/tk_funcs.c	/^tk_addstr(sp, str, len)$/
+tk_attr	../tk/tk_funcs.c	/^tk_attr(sp, attribute, on)$/
+tk_baud	../tk/tk_funcs.c	/^tk_baud(sp, ratep)$/
+tk_bell	../tk/tk_funcs.c	/^tk_bell(sp)$/
+tk_clrtoeol	../tk/tk_funcs.c	/^tk_clrtoeol(sp)$/
+tk_cursor	../tk/tk_funcs.c	/^tk_cursor(sp, yp, xp)$/
+tk_deleteln	../tk/tk_funcs.c	/^tk_deleteln(sp)$/
+tk_event	../tk/tk_read.c	/^tk_event(sp, evp, flags, timeout)$/
+tk_ex_adjust	../tk/tk_funcs.c	/^tk_ex_adjust(sp, action)$/
+tk_fmap	../tk/tk_term.c	/^tk_fmap(sp, stype, from, flen, to, tlen)$/
+tk_insertln	../tk/tk_funcs.c	/^tk_insertln(sp)$/
+tk_key	../tk/tk_read.c	/^tk_key(clientData, interp, argc, argv)$/
+tk_keyval	../tk/tk_funcs.c	/^tk_keyval(sp, val, chp, dnep)$/
+tk_move	../tk/tk_funcs.c	/^tk_move(sp, lno, cno)$/
+tk_msg	../tk/tk_util.c	/^tk_msg(sp, mtype, line, rlen)$/
+tk_op	../tk/tk_util.c	/^tk_op(clientData, interp, argc, argv)$/
+tk_op_push	../tk/tk_util.c	/^tk_op_push(sp, tkp, et)$/
+tk_opt_init	../tk/tk_util.c	/^tk_opt_init(clientData, interp, argc, argv)$/
+tk_opt_set	../tk/tk_util.c	/^tk_opt_set(clientData, interp, argc, argv)$/
+tk_optchange	../tk/tk_term.c	/^tk_optchange(sp, opt, str, valp)$/
+tk_quit	../tk/tk_screen.c	/^tk_quit(gp)$/
+tk_read	../tk/tk_read.c	/^tk_read(sp, timeout)$/
+tk_refresh	../tk/tk_funcs.c	/^tk_refresh(sp, repaint)$/
+tk_rename	../tk/tk_funcs.c	/^tk_rename(sp)$/
+tk_resize	../tk/tk_read.c	/^tk_resize(sp, lines, columns)$/
+tk_screen	../tk/tk_screen.c	/^tk_screen(sp, flags)$/
+tk_ssize	../tk/tk_term.c	/^tk_ssize(sp, sigwinch, rowp, colp, changedp)$/
+tk_suspend	../tk/tk_funcs.c	/^tk_suspend(sp, allowedp)$/
+tk_term_end	../tk/tk_term.c	/^tk_term_end(gp)$/
+tk_term_init	../tk/tk_term.c	/^tk_term_init(sp)$/
+tk_usage	../tk/tk_funcs.c	/^tk_usage()$/
+tk_version	../tk/tk_util.c	/^tk_version(clientData, interp, argc, argv)$/
+txt_Rresolve	../vi/v_txt.c	/^txt_Rresolve(sp, tiqh, tp, orig_len)$/
+txt_abbrev	../vi/v_txt.c	/^txt_abbrev(sp, tp, pushcp, isinfoline, didsubp, tu/
+txt_ai_resolve	../vi/v_txt.c	/^txt_ai_resolve(sp, tp, changedp)$/
+txt_backup	../vi/v_txt.c	/^txt_backup(sp, tiqh, tp, flagsp)$/
+txt_dent	../ex/ex_txt.c	/^txt_dent(sp, tp)$/
+txt_emark	../vi/v_txt.c	/^txt_emark(sp, tp, cno)$/
+txt_err	../vi/v_txt.c	/^txt_err(sp, tiqh)$/
+txt_fc	../vi/v_txt.c	/^txt_fc(sp, tp, redrawp)$/
+txt_fc_col	../vi/v_txt.c	/^txt_fc_col(sp, argc, argv)$/
+txt_hex	../vi/v_txt.c	/^txt_hex(sp, tp)$/
+txt_insch	../vi/v_txt.c	/^txt_insch(sp, tp, chp, flags)$/
+txt_isrch	../vi/v_txt.c	/^txt_isrch(sp, vp, tp, is_flagsp)$/
+txt_map_end	../vi/v_txt.c	/^txt_map_end(sp)$/
+txt_map_init	../vi/v_txt.c	/^txt_map_init(sp)$/
+txt_margin	../vi/v_txt.c	/^txt_margin(sp, tp, wmtp, didbreak, flags)$/
+txt_nomorech	../vi/v_txt.c	/^txt_nomorech(sp)$/
+txt_prompt	../ex/ex_txt.c	/^txt_prompt(sp, tp, prompt, flags)$/
+txt_resolve	../vi/v_txt.c	/^txt_resolve(sp, tiqh, flags)$/
+txt_showmatch	../vi/v_txt.c	/^txt_showmatch(sp, tp)$/
+txt_unmap	../vi/v_txt.c	/^txt_unmap(sp, tp, ec_flagsp)$/
+ulcase	../vi/v_ulcase.c	/^ulcase(sp, lno, lp, len, scno, ecno)$/
+v_Put	../vi/v_put.c	/^v_Put(sp, vp)$/
+v_Replace	../vi/v_itxt.c	/^v_Replace(sp, vp)$/
+v_Undo	../vi/v_undo.c	/^v_Undo(sp, vp)$/
+v_Xchar	../vi/v_xchar.c	/^v_Xchar(sp, vp)$/
+v_again	../vi/v_ex.c	/^v_again(sp, vp)$/
+v_alias	../vi/vi.c	/^v_alias(sp, vp, kp)$/
+v_at	../vi/v_at.c	/^v_at(sp, vp)$/
+v_bmark	../vi/v_mark.c	/^v_bmark(sp, vp)$/
+v_bottom	../vi/v_scroll.c	/^v_bottom(sp, vp)$/
+v_buildps	../vi/v_paragraph.c	/^v_buildps(sp, p_p, s_p)$/
+v_cfirst	../vi/v_left.c	/^v_cfirst(sp, vp)$/
+v_chF	../vi/v_ch.c	/^v_chF(sp, vp)$/
+v_chT	../vi/v_ch.c	/^v_chT(sp, vp)$/
+v_change	../vi/v_itxt.c	/^v_change(sp, vp)$/
+v_chf	../vi/v_ch.c	/^v_chf(sp, vp)$/
+v_chrepeat	../vi/v_ch.c	/^v_chrepeat(sp, vp)$/
+v_chrrepeat	../vi/v_ch.c	/^v_chrrepeat(sp, vp)$/
+v_cht	../vi/v_ch.c	/^v_cht(sp, vp)$/
+v_cmd	../vi/vi.c	/^v_cmd(sp, dp, vp, ismotion, comcountp, mappedp)$/
+v_comlog	../vi/vi.c	/^v_comlog(sp, vp)$/
+v_correct	../vi/v_search.c	/^v_correct(sp, vp, isdelta)$/
+v_count	../vi/vi.c	/^v_count(sp, fkey, countp)$/
+v_cr	../vi/v_scroll.c	/^v_cr(sp, vp)$/
+v_delete	../vi/v_delete.c	/^v_delete(sp, vp)$/
+v_dollar	../vi/v_right.c	/^v_dollar(sp, vp)$/
+v_down	../vi/v_scroll.c	/^v_down(sp, vp)$/
+v_dtoh	../vi/vi.c	/^v_dtoh(sp)$/
+v_ecl	../vi/v_ex.c	/^v_ecl(sp)$/
+v_ecl_exec	../vi/v_ex.c	/^v_ecl_exec(sp)$/
+v_ecl_init	../vi/v_ex.c	/^v_ecl_init(sp)$/
+v_ecl_log	../vi/v_ex.c	/^v_ecl_log(sp, tp)$/
+v_emsg	../vi/v_util.c	/^v_emsg(sp, p, which)$/
+v_end	../common/main.c	/^v_end(gp)$/
+v_eof	../vi/v_util.c	/^v_eof(sp, mp)$/
+v_eol	../vi/v_util.c	/^v_eol(sp, mp)$/
+v_estr	../common/main.c	/^v_estr(name, eno, msg)$/
+v_event_append	../common/key.c	/^v_event_append(sp, argp)$/
+v_event_err	../common/key.c	/^v_event_err(sp, evp)$/
+v_event_exec	../vi/v_ex.c	/^v_event_exec(sp, vp)$/
+v_event_flush	../common/key.c	/^v_event_flush(sp, flags)$/
+v_event_get	../common/key.c	/^v_event_get(sp, argp, timeout, flags)$/
+v_event_grow	../common/key.c	/^v_event_grow(sp, add)$/
+v_event_push	../common/key.c	/^v_event_push(sp, p_evp, p_s, nitems, flags)$/
+v_ex	../vi/v_ex.c	/^v_ex(sp, vp)$/
+v_ex_done	../vi/v_ex.c	/^v_ex_done(sp, vp)$/
+v_exaddr	../vi/v_search.c	/^v_exaddr(sp, vp, dir)$/
+v_exec_ex	../vi/v_ex.c	/^v_exec_ex(sp, vp, exp)$/
+v_exmode	../vi/v_ex.c	/^v_exmode(sp, vp)$/
+v_filter	../vi/v_ex.c	/^v_filter(sp, vp)$/
+v_first	../vi/v_left.c	/^v_first(sp, vp)$/
+v_fmark	../vi/v_mark.c	/^v_fmark(sp, vp)$/
+v_home	../vi/v_scroll.c	/^v_home(sp, vp)$/
+v_hpagedown	../vi/v_scroll.c	/^v_hpagedown(sp, vp)$/
+v_hpageup	../vi/v_scroll.c	/^v_hpageup(sp, vp)$/
+v_iA	../vi/v_itxt.c	/^v_iA(sp, vp)$/
+v_iI	../vi/v_itxt.c	/^v_iI(sp, vp)$/
+v_iO	../vi/v_itxt.c	/^v_iO(sp, vp)$/
+v_ia	../vi/v_itxt.c	/^v_ia(sp, vp)$/
+v_ii	../vi/v_itxt.c	/^v_ii(sp, vp)$/
+v_increment	../vi/v_increment.c	/^v_increment(sp, vp)$/
+v_init	../vi/vi.c	/^v_init(sp)$/
+v_io	../vi/v_itxt.c	/^v_io(sp, vp)$/
+v_isempty	../vi/v_util.c	/^v_isempty(p, len)$/
+v_join	../vi/v_ex.c	/^v_join(sp, vp)$/
+v_key	../vi/vi.c	/^v_key(sp, command_events, evp, ec_flags)$/
+v_key_cmp	../common/key.c	/^v_key_cmp(ap, bp)$/
+v_key_ilookup	../common/key.c	/^v_key_ilookup(sp)$/
+v_key_init	../common/key.c	/^v_key_init(sp)$/
+v_key_len	../common/key.c	/^v_key_len(sp, ch)$/
+v_key_name	../common/key.c	/^v_key_name(sp, ach)$/
+v_key_val	../common/key.c	/^v_key_val(sp, ch)$/
+v_keyval	../common/key.c	/^v_keyval(sp, val, name)$/
+v_keyword	../vi/vi.c	/^v_keyword(sp)$/
+v_left	../vi/v_left.c	/^v_left(sp, vp)$/
+v_lgoto	../vi/v_scroll.c	/^v_lgoto(sp, vp)$/
+v_linedown	../vi/v_scroll.c	/^v_linedown(sp, vp)$/
+v_lineup	../vi/v_scroll.c	/^v_lineup(sp, vp)$/
+v_mark	../vi/v_mark.c	/^v_mark(sp, vp)$/
+v_match	../vi/v_match.c	/^v_match(sp, vp)$/
+v_middle	../vi/v_scroll.c	/^v_middle(sp, vp)$/
+v_motion	../vi/vi.c	/^v_motion(sp, dm, vp, mappedp)$/
+v_mulcase	../vi/v_ulcase.c	/^v_mulcase(sp, vp)$/
+v_ncol	../vi/v_left.c	/^v_ncol(sp, vp)$/
+v_nomove	../vi/v_util.c	/^v_nomove(sp)$/
+v_obsolete	../common/main.c	/^v_obsolete(name, argv)$/
+v_optchange	../vi/v_init.c	/^v_optchange(sp, offset, str, valp)$/
+v_pagedown	../vi/v_scroll.c	/^v_pagedown(sp, vp)$/
+v_pageup	../vi/v_scroll.c	/^v_pageup(sp, vp)$/
+v_paragraphb	../vi/v_paragraph.c	/^v_paragraphb(sp, vp)$/
+v_paragraphf	../vi/v_paragraph.c	/^v_paragraphf(sp, vp)$/
+v_put	../vi/v_put.c	/^v_put(sp, vp)$/
+v_redraw	../vi/v_redraw.c	/^v_redraw(sp, vp)$/
+v_replace	../vi/v_replace.c	/^v_replace(sp, vp)$/
+v_right	../vi/v_right.c	/^v_right(sp, vp)$/
+v_screen	../vi/v_screen.c	/^v_screen(sp, vp)$/
+v_screen_copy	../vi/v_init.c	/^v_screen_copy(orig, sp)$/
+v_screen_end	../vi/v_init.c	/^v_screen_end(sp)$/
+v_search	../vi/v_search.c	/^v_search(sp, vp, ptrn, plen, flags, dir)$/
+v_searchN	../vi/v_search.c	/^v_searchN(sp, vp)$/
+v_searchb	../vi/v_search.c	/^v_searchb(sp, vp)$/
+v_searchf	../vi/v_search.c	/^v_searchf(sp, vp)$/
+v_searchn	../vi/v_search.c	/^v_searchn(sp, vp)$/
+v_searchw	../vi/v_search.c	/^v_searchw(sp, vp)$/
+v_sectionb	../vi/v_section.c	/^v_sectionb(sp, vp)$/
+v_sectionf	../vi/v_section.c	/^v_sectionf(sp, vp)$/
+v_sentenceb	../vi/v_sentence.c	/^v_sentenceb(sp, vp)$/
+v_sentencef	../vi/v_sentence.c	/^v_sentencef(sp, vp)$/
+v_shiftl	../vi/v_ex.c	/^v_shiftl(sp, vp)$/
+v_shiftr	../vi/v_ex.c	/^v_shiftr(sp, vp)$/
+v_sof	../vi/v_util.c	/^v_sof(sp, mp)$/
+v_sol	../vi/v_util.c	/^v_sol(sp)$/
+v_status	../vi/v_status.c	/^v_status(sp, vp)$/
+v_strdup	../common/util.c	/^v_strdup(sp, str, len)$/
+v_subst	../vi/v_itxt.c	/^v_subst(sp, vp)$/
+v_suspend	../vi/v_ex.c	/^v_suspend(sp, vp)$/
+v_switch	../vi/v_ex.c	/^v_switch(sp, vp)$/
+v_sync	../common/key.c	/^v_sync(sp, flags)$/
+v_tagpop	../vi/v_ex.c	/^v_tagpop(sp, vp)$/
+v_tagpush	../vi/v_ex.c	/^v_tagpush(sp, vp)$/
+v_tcmd	../vi/v_txt.c	/^v_tcmd(sp, vp, prompt, flags)$/
+v_txt	../vi/v_txt.c	/^v_txt(sp, vp, tm, lp, len, prompt, ai_line, rcount/
+v_txt_auto	../vi/v_txt.c	/^v_txt_auto(sp, lno, aitp, len, tp)$/
+v_ulcase	../vi/v_ulcase.c	/^v_ulcase(sp, vp)$/
+v_undo	../vi/v_undo.c	/^v_undo(sp, vp)$/
+v_up	../vi/v_scroll.c	/^v_up(sp, vp)$/
+v_wordB	../vi/v_word.c	/^v_wordB(sp, vp)$/
+v_wordE	../vi/v_word.c	/^v_wordE(sp, vp)$/
+v_wordW	../vi/v_word.c	/^v_wordW(sp, vp)$/
+v_wordb	../vi/v_word.c	/^v_wordb(sp, vp)$/
+v_worde	../vi/v_word.c	/^v_worde(sp, vp)$/
+v_wordw	../vi/v_word.c	/^v_wordw(sp, vp)$/
+v_xchar	../vi/v_xchar.c	/^v_xchar(sp, vp)$/
+v_yank	../vi/v_yank.c	/^v_yank(sp, vp)$/
+v_z	../vi/v_z.c	/^v_z(sp, vp)$/
+v_zero	../vi/v_left.c	/^v_zero(sp, vp)$/
+v_zexit	../vi/v_zexit.c	/^v_zexit(sp, vp)$/
+vi	../vi/vi.c	/^vi(spp)$/
+vs_bg	../vi/vs_split.c	/^vs_bg(sp)$/
+vs_busy	../vi/vs_msg.c	/^vs_busy(sp, msg, btype)$/
+vs_change	../vi/vs_smap.c	/^vs_change(sp, lno, op)$/
+vs_colpos	../vi/vs_relative.c	/^vs_colpos(sp, lno, cno)$/
+vs_column	../vi/vs_relative.c	/^vs_column(sp, colp)$/
+vs_columns	../vi/vs_relative.c	/^vs_columns(sp, lp, lno, cnop, diffp)$/
+vs_crel	../vi/v_z.c	/^vs_crel(sp, count)$/
+vs_deleteln	../vi/vs_smap.c	/^vs_deleteln(sp, cnt)$/
+vs_discard	../vi/vs_split.c	/^vs_discard(sp, spp)$/
+vs_divider	../vi/vs_msg.c	/^vs_divider(sp)$/
+vs_ex_resolve	../vi/vs_msg.c	/^vs_ex_resolve(sp, continuep)$/
+vs_fg	../vi/vs_split.c	/^vs_fg(sp, nspp, name, newscreen)$/
+vs_getbg	../vi/vs_split.c	/^vs_getbg(sp, name)$/
+vs_home	../vi/vs_msg.c	/^vs_home(sp)$/
+vs_insertln	../vi/vs_smap.c	/^vs_insertln(sp, cnt)$/
+vs_line	../vi/vs_line.c	/^vs_line(sp, smp, yp, xp)$/
+vs_modeline	../vi/vs_refresh.c	/^vs_modeline(sp)$/
+vs_msg	../vi/vs_msg.c	/^vs_msg(sp, mtype, line, len)$/
+vs_msgsave	../vi/vs_msg.c	/^vs_msgsave(sp, mt, p, len)$/
+vs_number	../vi/vs_line.c	/^vs_number(sp)$/
+vs_output	../vi/vs_msg.c	/^vs_output(sp, mtype, line, llen)$/
+vs_paint	../vi/vs_refresh.c	/^vs_paint(sp, flags)$/
+vs_rcm	../vi/vs_relative.c	/^vs_rcm(sp, lno, islast)$/
+vs_refresh	../vi/vs_refresh.c	/^vs_refresh(sp, forcepaint)$/
+vs_repaint	../vi/vs_refresh.c	/^vs_repaint(sp, evp)$/
+vs_resize	../vi/vs_split.c	/^vs_resize(sp, count, adj)$/
+vs_resolve	../vi/vs_msg.c	/^vs_resolve(sp, csp, forcewait)$/
+vs_screens	../vi/vs_relative.c	/^vs_screens(sp, lno, cnop)$/
+vs_scroll	../vi/vs_msg.c	/^vs_scroll(sp, continuep, wtype)$/
+vs_sm_1down	../vi/vs_smap.c	/^vs_sm_1down(sp)$/
+vs_sm_1up	../vi/vs_smap.c	/^vs_sm_1up(sp)$/
+vs_sm_cursor	../vi/vs_smap.c	/^vs_sm_cursor(sp, smpp)$/
+vs_sm_delete	../vi/vs_smap.c	/^vs_sm_delete(sp, lno)$/
+vs_sm_down	../vi/vs_smap.c	/^vs_sm_down(sp, rp, count, scmd, smp)$/
+vs_sm_erase	../vi/vs_smap.c	/^vs_sm_erase(sp)$/
+vs_sm_fill	../vi/vs_smap.c	/^vs_sm_fill(sp, lno, pos)$/
+vs_sm_insert	../vi/vs_smap.c	/^vs_sm_insert(sp, lno)$/
+vs_sm_next	../vi/vs_smap.c	/^vs_sm_next(sp, p, t)$/
+vs_sm_nlines	../vi/vs_smap.c	/^vs_sm_nlines(sp, from_sp, to_lno, max)$/
+vs_sm_position	../vi/vs_smap.c	/^vs_sm_position(sp, rp, cnt, pos)$/
+vs_sm_prev	../vi/vs_smap.c	/^vs_sm_prev(sp, p, t)$/
+vs_sm_reset	../vi/vs_smap.c	/^vs_sm_reset(sp, lno)$/
+vs_sm_scroll	../vi/vs_smap.c	/^vs_sm_scroll(sp, rp, count, scmd)$/
+vs_sm_up	../vi/vs_smap.c	/^vs_sm_up(sp, rp, count, scmd, smp)$/
+vs_split	../vi/vs_split.c	/^vs_split(sp, new, ccl)$/
+vs_swap	../vi/vs_split.c	/^vs_swap(sp, nspp, name)$/
+vs_update	../vi/vs_msg.c	/^vs_update(sp, m1, m2)$/
+vs_wait	../vi/vs_msg.c	/^vs_wait(sp, continuep, wtype)$/

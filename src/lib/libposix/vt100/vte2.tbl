@@ -1,0 +1,17 @@
+' ', 'F', MODE_VT7BIT, DO_VTMODE, /* S7C1T code */
+' ', 'G', MODE_VT8BIT, DO_VTMODE, /* S8C1T code */
+' ', 'L', 1, DO_ANSICONF,
+' ', 'M', 2, DO_ANSICONF,
+' ', 'N', 3, DO_ANSICONF,
+'#', '3', 1, DO_DECDHL,
+'#', '4', 0, DO_DECDHL,
+'#', '5', 0, DO_DECLW,
+'#', '6', 1, DO_DECLW,
+'#', '7', 0, DO__IGNORE,
+'#', '8', 0, DO_DECALN,
+'^', 'L', 0, DO__IGNORE,
+'{', '?', 0, DO_XSUPP,
+'{', 'A', 0, DO_XAPPEND,
+'{', 'R', 0, DO_XRECEIVE,
+'{', 'S', 0, DO_XSAVE,
+'{', 'T', 0, DO_XTRANS

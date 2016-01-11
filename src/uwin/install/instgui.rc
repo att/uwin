@@ -1,0 +1,196 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_WELCOME DIALOG DISCARDABLE  0, 0, 281, 162
+STYLE DS_MODALFRAME | WS_CHILD | WS_CAPTION
+CAPTION "Welcome"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    ICON            EXE_ICON,EXE_ICON,8,3,20,20
+    LTEXT           "Welcome to the UWIN Base Release installation.\n\nThis program installs the UWIN Base Release on your computer, including the ksh environment and UNIX API support over Win32.",
+                    IDC_STATIC,43,27,194,49,NOT WS_GROUP
+    LTEXT           "Any currently running UWIN processes will be terminated.\n\nTo install the UWIN Base Release now, click Next or press Enter. To exit the installation, click Cancel at any time.",
+                    IDC_STATIC,43,84,194,49,NOT WS_GROUP
+END
+
+IDD_LICENSE DIALOGEX 0, 0, 280, 160
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Software License Agreement"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    EDITTEXT        LICENSE_TEXT,2,25,275,89,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_READONLY | WS_VSCROLL | NOT WS_TABSTOP,
+                    WS_EX_NOPARENTNOTIFY
+    LTEXT           "Do you accept all of the terms of the preceding License Agreement?     If you choose No, the UWIN Base Release installation will not continue. To install UWIN, you must accept this agreement.",
+                    IDC_STATIC,27,116,226,27,NOT WS_GROUP
+    LTEXT           "Please read the following license agreement. Scroll down to see the entire agreement.",
+                    IDC_STATIC,50,3,180,19,NOT WS_GROUP
+    PUSHBUTTON      "Yes",IDC_LICENSE_ACCEPT,122,146,59,14,WS_GROUP | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "No",IDC_LICENSE_DECLINE,188,146,56,14
+    ICON            EXE_ICON,EXE_ICON,8,3,16,16
+END
+
+IDD_ROOT DIALOG DISCARDABLE  0, 0, 284, 160
+STYLE DS_MODALFRAME | WS_CAPTION
+CAPTION "Select UWIN Root Directory"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    PUSHBUTTON      "Browse",IDC_BROWSE_ROOT,198,63,44,14
+    LTEXT           "Path:",IDC_STATIC,38,83,22,8,NOT WS_GROUP
+    EDITTEXT        IDE_PATH_ROOT,68,83,178,12,ES_AUTOHSCROLL | WS_GROUP | 
+                    NOT WS_TABSTOP
+    ICON            EXE_ICON,EXE_ICON,8,3,20,20
+    LTEXT           "Select UWIN Root Directory",IDC_STATIC,68,63,96,11
+END
+
+IDD_INSTALL DIALOG DISCARDABLE  0, 0, 279, 162
+STYLE DS_MODALFRAME | WS_CHILD | WS_CAPTION
+CAPTION "Install"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    ICON            EXE_ICON,EXE_ICON,8,3,20,20,WS_GROUP
+    LTEXT           "The UWIN Base Release will be installed by a console application.  To finish the UWIN installation, click Finish or press Enter.\n\nTo exit the installation without installing UWIN, click Cancel.",
+                    IDC_STATIC,21,99,237,46,NOT WS_GROUP
+END
+
+IDD_NOTES DIALOGEX 0, 0, 284, 160
+STYLE DS_MODALFRAME | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Notes"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    EDITTEXT        NOTES_TEXT,7,23,268,135,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_READONLY | WS_VSCROLL | WS_GROUP | NOT WS_TABSTOP,
+                    WS_EX_NOPARENTNOTIFY
+    ICON            EXE_ICON,EXE_ICON,8,3,20,20,WS_GROUP
+END
+
+IDD_HOME DIALOG DISCARDABLE  0, 0, 284, 160
+STYLE DS_MODALFRAME | WS_CHILD | WS_CAPTION
+CAPTION "Select Home Directory"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    PUSHBUTTON      "Browse",IDC_BROWSE_HOME,198,63,44,14
+    LTEXT           "Path:",IDC_STATIC,38,83,20,8,NOT WS_GROUP
+    EDITTEXT        IDE_PATH_HOME,68,83,178,12,ES_AUTOHSCROLL | WS_GROUP | 
+                    NOT WS_TABSTOP
+    ICON            EXE_ICON,EXE_ICON,8,3,20,20,WS_GROUP
+    LTEXT           "Select Home Directory Destination",IDC_STATIC,68,63,108,
+                    8,NOT WS_GROUP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+
+    IDD_ROOT, DIALOG
+    BEGIN
+        RIGHTMARGIN, 251
+        BOTTOMMARGIN, 112
+    END
+
+    IDD_INSTALL, DIALOG
+    BEGIN
+        RIGHTMARGIN, 250
+        BOTTOMMARGIN, 161
+    END
+
+    IDD_NOTES, DIALOG
+    BEGIN
+        RIGHTMARGIN, 250
+        BOTTOMMARGIN, 103
+    END
+
+    IDD_HOME, DIALOG
+    BEGIN
+        RIGHTMARGIN, 251
+        BOTTOMMARGIN, 106
+    END
+
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+EXE_ICON                ICON    DISCARDABLE     "../doc/uwin" RCWOW ".ico"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED

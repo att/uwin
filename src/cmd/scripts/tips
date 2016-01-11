@@ -1,0 +1,29 @@
+You can run trace on a command to generate a system call trace
+pax can handle many file formats, run pax --?format so see formats
+pax can read and write delta archives, run pax --?z
+sum can compute checksums using may method, run sum --?method to list methods
+ps can display the commands in tree format, run ps --?tree for details
+ps allows you to specify the format, run ps --?format for details
+ls allows you to specify the format, run ls --?format for details
+find allows you to select on mime type with the -mime operand
+tw is similar to find except that it uses C syntax expressions
+tw can do the equivalent of -R for any command; try tw grep foo
+uuencode/uudecode can encode and decode several ways, see --?method for details
+file can display file mime types, run file --?mime for details
+You can find the author of many commands by running command --?-author
+cql is a flat file database query command that uses C syntax expressions
+ncc runs MSVC/C++ but builds native commands that do not require uwin runtime
+ksh is the latest KornShell 93 version
+You can add builtins to ksh at run time with a builtin named builtin.
+cat can be used to add or delete <cr>'s before newlines.
+You can control telent access with /etc/login.allow and /etc/login.deny
+The /etc/passwd.add file gets prepended to the /etc/passwd file
+iffe generates header files that answer feature questions, run iffe --man 
+The AT&T nmake command allows you to write small portable make files
+warp can be used to test the effect of y2k changes and other time shifts
+mm2html and troff2html can be used to convert troff files to html format
+You can access the registry through the registry file system in /reg
+typeset -H in ksh allows you to get native pathnames from UNIX names
+/dev/ptmx is the pseudo tty clone device
+wterm can be invoked to run a command in a separate window
+Environment variables listed in DOSPATHVARS are converted to native format

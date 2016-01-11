@@ -1,0 +1,6 @@
+MAKEFILES = Nmakefile
+MAKESKIP =
+
+export MAKEFILES MAKESKIP
+
+:MAKE:

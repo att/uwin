@@ -1,0 +1,88 @@
+CAP=$1 TMP=t$$ OUT=tinames.c
+
+trap "status=\$?; rm -f $TMP.*; exit \$status" 0 1 2
+
+ed - <<!
+E $CAP
+g/^#.*/d
+g/^[a-zA-Z0-9_]*,	*/s///
+g/^"[a-zA-Z0-9]*"	*"/s//_/
+g/"	*.*/s//",/
+g/^_/s//	"/
+/--- begin bool/
+c
+char*	boolcodes[] =
+{
+.
+/--- end bool/
+c
+	NIL(char*)
+};
+.
+/--- begin num/
+c
+char*	numcodes[] =
+{
+.
+/--- end num/
+c
+	NIL(char*)
+};
+.
+/--- begin str/
+c
+char*	strcodes[] =
+{
+.
+/--- end str/
+c
+	NIL(char*)
+};
+.
+w $TMP.code
+E $CAP
+g/^#.*/d
+g/^[a-zA-Z0-9_]*,	*"/s//_/
+g/"	*.*/s//",/
+g/^_/s//	"/
+/--- begin bool/
+c
+#include	"termhdr.h"
+#include	"scrhdr.h"
+
+
+
+char*	boolnames[] =
+{
+.
+/--- end bool/
+c
+	NIL(char*)
+};
+.
+/--- begin num/
+c
+char*	numnames[] =
+{
+.
+/--- end num/
+c
+	NIL(char*)
+};
+.
+/--- begin str/
+c
+char*	strnames[] =
+{
+.
+/--- end str/
+c
+	NIL(char*)
+};
+.
+\$r $TMP.code
+w $TMP.c
+q
+!
+
+cmp -s $TMP.c $OUT || mv $TMP.c $OUT

@@ -1,0 +1,16 @@
+include ../fvwm.mk
+
+CCFLAGS = $(CC.OPTIMIZE) $(CC.DLL)
+
+fvwm $(VERSION:/\([^.]*\.[^.]*\).*/\1/) :LIBRARY: fvwm.ign \
+	FShape.c Graphics.c Parse.c Picture.c Bindings.c Colorset.c \
+	Event.c envvar.c ColorUtils.c XResource.c Module.c \
+	WinMagic.c Target.c System.c FScreen.c XError.c \
+	fvwmsignal.c GetFont.c Strings.c wild.c safemalloc.c \
+	Pointer.c debug.c Grab.c ClientMsg.c fvwmrect.c Cursor.c \
+	-lXpm -lXinerama -lXext -lICE -lSM -lX11
+
+$(INCLUDEDIR) :INSTALLDIR: \
+	ClientMsg.h Grab.h Module.h Parse.h Strings.h \
+	defaults.h envvar.h fvwmlib.h fvwmrect.h fvwmsignal.h \
+	lang-strings.h safemalloc.h

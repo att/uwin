@@ -1,0 +1,5 @@
+include "../inetutils.mk"
+
+tftp :: tftp.c main.c tftpsubs.c -linetutils tftp.1
+
+:: Makefile.in

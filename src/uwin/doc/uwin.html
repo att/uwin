@@ -1,0 +1,546 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Frameset//EN" "http://www.w3.org/TR/REC-html40/frameset.dtd">
+<HTML>
+<HEAD>
+<META name="generator" content="mm2html (AT&T Labs Research) 2005-01-11">
+<TITLE> uwin/uwin.mm mm document </TITLE>
+<META name="author" content="uwin-users">
+</HEAD>
+<BODY bgcolor=white link=slateblue vlink=teal >
+<TABLE border=0 align=center width=96%>
+<TBODY><TR><TD valign=top align=left>
+<!--INDEX--><!--/INDEX-->
+
+<P>
+<P><HR><CENTER><FONT color=red><FONT face=courier><H3>UWIN Overview</H3></FONT></FONT></CENTER>
+The
+<STRONG>UWIN</STRONG>
+package allows
+<STRONG>UNIX</STRONG>
+applications to be built and run on Windows XP/2000/NT/ME/98/95
+with few, if any, changes necessary.
+<STRONG>UWIN</STRONG>
+source and binaries are available under the open source
+	<A href="http://www.opensource.org/licenses/cpl/" target=_top>Common Public License 1.0</A>
+at
+	<A href="http://www.research.att.com/sw/download/" target=_top>AT&amp;T AST/UWIN open source downloads.</A>
+<P>
+<STRONG>UWIN</STRONG>
+contains:
+<UL type=square>
+<LI>
+Libraries that emulate a
+<STRONG>UNIX</STRONG>
+environment by implementing the
+<STRONG>UNIX</STRONG>
+Application Programming Interface (API)
+<LI>
+Include files and development tools such as
+<NOBR><A href="/~gsf/man/man1/cc.html"><STRONG>cc</STRONG></A>(1),</NOBR>
+<NOBR><A href="/~gsf/man/man1/yacc.html"><STRONG>yacc</STRONG></A>(1),</NOBR>
+<NOBR><A href="/~gsf/man/man1/lex.html"><STRONG>lex</STRONG></A>(1),</NOBR>
+and
+<NOBR><A href="/~gsf/man/man1/make.html"><STRONG>make</STRONG></A>(1).</NOBR>
+<LI>
+<NOBR><A href="/~gsf/man/man1/ksh.html"><STRONG>ksh</STRONG></A>(1)</NOBR>
+(the Korn Shell) and over 250 utilities such as
+<NOBR><A href="/~gsf/man/man1/ls.html"><STRONG>ls</STRONG></A>(1),</NOBR>
+<NOBR><A href="/~gsf/man/man1/sed.html"><STRONG>sed</STRONG></A>(1),</NOBR>
+<NOBR><A href="/~gsf/man/man1/cp.html"><STRONG>cp</STRONG></A>(1),</NOBR>
+<NOBR><A href="/~gsf/man/man1/stty.html"><STRONG>stty</STRONG></A>(1),</NOBR>
+etc.
+</UL>
+<P>
+Most of the
+<STRONG>UNIX</STRONG>
+API is implemented by the POSIX.DLL dynamically loaded (shared) library.
+Programs linked with POSIX.DLL run under the
+<STRONG>WIN32</STRONG>
+subsystem instead of the
+<STRONG>POSIX</STRONG>
+subsystem, so programs can freely intermix
+<STRONG>UNIX</STRONG>
+and
+<STRONG>WIN32</STRONG>
+library calls.
+A
+<NOBR><A href="/~gsf/man/man1/cc.html"><STRONG>cc</STRONG></A>(1)</NOBR>
+command is provided to compile and link programs for
+<STRONG>UWIN</STRONG>
+on Windows using traditional
+<STRONG>UNIX</STRONG>
+build tools such as
+<NOBR><A href="/~gsf/man/man1/make.html"><STRONG>make</STRONG></A>(1).</NOBR>
+The
+<NOBR><A href="/~gsf/man/man1/cc.html"><STRONG>cc</STRONG></A>(1)</NOBR>
+command is a front end the the underlying compiler
+that performs the actual compilation and linking.
+It can be used with the Microsoft Visual C/C++ 5.X compiler,
+the Visual C/C++ 6.X compiler, the
+Visual C/C++ 7.X compiler, the
+	<A href="http://www.digitalmars.com/" target=_top>Digital Mars C/C++ compiler,</A>
+compiler, the
+	<A href="http://www.borland.com/" target=_top>Borland C/C++ compiler,</A>
+and the
+	<A href="http://www.mingw.org/" target=_top>Mingw compiler.</A>
+The
+	<A href="http://www.xraylith.wisc.edu/~khan/software/gnu-win32/egcs-uwin.html" target=_top>GNU compiler and development tools</A>
+are also available for download to
+<STRONG>UWIN.</STRONG>
+<P>
+<STRONG>UWIN</STRONG>
+runs best on Windows XP/NT/2000 with NTFS, but will run in degraded
+mode with the FAT file system, and further degradation with Windows ME/98/95.
+See the README file for more details.
+<P>
+<STRONG>UWIN</STRONG>
+provides the following functionality for
+<STRONG>WIN32</STRONG>
+applications:
+<DL COMPACT>
+<DL COMPACT>
+<DT><STRONG>Process control and management:</STRONG><DD>
+While processes can be created using the
+<NOBR><A href="/~gsf/man/man2/fork.html"><STRONG>fork</STRONG></A>(2)</NOBR>
+function,
+<STRONG>UWIN</STRONG>
+includes a
+<EM>spawn</EM>
+family of functions that combines the
+functionality of
+<EM>fork/exec</EM>
+for efficiency.
+With the
+<EM>exec</EM>
+family of functions,
+an existing process can be overlaid with another process.
+Each process has a unique process id and each
+process belongs to a process group.
+The
+<NOBR><A href="/~gsf/man/man2/vfork.html"><STRONG>vfork</STRONG></A>(2)</NOBR>
+function is also an efficient way to create processes.
+<DT><STRONG>File descriptor semantics:</STRONG><DD>
+Open files, pipes, sockets, fifos, and character and block special
+devices files have file descriptors associated with them.  They can
+be duped and inherited with
+<STRONG>UNIX</STRONG>
+semantics.
+<DT><STRONG>UNIX signal semantics:</STRONG><DD>
+Nearly all of the
+<STRONG>UNIX</STRONG>
+signals are provided, including job
+control signals so that
+<NOBR><A href="/~gsf/man/man1/ksh.html"><STRONG>ksh</STRONG></A>(1)</NOBR>
+can stop and restart jobs.
+A process can catch, block or ignore signals.
+Signals can be sent to processes or to process groups.
+Applications compiled with the
+<TT>-D_BSDCOMPAT</TT>
+flag obey UCB
+<STRONG>UNIX</STRONG>
+signal semantics.
+<DT><STRONG>Support for devices:</STRONG><DD>
+<STRONG>UWIN</STRONG>
+provides character and block devices with major and minor
+numbers as found on
+<STRONG>UNIX</STRONG>
+systems.  Support for direct access to
+floppy drives
+(<TT>/dev/fd0</TT>),
+and SCSI tape drives
+(<TT>/dev/mt0</TT>),
+as well as ptys and ttys is available.
+<DT><STRONG>Terminal interface for consoles, sockets, and serial lines:</STRONG><DD>
+The
+<STRONG>POSIX</STRONG>
+termios interface is supported for consoles with vt100 emulation.
+Serial lines, and sockets that have been designated as
+virtual terminals.
+<STRONG>UWIN</STRONG>
+supports pseudo-ttys.
+<DT><STRONG>Use of the mouse with console windows:</STRONG><DD>
+The left mouse button in a console window can be used to
+select text and copy to the clipboard.
+The right button (or middle button on a three button mouse)
+can be used to paste text from the clipboard.
+The
+<TT>/dev/clipboard</TT>
+pseudo-device can be used to redirect command input and output to
+the clipboard.
+The
+<TT>/dev/windows</TT>
+pseudo-device can be used within
+<NOBR><A href="/~gsf/man/man2/select.html"><STRONG>select</STRONG></A>(2)</NOBR>
+to block until mouse or keyboard events are received.
+<DT><STRONG>UCB sockets based on WINSOCK:</STRONG><DD>
+The socket interface uses the UCB header files and naming
+conventions, but is implemented as calls to WINSOCK.
+Sockets are file descriptors and obey file descriptor semantics.
+Both internet domain protocol (i.e. AF_INET family) and UNIX domain
+sockets (AF_UNIX family) are provided.  The multicast socket protocol is
+supported.  The connect stream library, which provides a higher
+level and easier to user interface, is also provided.
+<DT><STRONG>Pathname mapping from UNIX to Windows:</STRONG><DD>
+UWIN provides UNIX style naming for all files with <TT>/</TT>
+as the filename delimiter by creating mounts.
+The <TT>/</TT> directory location can be selected at installation.
+Each drive letter in Windows is mounted in a single letter
+directory name under <TT>/</TT> so that <TT>/a/file</TT> is the UWIN name
+for <TT>a:</TT>&#0092;file.
+In addition, certain directories are implicitly mounted such
+as <TT>/sys</TT> on the system directory,
+<TT>/win</TT> on the windows directory, and <TT>/msdev</TT>
+on the directory containing the Microsoft development kit if installed.
+The character and block special devices are in <TT>/dev</TT>
+and use naming conventions found on most UNIX systems.
+UWIN also supports UNC (universal naming convention) names for
+files that begin with <TT>//</TT>.
+An API function is provided to map the UNIX name into
+the Windows name. The mapping is available from <TT>ksh</TT> as well.
+<DT><STRONG>UNIX naming conventions:</STRONG><DD>
+The <TT>PATH</TT> variable is a <STRONG>:</STRONG> separated list of directories rather than
+a <STRONG>;</STRONG> separated list.  The <TT>cc</TT> command generates files
+with a <TT>.</TT>o suffix by default.  However, some characters
+such as <STRONG></STRONG>&#0092;, <STRONG>*</STRONG>, <STRONG>?</STRONG>, <STRONG>|</STRONG>, <STRONG>&amp;</STRONG>, <STRONG>&lt;</STRONG>. <STRONG>&gt;</STRONG>,
+and <STRONG>:</STRONG> are not valid as part of file names.
+By default, directories are mounted without case distinction.
+However, the <TT>mount</TT> command allows directories to be mounted
+as case sensitive so that the files <TT>makefile</TT> and <TT>Makefile</TT>
+are
+distinct.
+In addition, there is a registry key that can be set to make the
+default case sensitive.
+<DT><STRONG>Mapping to and from UNIX ids/permissions to NT/2000/XP permissions:</STRONG><DD>
+Windows NT/2000/XP subject identifiers are mapped to UNIX user ids
+and group ids.  UNIX permissions are mapped onto Windows NT/2000/XP
+file ACLs.
+The Administrator can use <TT>chown()</TT> to change the owner
+and or group of a file.
+<DT><STRONG>File control locking:</STRONG><DD>
+UNIX file control advisory locking is supported by UWIN
+with deadlock detection.
+<DT><STRONG>Memory mapping and shared memory:</STRONG><DD>
+Both <TT>mmap()</TT> and the system V shared memory facilities
+are provided.
+<DT><STRONG>System V IPC:</STRONG><DD>
+The System V semaphore and message calls are implemented.
+<DT><STRONG>Runtime linking of dynamically linked libraries:</STRONG><DD>
+The <TT>dlopen()</TT>, <TT>dlsym()</TT> interface from System V Release 4
+is provided.
+<DT><STRONG>Error mapping from Windows to UNIX:</STRONG><DD>
+Errors returned by
+<STRONG>WIN32</STRONG>
+functions are mapped into
+<STRONG>UNIX</STRONG>
+errnos.
+<DT><EM>i</EM><STRONG>-node numbers:</STRONG><DD>
+An
+<EM>i</EM>-node number is returned when reading a file
+and when stating a file.
+<DT><STRONG>Hard links:</STRONG><DD>
+Hard links are supported on both NTFS and FAT file systems.
+<DT><STRONG>Symbolic links:</STRONG><DD>
+Symbolic links to files and directories can be created in
+UWIN and are implemented as Windows shortcuts.
+A <TT>.lnk</TT> suffix will be appended to these file names
+but will not appear when reading directories with UWIN.
+Shortcuts created by Windows appear as
+symbolic links in UWIN but do not have the
+<TT>.lnk</TT> suffix removed.
+<DT><STRONG>Fifo's:</STRONG><DD>
+Fifo's (UNIX named pipes) can be created with <TT>mkfifo()</TT>
+and opened as an ordinary file.
+<DT><STRONG>Setuid and setgid programs:</STRONG><DD>
+Users can authorize setuid and/or setgid programs to be run on their behalf
+and use <TT>chmod()</TT> to turn on setuid permission for a
+program.  The program must be on an NTFS file system.
+<DT><STRONG><TT>inet</TT> <STRONG>Daemons and commands:</STRONG></STRONG><DD>
+UWIN 3.2 comes with the UCB inet daemon, the telnet daemon, the rlogin daemon,
+and the rsh daemon.
+It also includes the <TT>telnet</TT>, <TT>ftp</TT>, <TT>rsh</TT>, and <TT>rlogin</TT> programs.
+The <TT>ssh</TT> daemon and program can be built from the source but
+is not included because of possible export restrictions.
+<DT><STRONG>Access of Registry through the File System:</STRONG><DD>
+UWIN treats the Windows registry as a file system with registry
+keys treated as files, and keys that have sub-keys treated as directories.
+You can use UWIN tools directly on registry keys.
+The registry is automatically mounted under <TT>/reg</TT> during startup.
+<DT><STRONG>ssh and ssh daemon:</STRONG><DD>
+A compilation of openssh-3.6p1.
+<STRONG>Cron daemon:</STRONG>
+UWIN comes with a cron daemon that is used for running <TT>at</TT>
+and <TT>cron</TT> jobs.  The cron daemon is started by
+<TT>/etc/rc</TT> on Windows NT/2000/XP.
+<DT><STRONG>AT&amp;T open source utilities:</STRONG><DD>
+Most of the UWIN utilities are based on the
+	<A href="http://www.research.att.com/sw/download/" target=_top>AT&amp;T open source utilities</A>
+that are portable across virtually all systems and are
+based on the
+<STRONG>POSIX</STRONG>
+and
+<STRONG>X/Open</STRONG>
+standards.
+The utilities generate their own manual pages.
+<DT><STRONG>Development tools:</STRONG><DD>
+UWIN comes with <TT>cc</TT> and <TT>ncc</TT> compiler wrappers that
+use the Visual C/C++ compiler to build UWIN or native applications
+respectively.  Development tools such as <TT>yacc</TT>,  <TT>lex</TT>,
+<TT>ar</TT>, <TT>nm</TT> and <TT>rcs</TT> are also provided.
+UWIN provides both the traditional <TT>make</TT> and the much
+more powerful
+	<A href="http://www.bell-labs.com/project/nmake/" target=_top>AT&amp;T nmake</A>
+building tool.
+<DT><STRONG>Support for multibyte locales:</STRONG><DD>
+Most of the utilities and libraries support localization to different
+locales including multibyte locales.
+The <TT>iconv</TT> utility can be used to convert from one character
+set to another.
+<STRONG>X11 server and utilities:</STRONG>
+A compilation of X11R6.5 is available as add on packages.
+</DL>
+</DL>
+<P>
+The
+	<A href="http://kornshell.com/" target=_top>KornShell,</A>
+(<TT>ksh</TT>) can be started by double clicking the icon labeled
+"ksh for Windows NT" in the UWIN 3.2 program group.
+In addition
+The KornShell runs in a console window, just like the MS-DOS command
+shell.  Once <TT>ksh</TT> is running, all of the UNIX utilities can be executed.
+In addition, <TT>ksh</TT> can execute native Windows applications.
+The UWIN console provides an emulation of the VT100 terminal
+so that programs that use the curses library should work.
+All the environment variables of Windows that have been
+initialized when <TT>ksh</TT> has been started can be accessed from <TT>ksh</TT>.
+Some variables, such as <TT>PATH</TT>, which are understood by both Windows
+and UNIX utilities, but which use different formats, are converted
+to UNIX formats when executing UNIX utilities, and converted back
+when executing Windows utilities.
+The environment variable <TT>DOSPATHVARS</TT> can be set to the
+names of additional variables that get converted to and from
+native path formats.
+<P>
+Online documentation is obtained by clicking on the UWIN quick
+reference icon.
+Most commands generate their own documentation when you invoke
+the command as <TT>command --man</TT>.  In addition
+<TT>man -b</TT> <EM>command</EM> will display command documentation in
+a browser window.
+
+<P>
+<P><HR><CENTER><FONT color=red><FONT face=courier><H3>Building UWIN from source</H3></FONT></FONT></CENTER>
+UWIN source is available for download starting with release 4.0.
+To build UWIN from the source you must first download and install
+the UWIN 4.0 (or newer) binary
+<STRONG>uwin-base</STRONG>
+and
+<STRONG>uwin-dev</STRONG>
+packages.
+<UL type=square>
+<LI>
+Pick an package root directory
+<STRONG>$PACKAGEROOT</STRONG>.
+If you have administrative privileges then
+<STRONG>PACKAGEROOT=/usr</STRONG>
+will be fine.
+<LI>
+Change directory to
+<STRONG>$PACKAGEROOT</STRONG>
+and
+download the
+<STRONG>uwin</STRONG>
+source package tarball into the
+<STRONG>lib/package/tgz</STRONG>
+directory.
+<LI>
+Read the source package:
+<PRE>
+     package read
+</PRE>
+<LI>
+Build the binaries from the source:
+<PRE>
+     package make
+</PRE>
+All generated files will be placed in the
+<STRONG>INSTALLROOT=$PACKAGEROOT/arch/win32.i386</STRONG>
+directory tree.
+<LI>
+<STRONG>posix.dll</STRONG>
+will be installed in
+<STRONG>$INSTALLROOT/sys</STRONG>.
+<LI>
+In order to install
+<STRONG>/sys/posix.dll</STRONG>
+from
+<STRONG>$INSTALLROOT/sys/posix.dll</STRONG>
+you must stop all UWIN processes.
+Also, be sure to save a copy of the previous
+<STRONG>posix.dll</STRONG>;
+a botched
+<STRONG>posix.dll</STRONG>
+could potentially and completely disable UWIN.
+<LI>
+If you want to build just one component:
+<PRE>
+     export VPATH=$INSTALLROOT:$PACKAGEROOT
+     export CDPATH=:..:$INSTALLROOT/src/cmd:$INSTALLROOT/src/lib:$INSTALLROOT/src/uwin
+     cd <EM>component</EM> # e.g., <STRONG>libposix</STRONG>
+     nmake install # or <STRONG>all</STRONG> or foo.o
+</PRE>
+<LI>
+Once the initial
+<STRONG>package make</STRONG>
+completes you can run
+<NOBR><A href="/~gsf/man/man1/nmake.html"><STRONG>nmake</STRONG></A>(1)</NOBR>
+from any subdirectory in the
+<STRONG>$INSTALLROOT/src</STRONG>
+tree.
+<STRONG>package make</STRONG>
+essentially sets up the
+<STRONG>PACKAGEROOT</STRONG>,
+<STRONG>INSTALLROOT</STRONG>,
+<STRONG>PATH</STRONG>,
+and
+<STRONG>VPATH</STRONG>
+environment variables and runs
+<STRONG>nmake install cc-</STRONG>
+from the
+<STRONG>$INSTALLROOT/src</STRONG>
+directory.
+<LI>
+Do we think recursive make is harmful?
+<EM>No</EM>
+-- not if you use the right
+<STRONG>make</STRONG>.
+<NOBR><A href="/~gsf/man/man1/nmake.html"><STRONG>nmake</STRONG></A>(1)</NOBR>
+scans the makefiles rooted at the current directory and
+determines the proper recursive makefile build order.
+Any
+<STRONG>ast</STRONG>,
+<STRONG>graphviz</STRONG>,
+or
+<STRONG>ast nmake</STRONG>
+based package tarball can be read into
+<STRONG>$PACKAGEROOT/src</STRONG>;
+the next
+<STRONG>nmake</STRONG>
+invocation will build the new package components in the proper order.
+</UL>
+
+<P>
+<P><HR><CENTER><FONT color=red><FONT face=courier><H3>Documentation</H3></FONT></FONT></CENTER>
+Currently available documentation:
+<UL type=square>
+<LI>
+	<A href="uwin.faq.html">FAQ</A>
+<LI>
+	<A href="new4.0.html">What's new in UWIN 4.0</A>
+<LI>
+	<A href="new3.2.html">What's new in UWIN 3.2</A>
+<LI>
+	<A href="new3.1.html">What's new in UWIN 3.1</A>
+<LI>
+	<A href="new3.0.html">What's new in UWIN 3.0</A>
+<LI>
+	<A href="new2.9.html">What's new in UWIN 2.9</A>
+<LI>
+	<A href="new2.25.html">What's new in UWIN 2.25</A>
+<LI>
+	<A href="new2.2.html">What's new in UWIN 2.2</A>
+<LI>
+	<A href="new2.1.html">What's new in UWIN 2.1</A>
+<LI>
+	<A href="new2.0.html">What's new in UWIN 2.0</A>
+<LI>
+	<A href="http://www.xraylith.wisc.edu/~khan/software/gnu-win32/egcs-uwin.html" target=_top>EGCS (GNU) Development Toolchain for UWIN</A>
+<LI>
+	<A href="http://www.research.att.com/sw/download/" target=_top>Source code for ksh and most UWIN utilities</A>
+<LI>
+	<A href="http://www.bell-labs.com/project/nmake/" target=_top>Information about AT&amp;T nmake</A>
+<LI>
+	<A href="winnt.pdf">USENIX Conference paper</A>
+<LI>
+	<A href="talk.pdf">USENIX Conference slides</A>
+<LI>
+	<A href="winnt3.pdf">USENIX Windows NT Seatle Workshop paper</A>
+<LI>
+	<A href="seattle.pdf">USENIX Windows NT Seattle Workshop slides</A>
+<LI>
+	<A href="README.txt">README file</A>
+<LI>
+	<A href="man/utilities.html">Utilities that come with UWIN</A>
+<LI>
+	<A href="xopen.html">X/OPEN Status -- Implemented calls</A>
+<LI>
+	<A href="socket.html">List of socket functions in UWIN</A>
+<LI>
+	<A href="http://www.wipro.com/uwin/uwinSuDaPoA.html" target=_top>UWIN User Contributed Software</A>
+<LI>
+	<A href="http://www.omnium.de/uwin/downloadsUwin.html" target=_top>Additional UWIN User Contributed Software</A>
+<LI>
+	<A href="http://www.xraylith.wisc.edu/~khan/software/tcl/" target=_top>Tcl/Tk/Tix/BLT for UWIN</A>
+<LI>
+	<A href="http://kornshell.com/" target=_top>KornShell home page</A>
+<LI>
+	<A href="http://www.pauahtun.org/sshd.html" target=_top>Download ssh and sshd</A>
+</UL>
+
+<P>
+<P><HR><CENTER><FONT color=red><FONT face=courier><H3>UWIN Alternatives</H3></FONT></FONT></CENTER>
+<UL type=square>
+<LI>
+	<A href="http://www.datafocus.com" target=_top>NuTCracker from DataFocus</A>
+<LI>
+	<A href="http://www.interix.com" target=_top>Interix from Softway Systems</A>
+<LI>
+	<A href="http://cygwin.com/cygwin/" target=_top>Cygwin</A>
+</UL>
+
+<P>
+<P><HR><CENTER><FONT color=red><FONT face=courier><H3>Feedback Survey</H3></FONT></FONT></CENTER>
+User feedback, good or bad, will help shape future releases.
+Please take a few minutes and fill out a UWIN
+	<A href="/~gsf/cgi-bin/uwin.cgi" target=_top>survey.</A>
+
+<P>
+<P><HR><CENTER><FONT color=red><FONT face=courier><H3>Mail groups</H3></FONT></FONT></CENTER>
+See
+	<A href="mailgroups.html">UWIN mail groups</A>
+for
+<STRONG>UWIN</STRONG>
+mail group subscruption and archive details.
+<P>
+<HR>
+<TABLE border=0 align=center width=96%>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right><A href="mailto:uwin-users@research.att.com?subject= uwin/uwin.mm mm document">UWIN users mailgroup</A></TD>
+</TR>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right>Information and Software Systems Research</TD>
+</TR>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right>AT&amp;T Research</TD>
+</TR>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right>Florham Park NJ</TD>
+</TR>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right>January 19, 2005</TD>
+</TR>
+</TABLE>
+<P>
+
+</TD></TR></TBODY></TABLE>
+
+</BODY>
+</HTML>

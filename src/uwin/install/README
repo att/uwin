@@ -1,0 +1,19 @@
+sear *.files entries
+--------------------
+
+each entry is a / relative path of files to be packaged
+symlinks just include the symlink and not the link target
+directories name themselves and recursively all contents
+in general omitting directories and spelling out each file is preferable
+
+entries of the form
+	to::from
+map the local system physical path "from" to the package path "to"
+
+entries of the form
+	to::
+delete the file "to" on the system that unpackages the sear
+
+the local system files are viewpathed relative to $INSTALLROOT
+with "/" used as a last resort; e.g., the uwin posix headers are typically
+packaged from /usr/include rather than a viewpathed build directory

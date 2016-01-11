@@ -1,0 +1,7 @@
+include ../../fvwm.mk
+
+BINDIR = $(LIBEXECDIR)
+
+FvwmConsole :: FvwmConsole.c getline.c
+
+FvwmConsoleC :: FvwmConsoleC.c getline.o

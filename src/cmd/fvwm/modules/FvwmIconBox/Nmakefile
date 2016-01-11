@@ -1,0 +1,5 @@
+include ../../fvwm.mk
+
+BINDIR = $(LIBEXECDIR)
+
+FvwmIconBox :: FvwmIconBox.c icons.c

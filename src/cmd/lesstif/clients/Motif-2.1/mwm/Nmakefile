@@ -1,0 +1,14 @@
+include ../../../lesstif.mk
+
+.SOURCE.h:	../../../include/Motif-2.1	
+
+.SOURCE.a:	../../../lib/Xm-2.1
+
+mwm::	colormaps.c cursors.c decorate.c defaults.c desktop.c events.c \
+	functions.c gethostname.c icons.c menus.c misc.c move.c \
+	mwm.c mwmlex.l mwmparse.y pager.c pan.c props.c \
+	resize.c resources.c screens.c windows.c  -lXpm \
+	-Bstatic -lXm -lXt -Bdynamic -lXpm -lXext 
+
+::	Makefile.in Makefile.am Mwm.ad alt.map README system.mwmrc COPYING
+

@@ -1,0 +1,6 @@
+If you encounter problems during UWIN installation 
+please describe the problem, Windows and UWIN OS
+versions, file system type, privileges of user doing
+the install (e.g., normal user, admin privilege, local
+Administrator), and mail to uwin-users@research.att.com.
+

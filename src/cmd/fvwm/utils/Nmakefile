@@ -1,0 +1,15 @@
+include ../fvwm.mk
+
+xpmroot ::		xpmroot.1 xpmroot.c
+
+fvwm-config ::		fvwm-config.1 fvwm-config.in
+
+fvwm-menu-desktop ::	fvwm-menu-desktop.1 fvwm-menu-desktop.in
+
+fvwm-menu-directory ::	fvwm-menu-directory.1 fvwm-menu-directory.in
+
+fvwm-menu-headlines ::	fvwm-menu-headlines.1 fvwm-menu-headlines.in
+
+fvwm-menu-xlock ::	fvwm-menu-xlock.1 fvwm-menu-xlock.in
+
+fvwm24_convert ::	fvwm24_convert.1 fvwm24_convert.in

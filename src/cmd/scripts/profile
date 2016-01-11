@@ -1,0 +1,92 @@
+export DOSPATHVARS=TEMP TEMP
+case $TEMP in
+/*)	;;
+"")	TEMP=/c/temp;;
+*)	TEMP=$(unixpath "$TEMP");;
+esac
+if	[[ ! $HOME && $HOMEPATH ]]
+then	drive=
+	[[ ${HOMEDRIVE} ]] && drive=/${HOMEDRIVE%:}
+	HOME=$drive"${HOMEPATH//'\'//}"
+fi
+if	[[ ! -d $HOME ]]
+then	print -u2 -r "HOME was set as $HOME - but no such directory."
+	HOME=/tmp
+	print -u2 -r "Resetting HOME to $HOME"
+fi
+[[ $HOME == '/' ]] && HOME=/.	# avoid // problems
+unset LINES COLUMNS
+export HISTFILE=$HOME/.sh_history
+export HISTSIZE=510
+builtin getconf
+export HOSTTYPE=$(getconf HOSTTYPE)
+export HOSTNAME=$(hostname)
+export EDITOR=vi
+export SHELL=/usr/bin/ksh
+export FPATH=/usr/fun
+OLDPATH=$PATH
+export PATH=/usr/bin
+export VERSION_ENVIRONMENT=PACKAGE_cc:PACKAGE_msdev
+export PACKAGE_msdev=$(winpath /msdev 2>/dev/null)
+add=
+if	[[ -x /usr/bin/cc ]]
+then	if	PACKAGE_cc=$(cc -V 2> /dev/null)
+	then	PATH=$PATH:$PACKAGE_cc/bin
+		pcc=${PACKAGE_cc%/*}
+		if	[[ -d $pcc/SharedIDE/bin ]]
+		then	PATH=$PATH:$pcc/SharedIDE/bin
+		elif	[[ -d $pcc/Common/MSDev98/bin ]]
+		then	PATH=$PATH:$pcc/Common/MSDev98/bin
+		elif	[[ -d $pcc/Common7/Tools/bin ]]
+		then	PATH=$PATH:$pcc/Common7/Tools/bin:$pcc/Common7/IDE
+		elif	[[ -d $pcc/Common7/IDE ]]
+		then	PATH=$PATH:$pcc/Common7/IDE
+		fi
+		sdk=/msdev/platformsdk
+		for dir in bin bin/winnt bin/win64
+		do	[[ -d $sdk/$dir ]] && add=$add:$sdk/$dir
+		done
+	fi
+fi
+if	[[ -d /usr/local/bin ]]
+then	PATH=$PATH:/usr/local/bin
+fi
+if	[[ -f "/reg/local_machine/SOFTWARE/Microsoft/reskit/NameSpace/Windows 2000 Pro Resource Kit" ]]
+then	x=$(grep '^InstallDir=' '/reg/local_machine/SOFTWARE/Microsoft/reskit/NameSpace/Windows 2000 Pro Resource Kit' | sed -e 's/InstallDir=//' -e 's,/$,,')
+	if	[[ -n $x ]]
+	then	PATH=$PATH:$x
+	fi
+	unset x
+fi
+if	[[ -d $NTRESKIT && -x /bin/unixpath ]]
+then	PATH=$PATH:$(unixpath "$NTRESKIT")
+fi
+if	[[ -d /usr/X11/bin ]]
+then	export DISPLAY=localhost:0
+	PATH=$PATH:/usr/X11/bin
+fi
+PATH=$PATH:/sys:/win${add}:.
+PATH=$PATH:.
+export ENV=$HOME/envfile
+export nativepp=/usr/lib
+export COSHELL=/usr/bin/ksh
+export NLSPATH=/usr/share/lib/locale/%l/%C/%N
+cd "$HOME"
+export PWD=$HOME
+if	[[ $(id -g) == 3 ]]
+then	umask 002
+else	umask 022
+fi
+PS1='$ '
+export PS4='[$LINENO]+ '
+export TERM=${TERM:-vt100}
+unset TMP TMPDIR
+set -o viraw
+[[ -t 1 ]] && print -n $'\E[?1l\E>'	# for keybind problem in telnet sessions
+export PACKAGE_X11=/usr/X11
+if	[[ -r /var/etc/profile.local ]]
+then	. /var/etc/profile.local
+fi
+if	[[ ! -f /etc/rc.d/XWin && -x /usr/x11/bin/Xrun && $(ps -e) != *XWin* ]]
+then	(/usr/x11/bin/Xrun &) 2> /dev/null 
+fi

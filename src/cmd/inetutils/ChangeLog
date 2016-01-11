@@ -1,0 +1,1455 @@
+1997-09-10  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.3b'.
+
+	* ftp/cmds.c (lcd): Conditionalize use of getcwd with a zero size arg.
+	* configure.in: Check if getcwd (0, 0) is ok.
+	* headers/acconfig.h (HAVE_GETCWD_ZERO_SIZE): New define slot.
+
+	From Martin Buck <Martin-2.Buck@student.uni-ulm.de>:
+	* telnet/sys_bsd.c (TerminalNewMode): Don't limit to 7-bits when
+	not in binary mode.
+	
+1997-07-28  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* ftp/ftp.c (recvrequest, gunique): Get rid of
+	perm-checking-with-access crap.
+
+1997-05-27  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* iumacros.m4: Doc fixes.
+
+Tue Mar  4 12:49:00 1997  Philippe De Muyter  <phdm@info.ucl.ac.be>
+
+	* paths (PATH_TMP): Added a trailing '/' to default value.
+
+Mon Mar  3 23:53:45 1997  Philippe De Muyter  <phdm@info.ucl.ac.be>
+
+	* headers/acconfig.h (HAVE_SYS_ERRLIST): New macro.
+	(getpass, hstrerror, strerror): New function declarations, if needed.
+	* inetd/inetd.c (reapchild): Use wait, if not HAVE_WAIT3.
+	* libinetutils/hstrerror.c (hstrerror): Function made const.
+	* libinetutils/strerror.c (strerror): Function made const.
+	(sys_nerr): Fixed variable name.
+ 	* configure.in (sys_errlist): If variable exists,
+ 	AC_DEFINE(HAVE_SYS_ERRLIST).
+
+Thu Apr 17 12:47:31 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.3a'.
+
+Fri Feb 28 17:05:15 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* ftpd/ftpd.c (complete_login): Don't segv if CRYPT returns 0.
+
+	From: Andreas Schwab <schwab@issan.informatik.uni-dortmund.de>:
+	* configure.in (sigset_t): Add missing comma.
+
+	* rcp/rcp.c (source): Print longer-than-long numbers correctly.
+	* ftpd/ftpcmd.y: Likewise.
+	* ftp/cmds.c (restart): Likewise.
+
+Tue Feb 25 18:21:18 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	From David J MacKenzie <djm@va.pubnix.com>:
+	* tftpd/tftpd.c (validate_access): Truncate files opened for writing.
+	* ftp/ftp.c (login): Deal correctly with EOF to Name: prompt.
+
+Mon Feb 24 00:19:06 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.3'.
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2o'.
+
+	* libinetutils/snprintf.c, libinetutils/snprintf.h: Updated from
+	snprintf-1.1.
+
+Sun Feb 23 13:22:41 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* iumacros.m4 (IU_LIB_NCURSES): Add -with[out]-ncurses-include-dir
+	options.  Search $includedir and $prefix/include first in default list.
+
+	From NIIBE Yutaka <gniibe@mri.co.jp>:
+	* talk/ctl_transact.c (ctl_transact): Zero CTL_MASK before using.
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2n'.
+
+	* rules.make ($(bindir)/%: % $(bindir)): Test $USER as well as the
+	output of whoami, for linux boxes with a broken whoami.
+
+Fri Feb 21 14:16:31 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/iruserok.c (iruserok): Dynamically allocate PBUF
+	instead of using MAXPATHLEN.
+	(__ivaliduser): Dynanamically allocage BUF rather than using
+	MAXHOSTNAMELEN.
+	[STDC_HEADERS || HAVE_STDLIB_H]: New include.
+	[HAVE_MALLOC_H] <malloc.h>: New include.
+
+Thu Feb 20 14:40:00 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2m'.
+
+	* syslog.c: New file.
+	* libinetutils/Makefile.in (SRCS): Add syslog.c.
+
+Wed Feb 19 10:02:44 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* iumacros.m4 (IU_LIB_NCURSES): Add search for NCURSES_INCLUDE.
+	* config.make.in (NCURSES_INCLUDE): New variable.
+	* talk/Makefile.in (CPPFLAGS): Add $(NCURSES_INCLUDE).
+
+	* headers/acconfig.h (HAVE_SOCKADDR_IN_SIN_LEN): New define slot.
+
+	* iumacros.m4 (IU_CONFIG_PATHS): Give up on using IFS to break
+	apart search: paths, just use sed.
+
+	From NIIBE Yutaka <gniibe@mri.co.jp>:
+	* talk/ctl.c (daemon_addr, ctl_addr, my_addr): Leave length out of
+	initialization if !HAVE_SOCKADDR_IN_SIN_LEN.
+	* talk/invite.c (invite_remote): Use memcpy instead of bcopy.
+	* talk/look_up.c (check_local): Likewise.
+	* configure.in: Add check for sin_len field in struct sockaddr_in.
+	Fix test for whether we should build talk.
+
+Tue Feb 18 22:09:51 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* iumacros.m4 (IU_CONFIG_PATHS): Use `set' instead of `read' with
+	a here document, because the latter fucks up in some shells.
+
+Tue Feb 18 20:14:48 1997  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* configure.in: Add AC_STRUCT_ST_BLKSIZE test.
+	* ftp/cmds.c: Include glob.h last, it defines "const" to null
+	which breaks some system headers.
+	* ftp/ftp.c (recvrequest): Handle missing st_blksize member.
+	* ftp/ftp_var.h: Make all declarations extern except in one file
+	to avoid conflicts when linking.
+	* ftp/main.c (FTP_EXTERN): Activate this macro so the declarations
+	in ftp/ftp_var.h become definitions.
+	* ftpd/ftpcmd.y: Include glob.h last, it defines "const" to null
+	which breaks some system headers.
+	* ftpd/popen.c: Likewise.
+	* ftpd/ftpd.c: Likewise.  Also handle missing st_blksize member.
+	* headers/acconfig.h: Normalize variable argument list usage.
+	Also add support to handle missing st_blksize member.
+	* libinetutils/snprintf.c: Normalize variable argument list usage. 
+	* libinetutils/snprintf.h: Likewise.  Also constify DATA.pf member.
+	* rcp/util.c: Handle missing st_blksize member.
+	* rexecd/rexecd.c: Make environ extern to avoid link time conflicts.
+	* rshd/rshd.c: Likewise.
+	* telnetd/ext.h: Make terminaltype and line be extern to avoid
+	link time conflicts. 
+	* telnetd/sys_term.c (rmut): protect use of ut_host member.
+	* telnetd/telnetd.c (main, doit): Likewise.
+	(utmp_len): Only declare if HAVE_UTMP_UT_HOST.
+	* tftp/extern.h (toplevel): New declaration.
+	* tftp/tftp.c (toplevel): Duplicate definition removed.
+	* uucpd/uucpd.c (dologout): Remove unused status variable.  Add a
+	case for HAVE_WAITPID.
+	
+Tue Feb 18 01:13:16 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	From Alain Magloire <alain.magloire@rcsm.ee.mcgill.ca>:
+	* ftpd/ftpd.c (dologout): Small race condition with SIGURG (D. Greenman)
+	* ftpd/popen.c (popen): Buffer overflow in argv[] (AUSCERT)
+	* ftpd/ftpcmd.y: check_login for PASV (*Hobbit)
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2l'.
+
+	* libinetutils/snprintf.c (vsnprintf): New function, slightly
+	modified from snprintf.
+	[!HAVE_SNPRINTF] (snprintf): Now a wrapper that calls vsnprintf.
+	Change param types to match conventional signature.
+	[HAVE_CONFIG_H] <config.h>: New include.
+
+	From Marcus Daniels <marcus@sysc.pdx.edu>:
+	* configure.in (AC_REPLACE_FUNCS): Add xstrup & getusershell.
+	(vsnprintf): Check for, and possibly replace, this function.
+	* headers/acconfig.h: Declare vsnprintf if the system doesn't.
+	(HAVE_VSNPRINTF): New define slot.
+	* rules.make ($(bindir)/%: % $(bindir)): If $(INST_PROG_FLAGS) is
+	non-empty, only do the install if we're root.
+	* libinetutils/Makefile.in (SRCS): Add getusershell.c & xstrdup.c.
+
+Mon Feb 17 15:08:59 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2k'.
+
+	From Alain Magloire <alain.magloire@rcsm.ee.mcgill.ca>:
+	* talkd/announce.c (strvis): Use '\007' for systems that don't
+	recognize '\a'.
+	(announce): Don't pass TF argument to print_mesg.
+	(print_mesg): Remove TF parameter.
+	Free VIS_USER after we're done with it.
+	* talkd/process.c (process_request): Cast 0 argument to htonl.
+	* libinetutils/ttymsg.c (ttymsg): Add check for dangerous values
+	of LINE, and guard against buffer overflow.
+
+	* Makefile.in (DISTFILES): Add THANKS.
+	* THANKS: New file.
+
+	* libinetutils/snprintf.c: Real snprintf replacement, from
+	Alain Magloire <alain.magloire@rcsm.ee.mcgill.ca>.
+	* libinetutils/snprintf.h: New file.
+	* libinetutils/Makefile.in (DISTFILES): Add snprintf.h.
+
+	From NIIBE Yutaka <gniibe@mri.co.jp>:
+	* telnetd/sys_term.c (scrub_env): New function.
+	(start_login): Use it.
+
+	* ftp/ruserpass.c (ruserpass): Use snprintf instead of sprintf.
+	* ftpd/ftpd.c (retrieve): Likewise.
+	* telnetd/utility.c (fatal, fatalperror): Likewise.
+	* telnetd/sys_term.c (startslave, start_login): Likewise.
+	* talkd/announce.c (print_mesg): Likewise.
+	* syslogd/syslogd.c (main, fprintlog, cfline): Likewise.
+	* rlogind/rlogind.c (fatal): Likewise.
+	* rexecd/rexecd.c (error): Likewise.
+	* ping/ping.c (pr_addr): Likewise.
+	* inetd/inetd.c (set_proc_title): Likewise.
+
+	* iumacros.m4 (IU_LIB_TERMCAP): See if -lcurses works too.
+	(IU_LIB_CURSES): Don't check whether curses needs termcap if
+	$LIBCURSES == $LIBTERMCAP.
+
+Sun Feb 16 21:45:02 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* telnetd/defs.h, rlogind/rlogind.c, rlogin/rlogin.c <sys/proc.h>:
+	Include removed.
+
+Thu Jan 23 18:25:01 1997  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* configure.in: Add checks for sys/proc.h, sys/select.h and
+	sys/time.h.  Add AC_HEADER_TIME check.  Add checks for seteuid,
+	setegid, setreuid, setregid, setresuid, setresgid, killpg,
+	setlinebuf, utimes and utime.  Add AC_FUNC_SETVBUF_REVERSED and
+	AC_FUNC_VFORK tests.
+	* ftp/cmds.c: Use TIME_WITH_SYS_TIME macro for time.h headers.
+	* ftp/ftp.c: Likewise.  Also include sys/select.h for fd_set on AIX.
+	* ftp/ftp_var.h: Make declarations of mapin/mapout be extern so
+	they don't collide with their definitions below.
+	* ftpd/ftpcmd.y: Include sys/types.h and use TIME_WITH_SYS_TIME
+	macro.  Also make  declarations of cmttab/sitetab be extern so
+	they don't collide with their definitions below.
+	* ftpd/ftpd.c: Use TIME_WITH_SYS_TIME macro.
+	* headers/acconfig.h: Provide fallback definitions for killpg,
+	seteuid and setegid.
+	* inetd/inetd.c: Include sys/types.h, use TIME_WITH_SYS_TIME macro
+	and include sys/select.h.
+	* libinetutils/xmalloc.c: New file (to support alloca.c.)
+	* libinetutils/Makefile.in: Add xmalloc.c to $(SRCS), add
+	xmalloc.o to $(OBJS).
+	* libinetutils/cleansess.c: Use TIME_WITH_SYS_TIME macro.
+	* libinetutils/iruserok.c: Likewise.
+	* libinetutils/logout.c: Likewise.
+	* libinetutils/logwtmp.c: Likewise.
+	* libinetutils/localhost.c: Include stdlib.h to prototype malloc().
+	* libtelnet/spx.c (spx_send, spx_is): remove superfluous casts.
+	* rcp/rcp.c: Use TIME_WITH_SYS_TIME macro.  Use utime() if
+	utimes() is missing.  Cast 4th arg of setsockopt() in toremote()
+	and tolocal() functions.
+	* rexecd/rexecd.c: Include sys/types.h, use TIME_WITH_SYS_TIME
+	macro and include sys/select.h.
+	* rlogin/rlogin.c: Include sys/types.h and use TIME_WITH_SYS_TIME
+	macro.  Include sys/proc.h on hpux only.  Cast 4th arg of
+	setsockopt() in main().
+	* rlogind/rlogind.c: Use TIME_WITH_SYS_TIME macro.  Include
+	sys/proc.h on hpux only.  Include sys/select.h.  Cast 4th arg of
+	setsockopt() in main().
+	* rsh/rsh.c: Use TIME_WITH_SYS_TIME macro.  Include sys/select.h.
+	Cast 4th arg of setsockopt() in main().
+	* rshd/rshd.c: Use TIME_WITH_SYS_TIME macro.  Include sys/select.h.
+	* syslogd/syslogd.c: Use TIME_WITH_SYS_TIME macro.  Include
+	sys/select.h.  Include syslog.h, not sys/syslog.h.  Handle missing
+	setlinebuf() function in main().
+	* talk/ctl_transact.c: Use TIME_WITH_SYS_TIME macro.  Include
+	sys/select.h.
+	* talk/get_names.c: Include sys/types.h.
+	* talk/invite.c: Use TIME_WITH_SYS_TIME macro.
+	* talk/io.c: Use TIME_WITH_SYS_TIME macro.  Include sys/select.h.
+	* talk/msgs.c: Use TIME_WITH_SYS_TIME macro.
+	* talkd/announce.c: Use TIME_WITH_SYS_TIME macro.  Include stdlib.h
+	to prototype malloc().  Remove superfluous cast of malloc() in
+	function print_mesg().
+	* talkd/table.c: Use TIME_WITH_SYS_TIME macro.
+	* talkd/talkd.c: Use TIME_WITH_SYS_TIME macro.
+	* telnet/commands.c: Include stdlib.h to prototype malloc().
+	Only prototype strchr()/strrchr()/htons() if they are not macros.
+	Avoid superfluous cast of malloc() in function env_init().
+	* telnet/externs.h: Include termio.h & termios.h, not sys/termio.h
+	& sys/termios.h.
+	* telnet/main.c: Only prototype strrchr() if its not a macro.
+	* telnet/network.c: Use TIME_WITH_SYS_TIME macro.  Include
+	sys/select.h.
+	* telnet/sys_bsd.c: Likewise.
+	* telnet/telnet.c: Include stdlib.h to prototype malloc().
+	* telnet/utilities.c: Use TIME_WITH_SYS_TIME macro.
+	* telnetd/defs.h: Use TIME_WITH_SYS_TIME macro.  Include
+	sys/proc.h on hpux only.  Do #undef SE to avoid redecl warnings.
+	* telnetd/telnetd.c (telnet): Do #undef HE to avoid redecl warnings.
+	* telnetd/utility.c (edithost, putf): Only prototype
+	strncpy()/strchr()/strrchr() if they are not macros.
+	* tftp/tftp.c: Use TIME_WITH_SYS_TIME macro.
+	* uucpd/uucpd.c: Likewise.  Also, wrap comments after #else and
+	#endif with /* */ in all cases.
+
+Fri Jan 24 14:17:08 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2j'.
+
+	* iumacros.m4 (IU_CONFIG_PATHS): Temporarily suppress autoconf
+	quoting around regexps containing "[" and "]".
+
+	* paths (PATH_UTMP, PATH_WTMP, PATH_LASTLOG): Add /var/adm to file
+ 	search path.
+
+	* config.make.in (CPPFLAGS): Add $(CPPFLAGS-$(<F)).
+	* libinetutils/Makefile.in (CPPFLAGS): Remove $(CPPFLAGS-$(<F)).
+	(CPPFLAGS-logout.c, CPPFLAGS-logwtmp.c, CPPFLAGS-logwtmpko.c,
+	CPPFLAGS-ttymsg.c, CPPFLAGS-cleansess.c, CPPFLAGS-daemon.c):
+	New variables.
+	(CPPFLAGS): Variable removed.
+	
+	* telnet/commands.c (set_mode): Renamed from setmode, to avoid
+ 	conflict with netbsd <unistd.h>; all references changed.
+  	(clear_mode): Renamed from clearmode, for consistency with
+ 	setmode; all references changed.
+
+	* iumacros.m4 (IU_LIB_NCURSES): New macro.
+	(IU_LIB_TERMCAP): Use IU_LIB_NCURSES, and prefer ncurses as the
+	termcap library when it exists.
+	(IU_LIB_CURSES): Special case ncurses (it never requires termcap).
+	(_iu_curses_needs_termcap): Macro removed.
+	
+	* uucpd/uucpd.c (doit): Use PATH_UUCICO instead of _PATH_UUCICO.
+	(dologin): Use PATH_LASTLOG instead of _PATH_LASTLOG.
+	[HAVE_UTMP_H] <utmp.h>: New include.
+	* uucpd/Makefile.in (CPPFLAGS): Add $(PATHDEF_LASTLOG).
+	Use $(PATHDEF_UUCICO) instead of old wrong define.
+
+Thu Jan 23 13:12:03 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (libinetutils_version): Change to `1.2i'.
+
+	* configure.in: Move general library tests before any function tests.
+
+	* telnetd/sys_term.c (login_tty): Use setpgid instead of setpgrp.
+
+	* telnet/commands.c: Protect includes with HAVE_..._H rather than
+	random system defines.
+	(tn): Protect declaration of htons with !HAVE_HTONS_DECL.
+	* configure.in (htons): Add new declaration check.
+	(AC_CHECK_HEADERS): Add sys/param.h, unistd.h, sys/file.h & fcntl.h.
+	* headers/acconfig.h (HAVE_HTONS_DECL): New define slot.
+
+	* telnetd/sys_term.c (wtmpf): Initialize from PATH_WTMP.
+	[!PARENT_DOES_UTMP] (utmpf): Initialize from PATH_UTMP.
+	[NEWINIT && HAVE_UTMP_H && HAVE_UTMP_UT_TV] (HAVE_WTMP_UT_TV): New macro.
+	[NEWINIT && HAVE_UTMPX_H && HAVE_UTMPX_UT_TV] (HAVE_WTMP_UT_TV): New macro.
+	* configure.in: Check for ut_tv in struct utmpx, not struct wtmp.
+	Only do tests using <utmp.h> / <utmpx.h> when they exist.
+
+	* headers/acconfig.h (HAVE_UTMPX_UT_TV): Renamed from HAVE_WTMP_UT_TV.
+	* telnetd/Makefile.in (CPPFLAGS): Add $(PATHDEF_UTMP) & $(PATHDEF_WTMP).
+
+	* libinetutils/stub_tgetent.c (tgetent): Add missing semi.
+
+Wed Jan 22 20:51:31 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2h'.
+
+Tue Jan 21 15:32:56 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/openpty.c (openpty): Only use TIOCSWINSZ if it's
+	defined.
+
+	* configure.in: Add existance & decl tests for h_errno.
+	* headers/acconfig.h (HAVE_H_ERRNO, HAVE_H_ERRNO_DECL): New define
+	slots.
+
+Mon Jan 20 20:35:53 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/herror.c (herror): New file.
+	* configure.in (AC_REPLACE_FUNCS): Add herror.
+	* libinetutils/Makefile.in (SRCS): Add herror.c.
+
+	* rsh/rsh.c (main): Always use sigset_t & OSIGS & SIGS variables,
+	and pass a pointer to the talk function.
+	(talk): Always use a pointer for the OSIGS arg (was OMASK).
+	
+	* headers/acconfig.h (HAVE_UTMP_UT_TV, sigset_t): Add define slots.
+
+	* telnetd/sys_term.c (rmut): Use HAVE_WTMP_UT_TV rather than
+	HAVE_UTMPX_H || HAVE_UTMP_UT_TV.
+
+	* configure.in (sigset_t): New type replacement.
+	Add check for ut_tv field in struct wtmp.
+
+Wed Jan 15 16:52:31 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* ftpd/ftpd.c (makedir): Provide the absolute name of the new
+	directory in the reply, as per rfc959.
+
+Mon Jan 20 19:55:30 1997  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* ftp/extern.h (command): Constify fmt argument.
+	
+	* ftp/ftp.c (command): Normalize variable argument list usage.
+  	Require both HAVE_STDARG_H && __STDC__==1 to allow inclusion of
+ 	<stdarg.h> and use of ellipses, failing either we fall back on
+ 	<varargs.h> and va_alist.  Ensure stdarg.h/varargs.h appears
+	before syslog.h in all cases to avoid problems on solaris.
+	* ftp/ruserpass.c: Likewise.
+	* ftpd/ftpd.c (reply, lreply, setproctitle): Likewise.
+	* headers/err.h: Likewise.
+	* libinetutils/err.c (warn, warnx, err, errx): Likewise.
+	* libinetutils/snprintf.c (snprintf): Likewise.
+	* rcp/rcp.c (oldw, run_err): Likewise.
+	* rlogin/rlogin.c (warning): Likewise.
+	* rsh/rsh.c (warning): Likewise.
+	* rshd/rshd.c (error): Likewise.
+	* telnet/commands.c (call): Likewise.
+
+Mon Jan 13 22:17:38 1997  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* configure.in (AC_CHECK_HEADERS): Add sys/sysmacros.h for solaris
+	to get the roundup() macro.  (AC_CHECK_FUNCS): Add waitpid().
+	* ftp/cmds.c: Don't declare "union wait status".  Its never used
+	and causes problems for posix sys/wait.h.  Consequently, pass 0 to
+	the wait() function.  Add an (ignored) int parameter to function
+	passed to signal().
+	* ftp/ftp.c: Likewise for functions passed to signal().
+	* ftp/main.c: Likewise for functions passed to signal().
+	* ftpd/popen.c: Add POSIX signal handling.
+	* inetd/inetd.c: Likewise.
+	* libinetutils/ttymsg.c: Likewise.
+	* rcp/rcp.c: Change macro MODEMASK to RCP_MODEMASK to avoid
+	conflict with solaris sys/vnode.h header.
+	* rcp/util.c: Include sys/sysmacros.h for solaris to get the
+	roundup() macro.
+	* rexecd/rexecd.c: Use O_RDWR instead of "2" in call to open().
+	* rlogind/rlogind.c: Don't define FD_SETSIZE, let OS headers do it.
+	* rsh/rsh.c: Add POSIX signal handling.
+	* rshd/rshd.c: Use O_RDWR instead of "2" in call to open().
+	* syslogd/syslogd.c: Test MSG_BSIZE, not HAVE_SYS_MSGBUF_H, when
+ 	deciding if we have MSG_BSIZE.  Add POSIX signal handling.
+  	Optionally use waitpid().  Also, don't declare "union wait status",
+  	its never used and causes problems for posix sys/wait.h.
+  	Consequently, pass 0 to the waitpid()/wait3() functions.
+	* talk/ctl_transact.c: Use fd_set not int for file descriptor set.
+	Also set mask with FD_SET, not an explicit bit shift operation.
+	* talk/init_disp.c: Fix POSIX signal handling.
+	* talk/invite.c: Cast 2nd arg of sendto() to (const char *).
+	* talk/msgs.c: Add an (ignored) int parameter to function
+	passed to signal().
+	* telnet/sys_bsd.c: Add POSIX signal handling.
+	* telnetd/sys_term.c: Check HAVE_UTMP_UT_HOST before using ut_host.
+	Also, check HAVE_UTMPX_H||HAVE_UTMP_UT_TV before using ut_tv field.
+	* telnetd/telnetd.c: Use O_RDWR instead of "2" in call to open().
+	* telnetd/termstat.c: Evaluate tty_istrapsig() not tty_istrapsig.
+	* tftp/tftp.c: Cast 2nd arg of sendto() to (const char *).  Also
+	cast 2nd arg of recvfrom() to (char *).
+	* tftpd/tftpd.c: Include sys/filio.h.  Use O_RDONLY & O_WRONLY
+ 	instead of "0" & "1" in call to open().  Add an (ignored) int
+ 	parameter to function passed to signal().  Cast the 2nd arg of
+	send() to (const char *).  Cast the 2nd arg ot recv to (char *).
+	* uucpd/uucpd.c: Include termios.h for decl of TIOCNOTTY on
+	solaris.  Also use O_RDWR instead of "2" in call to open().
+
+Mon Jan 13 14:06:24 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2g'.
+
+	* iumacros.m4 (IU_LIB_CURSES): Add --disable-ncurses option.
+	Use _iu_curses_needs_termcap to keep the requirements of curses
+	and ncurses separate.
+	(_iu_curses_needs_termcap): New macro.
+
+Sat Jan 11 16:42:43 1997  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* libinetutils/forkpty.c: sunos4 cc chokes on indented cpp
+	directives.  Put # in first column and put indentation after it.
+	* libinetutils/openpty.c: Likewise.  Also change auto variable
+	declaration to avoid zero sized array error on sunos4 cc.
+	* libinetutils/iruserok.c: KNRize function signatures.
+
+Fri Jan 10 14:22:18 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2f'.
+
+	* tftp/main.c (put, get): Use strchr rather than index.
+	(tail): Use strrchr rather than rindex.
+	(index, rindex): Declarations removed.
+	* rlogind/rlogind.c (setup_term): Use strchr rather than index.
+	* talk/get_names.c (get_names): Likewise.
+	* tftp/tftp.c (tpacket): Likewise.
+	<string.h>: New include.
+
+	* rcp/rcp.c, tftp/tftp.c, tftpd/tftpd.c [!HAVE_STRERROR_DECL]
+	(strerror): New declaration.
+	* tftp/tftp.c (nak): Remove declaration of strerror.
+	(errno): Protect declaration with !HAVE_ERRNO_DECL.
+	* headers/acconfig.h
+	[HAVE_STRCHR] (strchr, strrchr): New macros.
+	[HAVE_STRCHR_DECL] (strchr, strrchr): New declarations.
+	(HAVE_STRCHR_DECL, HAVE_STRERROR_DECL): New define slots.
+	* configure.in (AC_CHECK_FUNCS): Add index & strchr.
+	(strchr, strerror): New declaration tests.
+
+	* libinetutils/iruserok.c (rcmd, rresvport): Functions removed.
+
+	* talk/io.c (talk): Use fd_setsinstead of ints for select.
+	(STDIN_MASK): Macro removed.
+	<sys/types.h>: New include.
+
+	* libinetutils/err.c (_VA, vwarnx, vwarn, warn, warnx, verr,
+	verrx, err, errx): Make FORMAT const.
+	* headers/err.h: Update prototypes to include const where appropriate.
+	* tftpd/tftpd.c (verifyhost, errtomsg): Add const to return type.
+	(struct errmsg): Make E_MSG field const.
+	* tftp/tftp.c (struct errmsg): Make E_MSG field const.
+	* syslogd/syslogd.c (cvthname, printline, printsys, logmsg,
+	fprintlog, decode, logerror): Add const all over the place.
+	* ftpd/ftpd.c (dolog): Add const to decl of NAME.
+	* rshd/rshd.c (doit): Add const to decls of HOSTNAME, ERRORSTR,
+	and ERRORHOST.
+	(local_domain, topdomain): Add const to decl of H.
+	* rlogind/rlogind.c (doit): Add const to decl of RAW_HOSTNAME.
+
+	* syslog/syslog.c (main): If LOG_PERROR isn't defined, don't
+	support -s option.
+
+	* rlogin/rlogin.c (main, setsignal, done, lostpeer, reader, stop,
+	writeroob): Use setsig instead of sigaction crap.
+	(setsig): New declaration.
+	[!_POSIX_VDISABLE] (_POSIX_VDISABLE): New macro.
+
+	* libinetutils/setsig.c: New file.
+	* libinetutils/Makefile.in (OBJS): Add setsig.o.
+	(SRCS): Add setsig.c.
+
+	* headers/syslog-int.h: New file.
+	* headers/Makefile.in (DISTFILES): Add syslog-int.h.
+	* syslog/syslog.c [!HAVE_SYSLOG_INTERNAL] <syslog-int.h>: New include.
+	* syslogd/syslogd.c: Likewise.
+	* configure.in: Add check for the special stuff in <syslog.h>
+	enabled by defining SYSLOG_NAMES.
+	* headers/acconfig.h (HAVE_SYSLOG_INTERNAL): New define slot.
+	
+	* iumacros.m4 (IO_CHECK_MACRO): Quote arguments to IU_RESULT_ACTIONS.
+
+Wed Jan  8 14:55:47 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* rlogind/rlogind.c (setup_term): Use cfsetispeed & cfsetospeed if
+	cfsetspeed isn't defined.
+	* configure.in (AC_CHECK_FUNCS): Add cfsetspeed.
+
+	* telnetd/sys_term.c [HAVE_SYS_TTY_H] <sys/tty.h>: Include removed.
+	[t_erase] (t_erase, t_kill, t_intrc, t_quitc, t_startc, t_stopc,
+	t_eofc, t_brkc, t_suspc, t_dsuspc, t_rprntc, t_flushc, t_werasc,
+	t_lnextc): Undefs removed.
+
+Tue Jan  7 13:10:05 1997  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* configure.in (IU_CHECK_DESC): Add checks for pclose, getpass
+ 	and getusershell.  Change sig_t, sig_atomic_t tests to look in
+	signal.h, not sys/signal.h.  Add check for sys/filio.h,
+	sys/ptyvar.h and sys/sockio.h.
+	* ftp/extern.h: Test HAVE_GETPASS_DECL.
+	* telnet/authenc.c: Likewise.
+	* ftp/ftp.c: Test HAVE_PCLOSE_DECL.
+	* ftpd/extern.h: Test HAVE_GETUSERSHELL_DECL.
+	* ftpd/ftpd.c: Change &array[x] to array+x to pacify sunos4 cc.
+	Cast the result of alloca().
+	* ftpd/popen.c: Cast the result of malloc().
+	* headers/acconfig.h: Add slots for pclose, getpass and getusershell.
+	* headers.crypt.h: Test HAVE_CRYPT_DECL, not HAVE_CRYPT, when
+	deciding to declare crypt().
+	* libinetutils/snprintf.c: Add missing arg "ap" to calls to
+	va_arg().  KNRize function signature of vsnprintf() and add
+	missing format parameter.  Also, check __STDC__ in addition to
+	HAVE_STDARG_H since hpux cc has the header but does not understand
+	elipses in function signatures by default.
+	* libtelnet/auth.c: Test HAVE_*_H macro, not __STDC__ for headers.
+	* libtelnet/enc_des.c: Likewise.
+	* libtelnet/encrypt.c: Likewise.
+	* libtelnet/kerberos.c: Likewise.
+	* libtelnet/krb4encpwd.c: Likewise.
+	* libtelnet/rsaencpwd.c: Likewise.
+	* libtelnet/spx.c: Likewise.
+	* telnetd/defs.h: Likewise.  Also test HAVE_SYS_FILIO_H, not
+	FILIO_H, and do not base include <ioctl.h> on !FILIO_H.
+	Test and include sys/stream.h, sys/tty.h and sys/ptyvar.h.
+	* telnet/externs.h: Likewise for filio.h stuff.
+	* rlogin/rlogin.c: Include sys/stream.h, sys/tty.h, sys/ptyvar.h,
+	and sys/sockio.h.
+	* libtelnet/kerberos5.c: Don't base "const" support on __STDC__.
+	* rshd/rshd.c: Add alloca() support and cast the result of
+	alloca().  Also test and include sys/filio.h.
+	* rlogind/rlogind.c: Likewise for sys/filio.h. Test and include
+	sys/stream.h, sys/tty.h, sys/ptyvar.h, and sys/sockio.h. 
+	* rexecd/rexecd.c: Likewise for filio.h.
+	* tftp/tftpsubs.c: Likewise.
+	* rsh/rsh.c: Likewise.
+	* talk/io.c: Likewise.
+	* talkd/announce.c: Don't assume sprintf() returns int.
+	* syslogd/syslogd.c: Likewise.  Also cast the result of malloc().
+
+Tue Jan  7 15:33:14 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/revoke.c: New file.
+	(AC_REPLACE_FUNCS): Add revoke.
+	* libinetutils/Makefile.in (SRCS): Add revoke.c.
+	
+	* libinetutils/login_tty.c: New file.
+	* configure.in (AC_REPLACE_FUNCS): Add login_tty.
+	(AC_CHECK_FUNCS): Add setsid.
+	* libinetutils/Makefile.in (SRCS): Add login_tty.c.
+
+	* paths (PATH_HEQUIV): New path (only necessary for iruserok.c).
+	* libinetutils/iruserok.c <netinet/in.h>: New include.
+	[HAVE_ARPA_NAMESER_H] <arpa/nameser.h>: New include.
+	<netdb.h>: New include.
+	(iruserok): Change _PATH_HEQUIV to PATH_HEQUIV.
+	* configure.in (AC_CHECK_HEADERS): Add arpa/nameser.h.
+	* libinetutils/Makefile.in (SRCS): Add iruserok.c.
+	(CPPFLAGS): Add $(CPPFLAGS-$<)
+	(CPPFLAGS-iruserok.c): New variable.
+
+Tue Jan  7 18:06:37 1997  Bernhard Rosenkraenzer  <bero@startrek.in-trier.de>
+
+	* configure.in: Check for bsd library, which enables some
+ 	bsd-style functions (revoke()) under Linux (and probably a few
+ 	other OSes).
+
+	* iumacros.m4: Use ncurses rather than curses if possible.  (fixes
+ 	scrollok problem with Linux)
+
+        * glob/Makefile.in (install): New dummy target to enable make
+ 	  install in the root directory
+
+	* configure.in (AC_REPLACE_FUNCS): Add iruserok.
+        * libinetutils/iruserok.c: New file.
+
+	* Makefile.in (DISTCLEAN): Add config.cache.
+
+	* libinetutils/openpty.c, libinetutils/forkpty.c: Replaced with
+ 	  versions that should work (NetKit-B based)
+
+Sun Jan  5 18:28:05 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2e'.
+
+	* configure.in: Test $inetutils_cv_macro_fd_set_macros, not
+	$inetutils_cv_fd_set_macros.
+
+	* configure.in (INCLUDES): Add protocols/talkd.h.
+	* headers/Makefile.in (DISTFILES): Add protocols & protocols/talkd.h.
+
+	* ftp/ftp.c [!HAVE_FCLOSE_DECL] (fclose): New declaration.
+
+	* telnetd/sys_term.c <sys/stream.h>: Make include conditional on
+	HAVE_SYS_STREAM_H, not STREAMS.
+	* configure.in (AC_CHECK_HEADERS): Add sys/stream .h.
+
+Sat Jan  4 20:05:29 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* ftpd/ftpd.c [!HAVE_FCLOSE_DECL] (fclose): New declaration.
+	* configure.in (libresolv): New check.
+	(sig_atomic_t): New type check.
+	(fclose): New decl check.
+	* headers/acconfig.h (sig_atomic_t, HAVE_FCLOSE_DECL): New define slots.
+
+	* iumacros.m4 (IU_CONFIG_PATHS): Store cache variables in a
+	temporary files so that they can be exported out of the subshell
+	in which some shells evaluate the main loop.
+	Instead of calling AC_C_CROSS, require AC_PROG_CC.
+
+	* headers/acconfig.h (HAVE_ENVIRON_DECL): New define slot.
+	* configure.in: Add check for declaration of ENVIRON.
+	Add AC_PREREQ of 2.12.
+
+Fri Jan  3 17:50:51 1997  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/memset.c, libinetutils/memmove.c,
+	libinetutils/setenv.c: New files. 
+	* headers/acconfig.h
+	[!HAVE_MEMCPY] (memcpy): Define to use memmove.
+	[!HAVE_BCOPY] (bcopy): Define to use memmove.
+	[!HAVE_BZERO] (bzero): Define to use memset.
+	[!HAVE_MEMMOVE] (bcopy): New declaration.
+	[!HAVE_MEMSET] (memset): New declaration.
+	* libinetutils/Makefile.in (SRCS): Add memmove.c, memset.c, & setenv.c.
+	* configure.in (AC_REPLACE_FUNCS): Add memset.
+	(AC_CHECK_FUNCS): Check for memcpy, bcopy, & bzero.
+
+Tue Dec 31 00:26:13 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* telnetd/telnetd.c (_console, cprintf): Debugging gunk removed.
+	* libinetutils/Makefile.in (SRCS): Update to reflect directory contents.
+
+	Portability changes for sunos from "Kaveh R." <ghazi@caip.rutgers.edu>:
+	* configure.in (AC_C_CONST, AC_FUNC_ALLOCA): New tests.
+	(AC_REPLACE_FUNCS): Add memmove & setenv.
+	(nsl, socket): Test for these libraries.
+	* ftpd/ftpd.c: Add alloca support.
+	* ftpd/ftpd.c, syslogd/syslogd.c [!LINE_MAX] (LINE_MAX): New macro.
+ 	* ftp/ftp.c (initconn): Don't use ansi-c string concatenation.
+	* libinetutils/Makefile.in (OBJS): Add @ALLOCA@.
+	* libinetutils/cleansess.c (cleanup_session): Use K&R style definition.
+	* libinetutils/hstrerror.c (hstrerror): Use K&R style definition.
+	* libinetutils/logout.c (logout): Use K&R style definition.
+	* libinetutils/version.c [HAVE_CONFIG_H] <config.h>: New include.
+	* libinetutils/err.c [!HAVE_STDARG_H] (_VA): Add missing backslashes.
+	[!HAVE_STDARG_H] (_VA, VAS): Supply missing AP argument to va_arg.
+	* ftp/ruserpass.c [HAVE_CONFIG_H] <config.h>: New include.
+	* rexecd/rexecd.c (path, doit): Use PATH_ instead of _PATH_ defines.
+	* talkd/announce.c (announce): Likewise.
+	* talkd/process.c (find_user): Likewise.
+	* telnetd/sys_term.c (start_login, getptyslave): Likewise.
+	* talkd/talkd.c (main): Likewise.
+	* telnetd/telnetd.c (telnet): Likewise.
+	* uucpd/uucpd.c (main): Likewise.
+	* rexecd/Makefile.in, talkd/Makefile.in (CPPFLAGS): New variable.
+	* rlogin/rlogin.c, ftpd/ftpd.c, syslog/syslog.c, syslogd/syslogd.c,
+	tftpd/tftpd.c <getopt.h>: New include.
+	* syslogd/Makefile.in (CPPFLAGS): Add $(PATHDEF_LOG).
+	* telnetd/sys_term.c: Test HAVE_UTMPX_H rather than UTMPX.
+	* tftp/main.c <fcntl.h>: New include.
+	* uucpd/Makefile.in (CPPFLAGS): Add $(PATHDEF_TTY).
+
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2d'.
+
+	* Makefile.in (pkgdirs): Renamed from auxdirs.
+	(SUBDIRS, SERVERS, CLIENTS, BOTH): Use $(pkgdirs) instead of $(auxdirs).
+	(DIST_SUBDIRS): New variable.
+	(DISTFILES): Use $(DIST_SUBDIRS) instead of $(SUBDIRS).
+	(dist-subdirs): Use $(DIST_SUBDIRS) instead of @SUBDIRS@.
+
+Mon Dec 30 15:45:59 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2c'.
+
+	* libinetutils/login.c, libinetutils/forkpty.c: New dummy files.
+	* libinetutils/Makefile (SRCS): Add err.c, login.c, and forkpty.c.
+	* libinetutils/logout.c <fcntl.h>: New include.
+	(logout): declare variable RD.
+
+	* headers/acconfig.h [!HAVE_SIG_T] (sig_t): Move to top-level.
+
+	* ftp/main.c (long_options, ohelp, main): Add --prompt/-p.
+	(DEFAULT_PROMPT): New macro.
+	(prompt): New variable.
+	(main): If FROMATTY, default PROMPT to DEFAULT_PROMPT.
+	(cmdscanner): Print a prompt when there is one, rather than only
+ 	when on a tty.
+
+	* libinetutils/version.c (inetutils_version): Change to `1.2b'.
+
+	* Makefile.in (auxdirs): New variable.
+	(SUBDIRS, SERVERS, CLIENTS, BOTH): Use $(auxdirs).
+	(dist-subdirs): New rule.
+
+	* iumacros.m4 (IU_CONFIG_PATHS): Use hairy eval construct to deal
+	with translating @( to $( in iu_val, because some shells
+	improperly deal with nested quotes.
+
+Fri Dec 27 23:56:25 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/Makefile.in (SRCS): Add openpty.c (bogus, but...).
+
+Tue Dec 24 14:37:55 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* telnet/commands.c (ToggleList): Don't make entry for "termdata"
+	dependent on `unix' being defined.
+	* telnet/externs.h (termdata): Likewise.
+
+	* telnetd/sys_term.c (startslave): Remove declaration of time().
+
+	* iumacros.m4 (IU_CONFIG_PATHS): Escape paths stored in the
+	autoconf cache to avoid problems with the shell evaluating make
+	variable notation, by storing `$(' as `@('.
+
+	* telnet/commands.c (env_init): Use correct hostname in sprintf.
+
+	* Makefile.in (DISTFILES): Add iumacros.m4.
+
+	* libinetutils/version.c (inetutils_version): Change to "1.2a".
+
+Tue Nov 12 19:25:44 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* iumacros.m4 (IU_CONFIG_PATHS): Make default iu_test_type 'r',
+	not 'e' (which apparently isn't totally standard).
+
+Thu Oct 24 17:21:36 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* telnet/telnet.c (init_term): Renamed from setupterm to avoid
+	conflict with ncurses.
+	(gettermname): Call init_term instead of setupterm.
+
+Mon Oct 21 16:21:15 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* config.make.in (LINK_DISTFILES): Add `;' before '}'.
+	Avoid posix sh bogosity with null for-loop.
+
+	* rsh/rsh.c (try_help, help, pusage): New function.
+	(usage): Use pusage & try_help.
+	(warning): Use __PROGNAME.
+	(main): Add long option handling.
+	(long_options): New variable.
+	"version.h": New include.
+	* libinetutils/version.c (inetutils_package): New variable.
+	* headers/version.h (inetutils_package): New declaration.
+	* ftp/main.c (main): Use INETUTILS_PACKAGE.
+	* ftpd/ftpd.c (statcmd, main): Likewise.
+	* telnet/main.c (main): Likewise.
+	(help): Add program description.
+
+	* ftpd/ftpd.c (inetutils_version): Declaration removed.
+	"version.h": New include.
+	
+Fri Sep 27 13:07:03 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_bugaddr): New variable.
+	(inetutils_version): Get rid of package name.
+	Change to version 1.3.
+	* ftp/main.c (main): Supply program name when printing the
+	version, and use INETUTILS_VERSION as only the version number.
+	* ftpd/ftpd.c (main, statcmd): Likewise.
+	* ftp/main.c (ohelp): Add bug reporting address.
+	* telnet/main.c (help): Likewise.
+	* headers/version.h (inetutils_bugaddr): New declaration.
+
+Tue Sep 24 19:16:34 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* telnetd/telnetd.c (telnet): Restore #if accidentally deleted
+	when removing debugging printfs.
+
+	* headers/crypt.h: Use crypt unconditionally if HAVE_CRYPT is defined.
+
+Fri Aug 30 11:47:44 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* telnetd/telnetd.c (telnet): Remove unecessary debugging printfs.
+
+Wed Aug 21 12:42:28 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* configure.in (enable_talk): Define `HAVE_OSOCKADDR_H' if we
+	supply that include file.
+	* headers/acconfig.h (HAVE_OSOCKADDR): Define slot removed.
+	(HAVE_OSOCKADDR_H): New define slot.
+	* talkd/talkd.c <osockaddr.h>: Conditionalize on HAVE_OSOCKADDR_H
+ 	instead of !HAVE_OSOCKADDR.
+
+Tue Aug 20 19:55:32 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* headers/Makefile.in (DISTFILES): Add err.h.
+
+Fri Aug 16 00:49:23 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* Makefile.in (DISTFILES): Add TODO.
+
+	* tftp/main.c (get_args): New function.
+	(setpeer, put, get, setrexmt, settimeout): Use get_args.
+	(command): Use fgets instead of gets.
+
+	* Makefile.in (dist): Remove dependency on $(DISTFILES).
+	(DISTFILES): Add $(SUBDIRS).  Remove glob & glob/*.
+	(dist-prepare): Don't make subdirectories explicitly.
+	Link or copy package directories as a unit into the distribution.
+	(DISTPACKAGES): New variable.
+
+	* headers/Makefile.in (DISTFILES): Add confpaths.h.in.
+
+	* headers/crypt.h [__GNUC__] (CRYPT): Use alternate definition to
+	avoid apparent gcc bug with weak refs and ?: operator.
+
+	* ftpd/ftpd.c (try_login): New function, guts from `pass'.
+	(pass): Call try_login.
+	(user): Always ask for a password for an uknown user.
+	Call try_login directly if a known user with no password.
+
+	* headers/Makefile.in (DISTFILES): Remove iupaths.h.
+
+Thu Aug 15 22:29:46 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* uucpd/uucpd.c (dologin, dologout): Always use logwtmp now.
+	<utmp.h>: Include removed.
+	(struct utmp): Type removed.
+	(dologout): Check HAVE_WAIT3 instead of BSDINETD.
+
+	* ftpd/ftpd.c (end_login, pass, dologout): Use logwtmp_keep_open.
+	* ftpd/Makefile.in (SRCS): Remove logwtmp.c.
+	* logwtmp.c: File removed.
+	* configure.in: Add check for errno being declared.
+	* libinetutils/logwtmp.c [!HAVE_ERRNO_DECL] (errno): New decl.
+	[HAVE_ERRNO_H] <errno.h>: New 
+	[KEEP_OPEN] Add code to define `logwtmp_keep_open' version.
+	* libinetutils/logwtmp.c <sys/fcntl.h>: New include.
+	* libinetutils/Makefile.in (CPPFLAGS): Add $(PATHDEF_WTMP) and
+	$(PATHDEF_UTMP).
+	(SRCS): Add logwtmpko.c.
+	(OBJS): Add logwtmpko.o.
+	* logwtmpko.c: New file.
+
+	* headers/acconfig.h (HAVE_STAT_ST_MTIMESPEC): Renamed from
+	HAVE_ST_TIMESPEC.
+	(HAVE_STAT_ST_MTIME_USC): Renamed from HAVE_ST_TIME_USEC.
+	(HAVE_ATTR_WEAK_REFS, HAVE_UTMP_UT_TYPE, HAVE_UTMP_UT_HOST,
+	HAVE_UTMP_UT_TV): New define slots.
+	* headers/crypt.h: Replace HAVE_WEAK_REFS with
+	HAVE_ATTR_WEAK_REFS, and test for any of the three with HAVE_WEAK_REFS.
+
+	* configure.in (sys_glob): Add checks for ut_type, ut_host, and
+	ut_tv fields in struct utmp.
+	(AC_CHECK_HEADERS): Add utmp.h & utmpx.h.
+	(AC_CHECK_FUNCS): Add flock, ftruncate, wait3.
+
+	* libinetutils/logwtmp.c (_logwtmp): Close FD after use.
+
+	* ftpd/logwtmp.c: Replace with version derived from libinetutils.
+
+	* rcp/rcp.c (write_stat_time): Replace HAVE_ST_TIME* with
+	HAVE_STAT_ST_MTIME* (as generated by new configure rules).
+
+Thu Aug  8 02:37:15 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* iumacros.m4: New file.
+	* configure.in: Use macros from iumacros.m4.
+	Rearrange to be more clear, and add lots of comments.
+	Check for libutils functions in libutil if it exists.
+
+Wed Aug  7 15:24:45 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* configure.in (AC_CHECK_FUNCS): Remove strdup & logwtmp.
+	(AC_REPLACE_FUNCS): Add strdup, logout, & logwtmp.
+	* libinetutils/logout.c, libinetutils/logwtmp.c,
+	libinetutils/cleansess.c, libinetutils/strdup.c: New files.
+	* libinetutils/Makefile.in (SRCS): Add strdup.c, logout.c,
+	logwtmp.c, & cleansess.c.
+	(OBJS): Add cleansess.o.
+
+	* ftp/cmds.c [!HAVE_STRDUP] (strdup): Function removed.
+	* ftpd/logwtmp.c [!PATH_WTMP && WTMP_FILE] (PATH_WTMP): Macro removed.
+
+	* rlogind/rlogind.c [HAVE_FD_SET_MACROS_IN_SYS_TIME_H]
+	<sys/time.h>: New include.
+
+	* configure.in: Rework format of path configuration file.
+	* headers/acconfig.h: Include <confpaths.h> at end.
+	* headers/confpaths.h.in: Renamed from iu_paths.h.
+	* paths: Change format of entries.
+	* libinetutils/Makefile.in (CPPFLAGS): New variable.
+	* libinetutils/daemon.c, libinetutils/ttymsg.c, rexecd/rexecd.c,
+ 	talkd/announce.c, talkd/process.c, talkd/talkd.c, uucpd/uucpd.c
+ 	<paths.h>: Include removed.
+	* ftp/cmds.c, ftpd/ftpd.c, ftpd/logwtmp.c, inetd/inetd.c,
+ 	rcp/rcp.c, rcp/util.c, rlogind/rlogind.c, rsh/rsh.c, rshd/rshd.c,
+ 	syslogd/syslogd.c, telnetd/sys_term.c, telnetd/telnetd.c
+ 	<iu_paths.h>: Include removed.
+	* Makefile.in (DISTCLEAN): Add pathdefs.make and paths.defs.
+
+Tue Aug  6 01:44:37 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to 1.2.
+
+	* paths: New file.
+	* configure.in: Add huge wodge of code to parse the `paths' file
+	and produce pathdefs.make and paths.defs.
+	* Makefile.in (DISTFILES): Add paths.
+	* config.make.in: Put @PATHDEFS_MAKE@ at the end.
+	* headers/iu_paths.h: New file.
+	* headers/Makefile.in (DISTFILES): Add iu_paths.h & remove paths.h.
+	* inetd/Makefile.in, telnetd/Makefile.in, ftpd/Makefile.in,
+	syslogd/makefile.in, rsh/Makefile.in, rlogind/Makefile.in,
+	rcp/Makefile.in
+	(CPPFLAGS): Use $(PATHDEF_...) variables.
+	* inetd/inetd.c, ftp/cmds.c, telnetd/telnetd.c, telnetd/sys_term.c,
+	syslogd/syslogd.c, rshd/rshd.c, rlogind/rlogind.c, rcp/util.c
+	<iu_paths.h>: Changed from <paths.h>.
+	* rsh/rsh.c, rcp/rcp.c <iu_paths.h>: New include.
+	* inetd/inetd.c (CONFIG): Initialize from PATH_INETDCONF.
+	* ftp/Makefile.in, rshd/Makefile.in (CPPFLAGS): New macro.
+	* syslogd/syslogd.c (LogName, ConfFile, PidFile, ctty, main, wallmsg):
+	Use PATH_* macros instead of _PATH_* ones.
+	* ftp/cmds.c (remglob, shell): Likewise
+	* rsh/rsh.c (main): Likewise.
+	* rshd/rshd.c (doit): Likewise.
+	* rlogind/rlogind.c (doit, cleanup): Likewise.
+	* rcp/util.c (susystem): Likewise.
+	* rcp/rcp.c (toremote, tolocal): Likewise.
+	* telnetd/sys_term.c (start_login): Likewise.
+	
+Mon Aug  5 00:23:07 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* configure.in: Check to see if the fd_set macros are defined by
+	<sys/time.h> rather than <sys/types.h> (!).
+	* headers/acconfig.h (HAVE_FD_SET_MACROS_IN_SYS_TIME_H): New def slot.
+	* rsh/rsh.c [HAVE_FD_SET_MACROS_IN_SYS_TIME_H] <sys/time.h>: New inc.
+
+	* talk/init_disp.c (init_display): Use sigaction or sigvec as appr.
+	* configure.in: Include $LIBTERMCAP in LIBCURSES if necessary.
+
+	* rlogin/rlogin.c (oob): Only use TIOCFLUSH if it's defined.
+	(writer): Only check VDSUSP if it's defined.
+
+	* talkd/announce.c <sgtty.h>: Include removed.
+
+	* rsh/rsh.c: [HAVE_STDARG_H] <stdarg.h>: New include.
+	[!HAVE_STDARG_H] <varargs.h>: Conditionalize include.
+	
+	* libinetutils/hstrerror.c: New file.
+	* libinetutils/Makefile.in (SRCS): Add strerror.c & hstrerror.c.
+	* headers/acconfig.h (HAVE_H_ERRLIST_DECL): New define slot.
+	* configure.in: Check for hstrerror, and various things to provide
+	a replacement if it doesn't exist.
+	* syslogd/syslogd.c (cfline): Declare hstrerror.
+
+	* rlogind/rlogind.c [!TTYDEF_IFLAG] (TTYDEF_IFLAG),
+	[!TTYDEF_OFLAG] (TTYDEF_OFLAG), [!TTYDEF_LFLAG] (TTYDEF_LFLAG):
+	New macros.
+	* rshd/rshd.c (doit): Use setpgid instead of setpgrp.
+	* uucpd/uucpd.c (dologin): Only write lastlog if HAVE_STRUCT_LASTLOG.
+	* configure.in: Add check for struct lastlog in <utmp.h>.
+	* headers/acconfig.h (HAVE_STRUCT_LASTLOG): New define slot.
+
+	* daemon.c: New file.
+	libinetutils/Makefile.in (SRCS): Add daemon.c.
+	* configure.in (AC_REPLACE_FUNCS): New test, for daemon.
+
+	* configure.in: Check whether crypt is declared in <unistd.h>.
+	(AC_CHECK_FUNCS): Add sigvec & sigaction.
+	* inetd/inetd.c (main): Use sigaction, sigvec, or signal as appropriate.
+	* rlogin/rlogin.c (main): Likewise.
+
+	* headers/acconfig.h (HAVE_CRYPT_DECL): New define slot.
+	* headers/crypt.h: If there's a system decl for crypt, use an
+	ambiguous argument signature (`()') to avoid conflicting with it.
+
+	* ftpd/ftpd.c (send_file_list): Test for '\0' in name rather than
+	looking at DIR's d_namlen field (which doesn't exist on all systems).
+	(retrieve, store): Use SEEK_* macros instead of L_*.
+	[!LOG_FTP] (LOG_FTP): New macro.
+	(version): Variable removed.
+	(main, statcmd): Use INETUTILS_VERSION instead of VERSION.
+	* configure.in: Add tests for SEEK_* macros and L_* macros,
+	defining the SEEK_* ones if they don't already exists.
+	* headers/acconfig.h (SEEK_SET, SEEK_CUR, SEEK_END): New define slots.
+	* tftpd/tftpd.c [!LOG_FTP] (LOG_FTP): New macro.
+
+	* telnetd/sys_term.c (tty_linemode): If EXTPROC isn't defined,
+	always return false (we can't set linemode either in this case).
+	* telnetd/telnetd.c (telnet): Only use TIOCPKT_IOCTL if it's defined.
+
+	* telnet/externs.h: Prefer termios if both <termios.h> & <termio.h>
+ 	exist.
+	Move define of `termio' to `termios' outside of file-already-
+ 	included test, as sometimes the file's already been included.
+
+	* ftp/ruserpass.c: Include <stdarg.h> or <varargs.h> before
+	including <err.h> (which needs va_list).
+	(localhost): New declaration.
+	* ftp/ftp.c [!HAVE_HSTRERROR] (hookup): Add grot to print error
+	message for h_errno, using herror.
+
+Sun Aug  4 23:00:29 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* ftp/cmds.c (site_idle): Renamed from `idle' to avoid conflict
+	with linux <unistd.h>.
+	* ftp/extern.h: Likewise.
+	(command): Add arg decls to prototype.
+	* ftp/cmdtab.c (cmdtab): Change entry for "idle" to use site_idle.
+	* ftp/ftp.c [HAVE_STDARG_H] <stdarg.h>: New include.
+	[!HAVE_STDARG_H] <varargs.h>: Conditionalize include.
+	(command): Make work with either <stdarg.h> or <varargs.h>.
+
+	* configure.in (AC_CHECK_HEADERS): Add glob.h.
+	Check for system glob, and config in our own if necessary.
+	* Makefile.in (SUBDIRS, SERVERS, CLIENTS, BOTH): Add @subdirs@,
+	the autoconf-supplied list of sub-configured directories.
+	(DISTFILES): Add `glob' and `glob/*' (ick, but what else can be
+	done without modifying glob?).
+	* ftp/Makefile.in, ftpd/Makefile.in (LDLIBS): Add $(LIBGLOB).
+	* config.make.in (LIBGLOB): New variable.
+
+	* headers/Makefile.in (DISTFILES): Add paths.h.
+
+Wed Jul 31 14:49:18 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* telnet/main.c (help): Shorten description for -l/--user.
+
+	* configure.in: Add a check for various types of weak reference.
+	Add crypt.h to INCLUDES.
+	* headers/acconfig.h (HAVE_WEAK_REFS, HAVE_PRAGMA_WEAK_REFS,
+	HAVE_ASM_WEAK_REFS): New define slots.
+	* headers/crypt.h: New file.
+	* headers/Makefile.in (DISTFILES): Add crypt.h.
+	* ftpd/ftpd.c (pass): Use CRYPT instead of crypt.
+	* libtelnet/krb4encpwd.c (passwdok): Likewise.
+	* libtelnet/rsaencpwd.c (rsaencpwd_passwdok): Likewise.
+	* rexecd/rexecd.c (doit): Likewise.
+	* uucpd/uucpd.c (doit): Likewise
+	* ftpd/ftpd.c, libtelnet/krb4encpwd.c, libtelnet/rsaencpwd.c,
+	rexecd/rexecd.c, uucpd/uucpd.c <crypt.h>: New include.
+
+Tue Jul 30 18:36:11 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* libinetutils/version.c (inetutils_version): Change to 1.1.
+
+	* configure.in (AC_CHECK_FUNCS): Check for crypt.
+	Check for EWOULDBLOCK.
+	* ftpd/ftpd.c (pass): Only call crypt if HAVE_CRYPT defined.
+	* libtelnet/krb4encpwd.c (passwdok): Likewise
+	* libtelnet/rsaencpwd.c (passwdok): Likewise.
+	* rexecd/rexecd.c (doit): Likewise.
+	* uucpd/uucpd.c (doit): Likewise.
+	* headers/acconfig.h (EWOULDBLOCK): New define slot.
+
+Sat Jul 27 11:32:13 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* uucpd/uucpd.c [!HAVE_LOGWTMP] (dologin): Supply name to copy in wtmp.
+
+	* rlogind/rlogind.c <getopt.h>: New include.
+	(fatal): Don't depend on sprintf returning a count.
+
+	* telnetd/defs.h: Prefer termios if <termios.h> & <termio.h> exist.
+
+	* inetd/inetd.c <getopt.h>: New include.
+	(line): Define with a size of 2048 if LINE_MAX isn't defined.
+
+Fri Jul 26 09:06:41 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* headers/Makefile.in (DISTFILES): Add `arpa' (the directory).
+	* config.make.in (_LINK_DISTFILE): Copy directories too.
+
+Wed Jul 24 01:36:15 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* config.make.in (_LINK_DISTFILE): Copy into $(DISTDIR)/$$FILE.
+	(LINK_DISTFILES): Always set $$FILE as well as $$DISTFILE before
+	using $(_LINK_DISTFILE).
+
+Tue Jul 23 22:59:49 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* Makefile.in: Use dependencies instead of shell loops for
+ 	iteration over subdirs, to make it interruptible in a sane
+ 	fashion.
+
+Mon Jul 22 00:14:09 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* headers/arpa/telnet.h, headers/arpa/ftp.h, headers/arpa/tftp.h:
+	New files.
+	* headers/Makefile (DISTFILES): Add arpa/telnet.h, arpa/ftp.h, &
+	arpa/tftp.h.
+	* configure.in (INCLUDES): Likewise.
+
+	* tftp/tftp.c [HAVE_CONFIG_H] <config.h>: New include.
+
+	* configure.in (paths.h): New test.
+	(AC_CHECK_HEADERS): Add stdlib.h, errno.h, string.h, stdarg.h &
+	sys/cdefs.h.
+	Check for __P in <sys/cdefs.h>, not <stdlib.h>.
+	Define HAVE___P if we do.
+	(verrx, strerror, __progname, snprintf): New tests.
+	Check for sig_t.
+	(AC_CHECK_FUNCS): Temporarily add $LIBUTIL to $LIBS while doing this.
+	* headers/acconfig.h (HAVE_SYS_ERRLIST_DECL, HAVE_SIG_T,
+	HAVE___PROGNAME, HAVE_SNPRINTF): New entries. 
+	[!HAVE_SIG_T] (sig_t): New macro.
+	* libinetutils/err.c: New file.
+	* libinetutils/__progname.c: New file.
+	* libinetutils/strerror.c: New file.
+	* libinetutils/snprintf.c: New file.
+	* headers/err.h: New file.
+	* ftp/main.c, rcp/rcp.c, rlogin/rlogin.c, rsh/rsh.c, talk/talk.c
+	[!HAVE___PROGNAME] (main): Set __progname.
+	* rcp/rcp.c, rsh/rsh.c, rshd/rshd.c <getopt.c>: New include.
+
+Sun Jul 21 12:19:48 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* configure.in (AC_CONFIG_HEADER): Added.
+	Add test for __P in <stdlib.h>.
+	(termlib): New test, if can't find termcap.
+        (curses): Don't depend on termcap if it's not necessary.
+	(util, crypt): Define unique substs for each lib found.
+	* config.make.in (CPPFLAGS): Remove -D_BSD_SOURCE (now in config.h).
+	(LIBCRYPT, LIBUTIL): New variables.
+	* ftpd/Makefile.in, ftp/Makefile.in, rlogind/Makefile.in,
+	rexecd/Makefile.in, uucpd/Makefile.in (LDLIBS): New variable.
+	* telnet/Makefile.in, telnetd/Makefile.in (LDLIBS):
+	Add $(LIBUTIL) & $(LIBCRYPT)
+	* Makefile.in (MAINTCLEAN, DISTCLEAN): New variables.
+	(distclean): Use $(DISTCLEAN).
+	(maintainer-clean): New target.
+	(%-clients, %-servers): New targets.
+	* headers/acconfig.h: New file.
+	* headers/Makefile.in (DISTFILES): Add config.h.in & acconfig.h.
+	(MAINTCLEAN): New variable.
+	* uucpd/uucpd.c, tftpd/tftpd.c, tftp/tftpsubs.c, tftp/main.c,
+ 	telnetd/utility.c, telnetd/termstat.c, telnetd/telnetd.c,
+ 	telnetd/sys_term.c, telnetd/state.c, telnetd/slc.c, telnetd/global.c,
+ 	telnetd/authenc.c, telnet/telnet.c, telnet/utilities.c,
+ 	telnet/tn3270.c, telnet/terminal.c, telnet/sys_bsd.c, telnet/ring.c,
+ 	telnet/network.c, telnet/main.c, telnet/commands.c, telnet/authenc.c,
+ 	talkd/talkd.c, talkd/table.c, talkd/process.c, talkd/print.c,
+ 	talkd/announce.c, talk/talk.c, talk/msgs.c, talk/look_up.c, talk/io.c,
+ 	talk/invite.c, talk/init_disp.c, talk/get_names.c, talk/get_addrs.c,
+ 	talk/display.c, talk/ctl_transact.c, talk/ctl.c, syslogd/syslogd.c,
+ 	syslog/syslog.c, rshd/rshd.c, rsh/rsh.c, rlogind/rlogind.c,
+ 	rlogin/rlogin.c, rlogin/krcmd.c, rlogin/kcmd.c, rlogin/des_rw.c,
+ 	rexecd/rexecd.c, rcp/util.c, rcp/rcp.c, libtelnet/rsaencpwd.c,
+ 	libtelnet/read_password.c, libtelnet/misc.c, libtelnet/krb4encpwd.c,
+ 	libtelnet/kerberos5.c, libtelnet/kerberos.c, libtelnet/genget.c,
+ 	libtelnet/enc_des.c, libtelnet/auth.c, libinetutils/ttymsg.c,
+ 	libinetutils/localhost.c, inetd/inetd.c, ftpd/ftpd.c, ftpd/ftpcmd.y,
+ 	ftp/main.c, ftp/ftp.c, ftp/domacro.c, ftp/cmdtab.c, ftp/cmds.c
+ 	[HAVE_CONFIG_H] <config.h>: New include.
+	
+	* rules.make (install, uninstall, mostlyclean, distclean,
+	maintainer-clean, dist): Make :: rules.
+	(clean): New rule.
+	(mostlyclean): Merge with clean.
+	(.PHONY): New target.
+	(uninstall): Put command in right place.
+	* ftp/Makefile.in, uucpd/Makefile.in, tftpd/Makefile.in,
+	tftp/Makefile.in, telnetd/Makefile.in, telnet/Makefile.in,
+	talkd/Makefile.in, talk/Makefile.in, syslogd/Makefile.in,
+	syslog/Makefile.in, rshd/Makefile.in, rsh/Makefile.in,
+	rlogin/Makefile.in, rcp/Makefile.in, libtelnet/Makefile.in,
+	libinetutils/Makefile.in, ftpd/Makefile.in (clean): Target removed.
+	(CLEAN, OBJS): New variables.
+	* inetd/Makefile.in (CLEAN): New variable.
+	(clean): Target removed.
+	(inet): Depend on inetd.o directly.
+	* tftpd/Makefile.in (tftpd): Depend on $(OBJS), not $(SRCS:.c=.o)
+	* tftp/Makefile.in (tftp): Likewise.
+	* telnetd/Makefile.in (telnetd): Likewise.
+	* telnet/Makefile.in (telnet): Likewise.
+	* talkd/Makefile.in (talkd): Likewise.
+	* talk/Makefile.in (talk): Likewise.
+	* rcp/Makefile.in (rcp): Likewise.
+	* libtelnet/Makefile.in (libtelnet.a): Likewise.
+	* libinetutils/Makefile.in (libinetutils.a): Likewise.
+	* ftpd/Makefile.in (ftpd): Likewise.
+
+	* talkd/announce.c [!HAVE_VIS_H] (strvis): Test CH for
+	printability, not *STR (STR has already been incremented).
+
+Fri Jul 19 01:37:46 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* rsh/Makefile.in (INST_PROG_FLAGS): New variable.
+	* rcp/Makefile.in (INST_PROG_FLAGS): New variable.
+
+Fri Jul 12 13:08:26 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* talkd/announce.c (tty_msg): New declaration.
+
+	* talk/look_up.c (check_local): Replace one hack for
+	copying the addr into the message with another.
+	* talk/invite.c (invite_remote): Likewise.
+
+	* talk/init_disp.c (set_edit_chars): Use tcgetattr if we have it.
+	[HAVE_TERMIOS] <termios.h>: New include.
+	[!HAVE_TERMIOS]: Guard <sys/ioctl.h> with HAVE_SYS_IOCTL_COMPAT_H.
+	* configure.in (AC_CHECK_HEADERS): Add sys/ioctl_compat.h.
+	(AC_CHECK_FUNCS): Add tcgetattr.
+
+	* talkd/announce.c: Guard include of <vis.h> with HAVE_VIS_H.
+	[!HAVE_VIS_H] (strvis): New function.
+	* configure.in (AC_CHECK_HEADERS): Add vis.h.
+
+	* libinetutils/localhost.c: New file.
+	* libinetutils/Makefile.in (SRCS): Add localhost.c.
+	* ftp/ruserpass.c (ruserpass): Use localhost.
+	* rlogind/rlogind.c (local_domain): Likewise.
+	* rshd/rshd.c (local_domain): Likewise.
+	* talk/get_names.c (get_names): Likewise.
+	* telnet/commands.c (env_init): Use likewise.
+	* telnet/telnet.c (telnet): Likewise.
+	* ftpd/ftpd.c (main): Use localhost.
+	(hostname_len): Variable removed.
+	* syslogd/syslogd.c (LocalHostNameLen): Variable removed.
+	(localhost): New declaration.
+	(main): Use localhost.
+	* talkd/talkd.c (main): Use localhost.
+	(hostname): Change to be a char *.
+	(localhost): New declaration.
+	* talkd/announce.c (hostname): Change to be a char *.
+
+	* talkd/print.c, talkd/process.c, talkd/table.c, talkd/talkd.c,
+	talkd/announce.c, talk/look_up.c, talk/get_names.c, talk/invite.c,
+	talk/ctl_transact.c, talk/ctl.c, talk/get_addrs.c:
+	[!HAVE_OSOCKADDR] <osockaddr.h>: New include.
+	* configure.in: Check for struct osockaddr in <sys/socket.h>.
+	* headers/osockaddr.h: New file.
+	* headers/Makefile.in (DISTFILES): Add osockaddr.h.
+
+	* configure.in: Change references to $ac_cv_lib_LIB variables
+	to $ac_cv_lib_LIB_FUNC.
+
+	* syslog/Makefile.in ($(bindir)/logger): Remove before linking.
+
+	* configure.in (SUBDIRS): Add headers.
+	* headers/Makefile.in: New file.
+	* libinetutils/Makefile.in (DISTFILES): Remove $(HDRS).
+	(HDRS): Variable removed.
+
+Thu Jul 11 00:39:45 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* headers: New directory.
+	* configure.in: Link include files from headers.
+	LIB_INCLUDES -> INCLUDES.
+	(_ISRCS, _DSTS, SUBDIR_MAKEFILES): Frob quoting to satisfy
+	brain-dead shells.
+
+	* ftpd/logwtmp.c (_PATH_WTMP): Define to be WTMP_FILE if necessary.
+	Check for HAVE_UTMPNAME too.
+
+	* configure.in: Check for -lcrypt.
+
+	* inetd/inetd.c (set_proc_title): Renamed from `setproctitle' to
+	avoid conflict with the <stdlib.h> function in netbsd.
+	(chargen_stream, discard_stream, echo_stream): Use set_proc_title.
+
+	* ftp/main.c (ohelp): Remove extra newline.
+	* telnet/main.c (help): Remove extra newlines.  Fiddle text.
+
+Wed Jul 10 03:41:39 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+	
+	* ftp/main.c (ohelp, try_help, usage): New functions.
+	(long_options): New variable.
+	(main): Use getopt_long, and new help functions.
+	<getopt.h>, <version.h>: New includes.
+	* telnet/main.c (try_help): New function.
+	(usage): Use try_help, not help.
+	(help): Remove arg, and only implement long help.
+	(main): Use help & try_help appropiately.
+
+	* config.make.in (_LINK_DISTFILE): New variable.
+	(LINK_DISTFILES): Use $(_LINK_DISTFILE); support OPT_DISTFILES.
+	* rules.make (distclean): Remove $(DISTCLEAN) too.
+	(maintainer-clean): New rule.
+	* ftpd/Makefile.in (MAINTCLEAN): New variable.
+	(OPT_DISTFILES): New variable.
+
+	* uucpd/uucpd.c (dologin, dologout): If HAVE_LOGWTMP, use it.
+	* ftpd/logwtmp.c (logwtmp): If HAVE_SETUTENT_R, use a more sysvish
+	style of wtmp frobbing.
+	* configure.in (AC_CHECK_FUNCS): Add setutent_r & logwtmp.
+	
+	* Makefile.in (distclean, clean): Split out targets, and clean up here.
+	Use $(SUBDIRS).
+
+	* telnetd/Makefile.in, telnet/Makefile.in (LDLIBS): Use
+	$(LIBTERMCAP), not -ltermcap.
+	* configure.in: Put library specs for found libraries in specific substs.
+	* config.make.in (LIBCURSES, LIBTERMCAP, LIBAUTH): New variables.
+	(LDLIBS): Put $(LIBS) last.
+	* libinetutils/stub_tgetent.c: New file.
+	* talk/Makefile.in (LDLIBS): Use $(LIBCURSES), not -lcurses.
+
+	* libinetutils/Makefile.in (SRCS): Enumerate all sources, don't
+	include @LIBOBJS@.
+	(libinetutils.a): List constant objects + @LIBOBJS@.
+	* ftp/Makefile.in, ftpd/Makefile.in, libinetutils/Makefile.in,
+	libtelnet/Makefile.in, rcp/Makefile.in, rlogin/Makefile.in,
+	talk/Makefile.in, telnet/Makefile.in, telnetd/Makefile.in,
+	tftp/Makefile.in (HDRS): New variable.
+	(DISTFILES): Add $(HDRS).
+
+	* config.make.in (CPPFLAGS): Add -I$(srcdir).
+
+	* Makefile.in (distname): Depend on libinetutils/version.c.
+	Variable is named `inetutils_version', not `version_string'.
+	* libinetutils/version.c, libinetutils/version.h
+	(inetutils_version): Renamed from version_string.
+	* telnet/main.c (main): Use inetutils_version, not version_string.
+
+	* configure.in: Add test for setpgid.
+	* rexecd/rexecd.c (doit): Use setpgid instead of setpgrp.
+	* config.make.in (CPPFLAGS): Add -D_BSD_SOURCE.
+
+	* syslogd/Makefile.in (syslogd): Rule removed.
+	* talkd/Makefile.in (talkd): Get rid of ttymsg.o.
+	* ftpd/Makefile.in (ftpd): Fix subst for generating .o files.
+
+	* config.make.in (top_srcdir): Variable removed.
+	* ftp/Makefile.in, ftpd/Makefile.in, inetd/Makefile.in,
+	libinetutils/Makefile.in, libtelnet/Makefile.in, ping/Makefile.in,
+	rcp/Makefile.in, rexecd/Makefile.in, rlogin/Makefile.in,
+	rlogind/Makefile.in, rsh/Makefile.in, rshd/Makefile.in,
+	syslog/Makefile.in, syslogd/Makefile.in, talk/Makefile.in,
+	talkd/Makefile.in, telnet/Makefile.in, telnetd/Makefile.in,
+	tftp/Makefile.in, tftpd/Makefile.in, uucpd/Makefile.in
+	(top_srcdir): New variable.
+
+	* telnet/main.c (help): New function.
+	(usage): Just use help now.
+	(long_options): New variable.
+	(main): Use help sometimes instead of usage.  Use getopt_long.
+	Add --help and --version options.
+	<getopt.h>, "version.h": New includes.
+	
+	* libinetutils: New directory, mostly from old comon dir.
+	* common: Dir removed.
+	* config.make.in (CPPFLAGS): Add -I../include.
+	(LDLIBS): Add -L../inetinetutils -linetutils.
+	* configure.in (COMMON): New variable & subst.
+	(SUBDIRS): Add $COMMON.
+	Add rules for using gnu getopt.
+	Add rules for linking in optional header files into obj include dir.
+	* Makefile.in (COMMON): Use autoconf subst.
+
+Tue Jul  9 16:15:15 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* configure.in (SUBDIRS): New subst.
+	(AC_OUTPUT): Automatically compute the subdir makefiles.
+	Fix test to turn on talk if $enable_talk == maybe.
+	* Makefile.in (distname, dist): New targets.
+	* rules.make (dist): New rule.
+	* config.make.in (LINK_DISTFILES): New variable.
+	* inetd/Makefile.in, libtelnet/Makefile.in, rcp/Makefile.in,
+	rexecd/Makefile.in, ftpd/Makefile.in, telnetd/Makefile.in,
+	rshd/Makefile.in, rlogind/Makefile.in, uucpd/Makefile.in,
+	syslogd/Makefile.in, tftpd/Makefile.in, telnet/Makefile.in,
+	ftp/Makefile.in, rsh/Makefile.in, rlogin/Makefile.in,
+	tftp/Makefile.in, syslog/Makefile.in, talkd/Makefile.in,
+	talk/Makefile.in (SRCS, DISTFILES): New variables.
+	* libtelnet/Makefile.in (OBJS): Derive from $(SRCS).
+	* inetd/Makefile.in (inetd): Derive objects from $(SRCS).
+	* rcp/Makefile.in (rcp): Likewise.
+	* ftpd/Makefile.in (ftpd): Likewise.
+	* telnet/Makefile.in (telnet): Likewise.
+	* ftp/Makefile.in (ftp): Likewise.
+	* tftp/Makefile.in (tftp): Likewise.
+	* talk/Makefile.in (tftp): Likewise.
+	* syslogd/Makefile.in (ttymsg.o): Rule removed.
+	(syslogd): Derive syslogd objects from $(SRCS) (keep ttymsg.o).
+	* tftpd/Makefile.in (tftpd): Derive tftpd objects from $(SRCS)
+	(keep tftpsubs.o).
+	* talkd/Makefile.in (ttymsg.o): Rule removed.
+	(talkd): Derive talkd objects from $(SRCS) (keep ttymsg.o).
+	* config.make.in (VPATH): Add $(srcdir)/common
+	* common/version.c, common/version.h: New files.
+
+	* configure.in (CLIENTS): Remove ping.  Change `logger' to `syslog'.
+
+Tue Jun 25 02:42:06 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
+
+	* ftp/cmds.c: Include errno.h.
+
+Wed Feb  7 17:06:04 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* ftp/cmds.c (remglob): Make sure return value is mallocated.
+	(mdelete): Free CP after use.
+	(remglob): Don't keep BUF around between calls, as the caller frees it.
+
+Wed Jan 31 16:08:44 1996  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* ftpd/ftpd.c (user, pass): Don't require users to have a password.
+
+Sat Dec 30 06:36:41 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
+
+	* ftpd/ftpcmd.y: Allow `SITE IDLE 0' for non-anonymous user to
+	disable idle timer.
+

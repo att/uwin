@@ -1,0 +1,10 @@
+trap 'rm -f f$$.o /tmp/f$$*' EXIT
+print 'int main(){return 0;}' > /tmp/f$$.c
+if	cc -o /tmp/f$$ /tmp/f$$.c
+then	msvc=$(strings /tmp/f$$ | grep -i msvcr)
+fi
+if	[[ $msvc ]]
+then	print -r -- ${msvc%.[Dd][Ll][Ll]}
+else	print mvscrt
+	print -u2 "unable to determine MSVCRT, using default"
+fi

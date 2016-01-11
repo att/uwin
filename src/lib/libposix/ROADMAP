@@ -1,0 +1,119 @@
+
+UWIN creates a named shared memory segment that each uwin process shares.
+The init_sharedmem() function in xinit.c creates or attaches
+this segment.  All processes that use the same name belong to the
+same UWIN.  By using multiple different names, more that one
+UWIN can run at a time.
+
+This memory segment contains a bunch of shared constants (Pshare),
+space, for the ipc shared memory information, Pshmtab,
+the sid mapping table, Psidtab, the open file table, Pfdtab,
+the process table, and blocks that can be dynamically allocated.
+The block_alloc() and block_free() functions manage these.
+All blocks are 512 bytes and a block index is an unsigned short.
+
+Here is a roadmap that explains the purpose of each of the
+modules in libposix.
+
+audio.c:	Wipro create module that implements the audio device.
+bio.c:		Implements io used internally to posix.dll and for
+		debugging.  This is independent of sfio.
+bsd.c:		Implements functions in BSD Unix that are not part
+		of the posix standard.
+clip:		Wipro created module that implements the clipboard device.
+config:		Implements sysconf() and pathconf().  Similar to ast.
+context.c:	Implementation of getcontext(), setcontext() and swapcontext().
+delete.cc:	Intercept for delete operator to use our free().
+dir.c:		Implementation of directory read operations for directories
+		and registry file system.
+dl.c:		Implementation of dlopen(), dlsym().  Note that this
+		can handle returning symbols from main program if
+		this program is compiled with -Z since in that case
+		a symbol table is passed at startup.
+dllinit.c:	Used for Digital Mars compiler.
+doshandle.c:	Used for Digital Mars compiler to intercept
+		_dos_sethandlecount()
+dosign.c:	Used for Digital Mars compiler to intercept _DOSIGN
+errmap.c:	Maps WIN32 error numbers to UNIX errnos.
+fatlink:	Implements hard links for FAT file systems by creating
+		a ./links directory on each FAT file system.  It then
+		uses a base32 hash on store all links and linkcount.
+		At startup, there is a walk through to make sure that
+		all files still exit.
+fscommon.c:	An interface to file system calls that is pretty much
+		WIN32 independent.  It allocated open file slots which
+		contain a file type.  Each file type has read, write, seeek,
+		stat, close, and select functions.
+fsnt.c:		Implementation of most of the system calls.
+group.c:	Implemenation of setgroups() and initgroups().  I don't
+		know if this works.
+handle.c:	This was created for debugging but is not used.
+inet.c:		Implements BSD pty function interface.
+intercept:	Called at startup for C++ to intercept stdio calls and
+		map them into sfio calls.
+ioctl.c:	Implements ioctl().
+init.cc:	C++ static initializer to call runprog() before main().
+ipc.c:		Implements System V IPC.
+linit.c:	Implements the pass down of data to posix.dll shared
+		library and invokes _ast_runprog() which is called
+		before main().
+locale.c:	Captures locale() calls and then uses AST to
+		implement.
+lock.c:		Implements fcntl() locking.  Uses shared memory blocks
+		to store information.
+mem.c:		Implementation of mmap().
+misc.c:		Intercepts for some of the math functions that call
+		weak version.
+mnt.c:		Implementatio of mount points and creation of initial
+		mount mapping table.
+modem.c:	Wipro implementation of modem device.
+mwait.c:	Implementation of multiple event wait that is not
+		limited to 64 events.
+new.cc:		Intercept for new operator to use our malloc().
+passwd.c:	Code to read files like passwd, group, mount, services,
+		networks.
+pathmap.c:	Maps UNIX pathnames into native pathnames and returns
+		handle to object as requested.  This handles symlinks
+		and device files as well.
+pinit.c:	Same as linit.c but is part of the static library.
+pmain.c:	Thus sed to be used for startup.
+proc.c:		Implentation of process related calls like kill(), get*id().
+		This also creates, initializes, and destroys UNIX process
+		structures.  It also implements the /proc file system.
+procdir.c:	Implements process walking for process directory reads
+		and to get info for ps.
+reg.c:		Implementation of registry file system.
+sbrk.c:		Implementation of sbrk() and brk().
+sid.c:		Implementation security functions that manage SIDS and ACLS.
+sig.c:		Implements UNIX signals and runs signal thread.
+shortcut.c:	reads and wrotes windows shortcuts to implement symbolic
+		links.
+socket.c:	Implements UNIX sockets on Window sockets.  It maps
+		socket events to handes so that calls can wait for
+		socket events and interrupts simultaneously.
+spawnve.c:	Implements fork(), exec() and wait() family of functions.
+streams.c:	Interface for UNIX streams which is not implemented.
+syserr.c:	Implementaton of strerror().
+tape.c:		Global Technologies implementation of mag tape driver.
+term.c:		Interface for vt100 functions in vt100 directory.
+termios.c:	Implementation of terminal interface and tty/pty devices.
+		Each tty and pty has read and write threads that run
+		in the process that creates them but can migrate
+		to another process.
+time.c:		Implements time related functions.
+utmp.c:		Implements utmp and wtmp file management.
+vmaloc/*.c:	An older version of vmalloc() used to implement malloc(),
+		free().
+vt100/*.c:	MIT and Global Technologies vt100 implementation.
+wmain.c:	Old implementation of WinMain() which is no longer used
+		because of init.cc.
+xinit.c:	Creates or attaches shared memory segment.  This
+		is the initialization function for posix.dll and
+		it creates the init process if not already created.
+		it also intercepts malloc() and free() calls and
+		maps them to vmalloc().
+
+Not that pdev.c pdevdisc.c pdevcache.c pdevutils.c rawdev.c gtlterm.c
+are files provided by Global Technologies as an alternative
+term.c and termios.c implementation.  It was not completely working.
+so it is not the default.

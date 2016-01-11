@@ -1,0 +1,23 @@
+VERSION =	1.0
+CCFLAGS =	$(CC.OPTIMIZE) $(CC.DLL)
+
+_PATH_RPC ==	"/usr/etc/inet/rpc"
+IEEEFP ==	1
+_BSDCOMPAT ==	1
+
+rpc $(VERSION) :LIBRARY: auth_none.c auth_unix.c authunix_prot.c \
+		bindresvport.c clnt_generic.c clnt_perror.c clnt_raw.c \
+		clnt_simple.c clnt_tcp.c clnt_udp.c get_myaddress.c \
+		getrpcent.c getrpcport.c pmap_getmaps.c pmap_getport.c \
+		pmap_clnt.c pmap_prot.c pmap_prot2.c pmap_rmt.c \
+		rpc_callmsg.c rpc_commondata.c rpc_dtablesize.c rpc_prot.c \
+		svc.c svc_auth.c svc_auth_unix.c svc_raw.c svc_run.c \
+		svc_simple.c svc_tcp.c svc_udp.c xdr.c xdr_array.c \
+		xdr_float.c xdr_mem.c xdr_rec.c xdr_reference.c xdr_stdio.c \
+		rpc.sym bindresvport.3 getrpcent.3 getrpcport.3 rpc.3 xdr.3
+
+$(INCLUDEDIR)/rpc :INSTALLDIR: rpc/auth.h rpc/auth_unix.h rpc/clnt.h \
+		rpc/pmap_clnt.h rpc/pmap_prot.h rpc/pmap_rmt.h rpc/rpc.h \
+		rpc/rpc_msg.h rpc/svc.h rpc/svc_auth.h rpc/types.h rpc/xdr.h
+
+:: README DISCLAIMER Makefile.inc

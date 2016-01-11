@@ -1,0 +1,7 @@
+include "../inetutils.mk"
+
+$(ETCDIR) :INSTALLDIR: inetd
+
+inetd :: inetd.c -linetutils inetd.8
+
+:: Makefile.in

@@ -1,0 +1,36 @@
+_Sfextern	DATA
+_sfdlen
+_sffilbuf
+_sfflsbuf
+_sfllen
+_sfmode
+_sfputd
+_sfputl
+_sfputm
+_sfputu
+_sftype
+_stdgets
+sfclose
+sfclrlock
+sfmutex
+sfnew
+sfopen
+sfpopen
+sfpurge
+sfputr
+sfread
+sfseek
+sfset
+sfsetbuf
+sfsprintf
+sfsync
+sfstderr	DATA
+sfstdin		DATA
+sfstdout	DATA
+sftmp
+sfungetc
+sfvprintf
+sfvscanf
+sfvsprintf
+sfvsscanf
+sfwrite

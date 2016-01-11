@@ -1,0 +1,58 @@
+	            mini_httpd - small HTTP server
+		      version 1.19 of 19dec2003
+
+mini_httpd is a small HTTP server.  Its performance is not great, but for
+low or medium traffic sites it's quite adequate. It implements all the
+basic features of an HTTP server, including:
+
+  * GET, HEAD, and POST methods.
+  * CGI.
+  * Basic authentication.
+  * Security against ".." filename snooping.
+  * The common MIME types.
+  * Trailing-slash redirection.
+  * index.html, index.htm, index.cgi
+  * Directory listings.
+  * Multihoming / virtual hosting.
+  * Standard logging.
+  * Custom error pages.
+
+It can also be configured to do SSL/HTTPS.
+
+mini_httpd was written for a couple reasons.  One, as an experiment
+to see just how slow an old-fashioned forking web server would be
+with today's operating systems.  The answer is, surprisingly, not
+that slow - on FreeBSD 3.2, mini_httpd benchmarks at about 90% the
+speed of Apache.  The other main reason for writing mini_httpd was
+to get a simple platform for experimenting with new web server
+technology, for instance SSL.
+
+See the manual entry for more details.
+
+Files in this distribution:
+
+    README		this
+    Makefile		guess
+    mini_httpd.c	source file for server
+    mini_httpd.8	manual entry for server
+    version.h		version defines
+    port.h		portability defines
+    mime_types.txt	list of MIME types
+    htpasswd.c		source file for password changer
+    htpasswd.1		manual entry for password changer
+    index.html		sample index file
+
+To build: If you're on a SysV-like machine (which includes old Linux systems
+but not new Linux systems), edit the Makefile and uncomment the SYSVLIBS line.
+If you're doing SSL, uncomment those lines too.  Otherwise, just do a make.
+
+On Red Hat Linux systems you can use RPM to install mini_httpd, like so:
+    cd /usr/src/redhat/SOURCES
+    wget http://www.acme.com/software/mini_httpd/mini_httpd-1.19.tar.gz
+    rpm -ta mini_httpd-1.19.tar.gz
+    rpm -i /usr/src/redhat/RPMS/i386/mini_httpd-1.19-1.i386.rpm
+
+Feedback is welcome - send bug reports, enhancements, checks, money
+orders, etc. to the addresses below.
+
+    Jef Poskanzer  jef@mail.acme.com  http://www.acme.com/jef/

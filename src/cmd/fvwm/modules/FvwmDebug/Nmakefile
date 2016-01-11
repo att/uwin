@@ -1,0 +1,5 @@
+include ../../fvwm.mk
+
+BINDIR = $(LIBEXECDIR)
+
+FvwmDebug :: FvwmDebug.c

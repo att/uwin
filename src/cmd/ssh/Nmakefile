@@ -1,0 +1,131 @@
+/*
+ * nmakefile for openssh-4.3 ssh
+ */
+
+.SOURCE:	openbsd-compat contrib
+
+LIBEXECDIR		= $(INSTALLROOT)/libexec
+
+DEBUG_SFTP_SERVER	== 1
+DEBUG_SSH_KEYSIGN	==
+
+SSHDIR 			== "/usr/etc/ssh"
+_PATH_SSH_PROGRAM	== "/usr/bin/ssh"
+_PATH_SSH_ASKPASS_DEFAULT== "/usr/libexec/ssh-askpass"
+_PATH_SFTP_SERVER	== "/usr/libexec/sftp-server"
+_PATH_SSH_KEY_SIGN	== "/usr/libexec/ssh-keysign"
+_PATH_PRIVSEP_CHROOT_DIR== "/var/empty"
+SSH_RAND_HELPER		== "/usr/libexec/ssh-rand-helper"
+HAVE_CONFIG_H		== 1
+
+CCFLAGS = -O
+
+LIBS	=  -lsshl -lopenbsd-compat -lcrypto -lz
+
+OPENBSD= base64.c basename.c bindresvport.c daemon.c dirname.c getcwd.c \
+	getgrouplist.c getopt.c getrrsetbyname.c glob.c inet_aton.c \
+	inet_ntoa.c inet_ntop.c mktemp.c readpassphrase.c realpath.c \
+	rresvport.c setenv.c setproctitle.c sigact.c strlcat.c strlcpy.c \
+	strmode.c strsep.c strtonum.c strtoll.c strtoul.c vis.c
+
+COMPAT= bsd-arc4random.c bsd-asprintf.c bsd-closefrom.c bsd-cray.c \
+	bsd-cygwin_util.c bsd-getpeereid.c bsd-misc.c bsd-nextstep.c \
+	bsd-openpty.c bsd-snprintf.c bsd-waitpid.c fake-rfc2553.c \
+	openssl-compat.c xmmap.c xcrypt.c
+
+PORTS=	port-irix.c port-aix.c port-uw.c port-tun.c
+
+
+LIBSSH_SRC= acss.c authfd.c authfile.c bufaux.c buffer.c \
+	canohost.c channels.c cipher.c cipher-acss.c cipher-aes.c \
+	cipher-bf1.c cipher-ctr.c cipher-3des1.c cleanup.c \
+	compat.c compress.c crc32.c deattack.c fatal.c hostfile.c \
+	log.c match.c moduli.c nchan.c packet.c \
+	readpass.c rsa.c ttymodes.c xmalloc.c \
+	atomicio.c key.c dispatch.c kex.c mac.c uidswap.c uuencode.c misc.c \
+	monitor_fdpass.c rijndael.c ssh-dss.c ssh-rsa.c dh.c kexdh.c \
+	kexgex.c kexdhc.c kexgexc.c scard.c msg.c progressmeter.c dns.c \
+	entropy.c scard-opensc.c gss-genr.c trace.c
+
+SSH_SRC= ssh.c readconf.c clientloop.c sshtty.c \
+	sshconnect.c sshconnect1.c sshconnect2.c
+
+SSHD_SRC= sshd.c auth-rhosts.c auth-passwd.c auth-rsa.c auth-rh-rsa.c \
+	sshpty.c sshlogin.c servconf.c serverloop.c \
+	auth.c auth1.c auth2.c auth-options.c session.c \
+	auth-chall.c auth2-chall.c groupaccess.c \
+	auth-skey.c auth-bsdauth.c auth2-hostbased.c auth2-kbdint.c \
+	auth2-none.c auth2-passwd.c auth2-pubkey.c \
+	monitor_mm.c monitor.c monitor_wrap.c kexdhs.c kexgexs.c \
+	auth-krb5.c \
+	auth2-gss.c gss-serv.c gss-serv-krb5.c \
+	loginrec.c auth-pam.c auth-shadow.c auth-sia.c md5crypt.c \
+	audit.c audit-bsm.c
+
+$(LIBEXECDIR) :INSTALLDIR: ssh-rand-helper sftp-server
+
+openbsd-compat	:LIBRARY: $(OPENBSD) $(COMPAT) $(PORTS)
+
+sshl :LIBRARY:	$(LIBSSH_SRC)
+
+$(BINDIR:C/bin$/s&/) :INSTALLDIR: sshd
+
+ssh::		$(SSH_SRC) dummy.c $(LIBS) ssh.1 ssh_config.5
+
+slogin :LINK:	ssh
+
+sshd::		$(SSHD_SRC) dummy.c $(LIBS) sshd.8 sshd_config.5
+
+scp::		scp.c $(LIBS) scp.1
+
+ssh-add::	ssh-add.c $(LIBS) ssh-add.1
+
+ssh-agent::	ssh-agent.c $(LIBS) ssh-agent.1
+
+ssh-keygen::	ssh-keygen.c dummy.c $(LIBS) ssh-keygen.1
+
+ssh-keysign::	ssh-keysign.c readconf.c $(LIBS) ssh-keysign.8
+
+ssh-keyscan::	ssh-keyscan.c $(LIBS) ssh-keyscan.1
+
+sftp-server:: 	sftp-server.c sftp-common.c $(LIBS) sftp-server.8
+
+sftp:: 		sftp.c sftp-client.c sftp-common.c sftp-glob.c $(LIBS) sftp.1
+
+ssh-rand-helper::  ssh-rand-helper.c $(LIBS) ssh-rand-helper.8
+
+logintest::	 logintest.c loginrec.c $(LIBS)
+
+ssh_prng_cmds: ssh_prng_cmds.in
+	while read line
+	do	case $line in
+		'#'*|'') print -r "$line"; continue ;;
+		esac
+		eval set -- $line
+		$1 >/dev/null 2>&1 && print "\"$1\" $( PATH=/usr/bin:/bin:/usr/sbin:/etc:$PATH whence -p ${1%%\ *} ) $3"
+	done < $(*) > 1.$(tmp).d
+	if	$(CMP) -s 1.$(tmp).d $(<)
+	then	$(RM) -f 1.$(tmp).d
+	else	$(MV) 1.$(tmp).d $(<)
+	fi
+
+$(ETCDIR)/ssh :INSTALLDIR: ssh_prng_cmds ssh_config sshd_config
+
+$(ETCDIR)/ssh/moduli :INSTALL: moduli.in
+
+ssh-copy-id :: ssh-copy-id.sh ssh-copy-id.1
+
+::		RELEASE \
+		configure config.h.in configure.ac config.guess config.sub \
+		README README.dns README.platform README.privsep \
+		README.smartcard README.tun CREDITS INSTALL LICENCE \
+		OVERVIEW TODO WARNING.RNG Makefile.in buildpkg.sh.in \
+		.cvsignore fixpaths fixprogs install-sh mdoc2man.awk \
+		ssh_prng_cmds.in ssh_config sshd_config survey.sh.in \
+		scp.0 sftp-server.0 sftp.0 ssh-add.0 ssh-agent.0\
+		ssh-keygen.0 ssh-keyscan.0 ssh-keysign.0 ssh-rand-helper.0 \
+		ssh.0 ssh_config.0 sshd.0 sshd_config.0 opensshd.init.in \
+		openbsd-compat/.cvsignore openbsd-compat/Makefile.in \
+		mkinstalldirs nchan.ms nchan2.ms ChangeLog RFC.nroff \
+		aclocal.m4 scard/.cvsignore \
+		scard contrib regress

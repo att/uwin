@@ -1,0 +1,41 @@
+# $XConsortium: Makefile.nt,v 1.2 94/09/12 20:19:31 kaleb Exp $
+
+# Simple Makefile for MS Windows NT.
+
+CC = cl
+
+LIBS = crtdll.lib kernel32.lib
+
+CFLAGS = -Zi -Od -DWIN32 -D_DLL -D_MT -D__STDC__ -DX_86_ -nologo
+LDFLAGS = -link -debug:full -debugtype:cv
+
+SRCS = backupfile.c getopt.c getopt1.c inp.c patch.c pch.c util.c \
+	version.c
+
+OBJS = backupfile.obj getopt.obj getopt1.obj inp.obj patch.obj pch.obj \
+	util.obj version.obj
+
+HDRS = EXTERN.h INTERN.h backupfile.h common.h getopt.h \
+	inp.h patchlevel.h pch.h util.h version.h
+
+all: patch.exe
+
+patch.exe: $(OBJS)
+	$(CC) $(OBJS) $(LIBS) -o $@ $(LDFLAGS)
+
+.c.obj:
+	if exist $@ del $@
+	$(CC) -c -DHAVE_CONFIG_H -I. $(CPPFLAGS) $(CFLAGS) $<
+
+clean:
+	rm -f patch.exe *.obj
+
+backupfile.obj: $(HDRS)
+getopt.obj: $(HDRS)
+getopt1.obj: $(HDRS)
+inp.obj: $(HDRS)
+patch.obj: $(HDRS)
+pch.obj: $(HDRS)
+util.obj: $(HDRS)
+version.obj: $(HDRS)
+

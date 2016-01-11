@@ -1,0 +1,63 @@
+/* ast nmake makefile for gmake with MAM */
+
+LICENSE =		gpl,since=1988,author="Richard Stallman,Roland McGrath,Paul Smith"
+
+REMOTE =		stub	/* one of remote-*.c below */
+
+PACKAGE ==		"make"
+VERSION ==		"3.81beta1"
+MAKE_HOST ==		"$(CC.HOSTTYPE)"
+
+PREFIX ==		/usr/local
+INCLUDEDIR ==		"$(PREFIX)/include"
+LIBDIR ==		"$(PREFIX)/lib"
+LOCALEDIR ==		"$(PREFIX)/share/locale"
+
+MAM ==			1
+MAKE_JOBSERVER ==	1
+
+HAVE_CASE_INSENSITIVE_FS == $(.GETCONF PATH_ATTRIBUTES:N=*c*:?1??)
+HAVE_CONFIG_H ==	1
+
+.SOURCE : glob tests
+
+gmake :: gmake.1 \
+	commands.h debug.h dep.h filedef.h fnmatch.h getopt.h \
+	gettext.h glob.h hash.h job.h make.h rule.h variable.h \
+	ar.c arscan.c commands.c default.c dir.c expand.c file.c \
+	fnmatch.c function.c getloadavg.c glob.c hash.c implicit.c \
+	job.c main.c misc.c read.c remake.c rule.c signame.c \
+	variable.c version.c vpath.c local.c remote-$(REMOTE).c \
+	-lkstat -lkvm
+
+-lkstat -lkvm -lelf : .DONTCARE
+
+test : gmake run_make_tests.pl
+	if	($(PERL|"perl") -v) >/dev/null 2>&1
+	then	src=$(*:O=2:P=L!:D:N=/*)
+		gen=$(*:O=2:P=L!:D::B:S=.out)
+		if 	test "" != "$src" -a "$gen" != "$src"
+		then	if	test ! -d $gen
+			then	rm -rf $gen
+				mkdir $gen
+			fi
+			for i in run_make_tests.pl test_driver.pl scripts
+			do	if	test ! -L $gen/$i
+				then	rm -f $gen/$i
+					ln -s $src/$i $gen
+				fi
+			done
+		fi
+		rm -rf $gen/.ostest
+		cd $gen
+		PATH=/usr/bin:/bin:$PATH $(PERL|"perl") $(*:O=2:P=A) -make $(*:O=1:P=A)
+	else	echo $(<): perl required to run tests >&2
+	fi
+
+:: RELEASE
+:: remote-cstms.c remote-stub.c
+:: COPYING ChangeLog NEWS
+:: README README.Amiga README.DOS README.OS2 README.W32
+:: README.customs README.mam
+:: configure config.h.in
+:: tests

@@ -1,0 +1,252 @@
+#
+# convert openssl gnu-build-system layout to att nmake lib+cmd
+#
+
+release=0.9.8i
+tgz=openssl-$release.tar.gz
+
+cd $PACKAGEROOT/src
+mkdir -p lib/libcrypto cmd/openssl
+cd lib/libcrypto
+
+if	[[ ! -d openssl-$release ]]
+then	pax -rvf $tgz
+fi
+if	[[ ! -d crypto ]]
+then	for f in $(tw -P -d openssl-$release/apps -d openssl-$release/test -e 'type==LNK')
+	do	mv $f $f.link
+		cp $f.link $f
+		rm $f.link
+	done
+	mv openssl-$release/@(crypto|engines|include|test|ssl|*.h) .
+	mv openssl-$release/apps/* openssl-$release/test ../../cmd/openssl
+fi
+if	[[ -f crypto/mdc2/mdc2.h ]]
+then	mv crypto/mdc2/mdc2.h include/openssl
+fi
+if	[[ -f crypto/rc5/rc5.h ]]
+then	mv crypto/rc5/rc5.h include/openssl
+fi
+if	[[ -f crypto.def ]]
+then	sym=crypto.def
+	rm -f crypto.ign
+else	sym=crypto.ign
+	if	[[ ! -f $sym ]]
+	then	: > $sym
+	fi
+fi
+if	[[ ! -f buildinf.h ]]
+then	print -r '/* { CFLAGS DATE PLATFORM } defined in Nmakefile */' > buildinf.h
+fi
+
+os=$(cat /proc/version)
+dt=$(date -m -f %K%z buildinf.h)
+
+function pretty
+{
+	typeset line prev sep=1
+	if	[[ $1 == - ]]
+	then	sep=
+		shift
+	fi
+	pr -a -t -C${1:-4} |
+	{
+		prev=
+		while	read line
+		do	if	[[ $prev ]]
+			then	print -r $'\t'"$prev"$' \\'
+			fi
+			prev=$line
+		done
+		print -r $'\t'"$prev"
+		[[ $sep ]] && print
+	}
+}
+
+{
+	print -r "/*
+ * nmakefile for openssl $release -lcrypto (with -lssl)
+ */
+
+.SOURCE.h : \\
+	include/openssl include
+
+.SOURCE : \\"
+
+	src=$(print crypto; tw -d crypto -e 'type==DIR&&level==1&&path!="*/perl*"'; print engines; print ssl)
+
+	print -r "$src" |
+	pretty
+
+	print -r 'CFLAGS		== "$(CC) $(...:A=.SCAN.STATE:N!=\((CFLAGS|DATE|PLATFORM|ERROR_CATALOG|USAGE_LICENSE|_BLD_*)\):T=D)"
+DATE		== "'"$dt"'"
+MONOLITH	== 1
+L_ENDIAN	== 1
+OPENSSL_THREADS	== 1
+PLATFORM	== "'"$os"'"
+TERMIOS		== 1
+
+CCFLAGS		= $(CC.DLL) $(CC.OPTIMIZE)
+
+crypto '${release//[[:alpha:]]/}' :LIBRARY: '$sym' \'
+
+	keep='@(a_strnid|o_time|p5_crpt2).c'
+	skip='@(bf_cbc|bio_ber|bss_rtcp|camellia|e_dsa|ec2_smpt|exp|mdc2_one|mdc2dgst|ncbc_enc|p8_key|read_pwd|ssl_task|tasn_prn|(LPdir_|cmll_|cms_|rc5|seed)*|*test).c'
+	trap 'rm keep.src skip.src' EXIT
+	exec 5> keep.src
+	exec 6> skip.src
+	for d in $src
+	do	for f in $(ls $d)
+		do	if	[[ $f == *.c ]]
+			then	if	[[ $f == $skip ]] || { [[ $f != $keep ]] && grep -q '\<main(.*)' $d/$f ;}
+				then	print -u6 $f
+				else	print -u5 $f
+				fi
+			fi
+		done
+	done
+	exec 5>&- 6>&-
+	pretty < keep.src
+
+	print -r 'crypt :REQUIRE: -lcrypto
+
+ssl :REQUIRE: -lcrypto
+
+$(INCLUDEDIR)/openssl :INSTALLDIR: \'
+	{ print e_os.h; print e_os2.h; ls include/openssl; } |
+	pretty
+
+tw -e "name=='*.orig'; action:printf('%s\n',name);" >> skip.src
+
+print -r ":: \$(".":P=L=*:O=N) nmakeize openssl-$release \\"
+	pretty - < skip.src
+
+} > Nmakefile
+
+{
+	print -r '/*
+ * nmakefile for openssl '$release' command
+ */
+
+:PACKAGE:	crypto:library
+
+MONOLITH	== 1
+L_ENDIAN	== 1
+OPENSSL_THREADS	== 1
+TERMIOS		== 1
+
+CCFLAGS		= $(CC.OPTIMIZE)
+
+.SOURCE :	test
+
+openssl :: \'
+
+	ls ../../cmd/openssl/*.c |
+	sed 's,.*/,,' |
+	egrep -v '^(md4|winrand)\.c$' |
+	pretty
+
+	print -r '$(LIBDIR)/ssl :INSTALLDIR: openssl.cnf'
+	print
+
+	print -r ":: \$(".":P=L=*:O=N) \\"
+	{ print md4.c; print winrand.c; ls ../../cmd/openssl/*.orig | sed 's,.*/,,'; } |
+	pretty
+
+	cat <<'!'
+:TEST: bftest.c
+:TEST: bntest.c
+	set +x
+	{
+		$(*)
+		echo quit
+	} 2>/dev/null |
+	bc |
+	{
+		integer tp=0 tf=0 p=0 f=0
+		t=
+		while	read line
+		do	case $line in
+			test*)	if	(( p || f ))
+				then	if	(( p ))
+					then	t="$t passed $p"
+						(( tp += p ))
+						(( p = 0 ))
+					fi
+					if	(( f ))
+					then	t="$t FAILED $f"
+						(( tf += f ))
+						(( f = 0 ))
+					fi
+					print -u2 $t
+				fi
+				t=$line
+				;;
+			0)	(( p++ ))
+				;;
+			*)	(( f++ ))
+				;;
+			esac
+		done
+		if	(( p || f ))
+		then	if	(( p ))
+			then	t="$t passed $p"
+				(( tp += p ))
+			fi
+			if	(( f ))
+			then	t="$t FAILED $f"
+				(( tf += f ))
+			fi
+			print -u2 $t
+		fi
+		t="$$(( tp + tf )) tests"
+		if (( tf ))
+		then	t="$t, $tf FAILED"
+		fi
+		print -u2 $t
+	}
+
+:TEST: casttest.c
+:TEST: destest.c
+:TEST: dhtest.c
+:TEST: dsatest.c
+:TEST: ecdhtest.c
+:TEST: ecdsatest.c
+:TEST: ectest.c
+:TEST: enginetest.c
+:TEST: evp_test.c evptests.txt
+:TEST: exptest.c
+:TEST: hmactest.c
+:TEST: ideatest.c
+:TEST: igetest.c
+:TEST: md2test.c
+:TEST: md4test.c
+:TEST: md5test.c
+:TEST: mdc2test.c
+:TEST: randtest.c
+:TEST: rc2test.c
+:TEST: rc4test.c
+:TEST: rc5test.c
+:TEST: rmdtest.c
+:TEST: rsa_test.c
+:TEST: sha1test.c
+:TEST: sha256t.c
+:TEST: sha512t.c
+:TEST: shatest.c
+:TEST: ssltest.c -test_cipherlist
+
+:TEST: tcrl.sh testcrl.pem
+:TEST: testenc.sh
+:TEST: testgen.sh test.cnf testca.pem dsa512.pem
+:TEST: testss.sh openssl.cnf CAss.cnf Uss.cnf P1ss.cnf P2ss.cnf
+:TEST: testssl.sh :: testss :: server2.pem keyU.ss certU.ss certCA.ss
+:TEST: testsslproxy.sh :: testss :: keyP1.ss certP1.ss intP1.ss : keyP2.ss certP2.ss intP2.ss
+:TEST: tpkcs7.sh testp7.pem
+:TEST: tpkcs7d.sh pkcs7-1.pem
+:TEST: treq.sh openssl.cnf testreq2.pem
+:TEST: trsa.sh testrsa.pem
+:TEST: tsid.sh testsid.pem
+:TEST: tx509.sh testx509.pem : v3-cert1.pem : v3-cert2.pem
+!
+
+} > ../../cmd/openssl/Nmakefile

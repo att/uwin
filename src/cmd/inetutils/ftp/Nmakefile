@@ -1,0 +1,6 @@
+include "../inetutils.mk"
+
+ftp :: cmds.c cmdtab.c ftp.c main.c ruserpass.c domacro.c \
+		-linetutils ftp.1
+
+:: Makefile.in

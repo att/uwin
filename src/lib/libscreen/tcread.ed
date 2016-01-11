@@ -1,0 +1,558 @@
+CAP=$1 TMP=t$$ OUT=tcread.c
+
+trap "status=\$?; rm -f $TMP.*; exit \$status" 0 1 2
+
+ed - <<!
+E $CAP
+g/^#.*/d
+g/^[a-zA-Z0-9_]*,	*"/s///
+g/"	*"/s//	/
+g/".*/s///
+g/^[a-zA-Z0-9]/s/.*/&:::&/
+g/[a-zA-Z0-9]*	/s///
+g/	.*/s///
+w $TMP.tmp
+q
+!
+
+ed - <<!
+E $TMP.tmp
+/--- begin bool/
+1,.d
+/--- end bool/
+.,\$d
+1,\$s/./			case CAP('&','/
+1,\$s/:::/') : setflag(\&(T_/
+1,\$s/\$/),entry+2); goto next;/
+w $TMP.bool
+q
+!
+
+ed - <<!
+E $TMP.tmp
+g/^#.*/d
+/--- begin num/
+1,.d
+/--- end num/
+.,\$d
+1,\$s/./			case CAP('&','/
+1,\$s/:::/') : setshort(\&(T_/
+1,\$s/\$/),entry+2); goto next;/
+w $TMP.num
+q
+!
+
+ed - <<!
+E $TMP.tmp
+g/^#.*/d
+/--- begin str/
+1,.d
+/--- end str/
+.,\$d
+1,\$s/./			case CAP('&','/
+1,\$s/:::/') : setstr(\&(T_/
+1,\$s/\$/),entry+2,\&ar); goto next;/
+1,100w $TMP.str1
+101,200w $TMP.str2
+201,\$w $TMP.str3
+q
+!
+
+ed - <<!
+E $TMP.tmp
+/--- begin bool/
+1,.d
+1
+s/..::://
+s/.*/	bs = \&(T_&);/
+/--- end bool/
+.,\$d
+\$
+s/..::://
+s/.*/	be = \&(T_&);/
+.-1
+2,.d
+w $TMP.ibool
+q
+!
+
+ed - <<!
+E $TMP.tmp
+/--- begin num/
+1,.d
+1
+s/..::://
+s/.*/	ns = \&(T_&);/
+/--- end num/
+.,\$d
+\$
+s/..::://
+s/.*/	ne = \&(T_&);/
+.-1
+2,.d
+w $TMP.inum
+q
+!
+
+ed - <<!
+E $TMP.tmp
+/--- begin str/
+1,.d
+1
+s/..::://
+s/.*/	ss = \&(T_&);/
+/--- end str/
+.,\$d
+\$
+s/..::://
+s/.*/	se = \&(T_&);/
+.-1
+2,.d
+w $TMP.istr
+q
+!
+
+cat > $TMP.CC <<'!'
+#include	<stdio.h>
+#include	"termhdr.h"
+
+/*
+**	Get terminal description from the termcap database.
+*/
+
+/* various undefined states */
+#define	UNDEFBOOL	(TRUE+TRUE)
+#define UNDEFINT	-1
+#define UNDEFSTR	((char *) 1)
+
+#define NMSIZE	1024		/* max name buffer length */
+
+static	char	*names, *entry;
+static	int	gotname, nmsize, ensize;
+
+/*
+**	Set/Unset undefined states
+*/
+#if __STD_C
+static void undeftc(int yes)
+#else
+static void undeftc(yes)
+int	yes;
+#endif
+{
+	reg bool	*bs, *be;
+	reg short	*ns, *ne;
+	reg char	**ss, **se;
+
+/*---UNDEFS---*/
+
+	for(; bs <= be; ++bs)
+		if(yes)	*bs = UNDEFBOOL;
+		else if(*bs == UNDEFBOOL)
+			*bs = FALSE;
+
+	for(; ns <= ne; ++ns)
+		if(yes)	*ns = UNDEFINT;
+		else if(*ns == UNDEFINT && ns != &(T_xmc))
+			*ns = 0;
+
+	for(; ss <= se; ++ss)
+		if(yes)	*ss = UNDEFSTR;
+		else if(*ss == UNDEFSTR)
+			*ss = NIL(char*);
+}
+
+/*
+**	Set a bool cap
+*/
+#if __STD_C
+static void setflag(bool* bp, char* tc)
+#else
+static void setflag(bp,tc)
+bool	*bp;
+char	*tc;
+#endif
+{
+	if(*bp == UNDEFBOOL)
+		*bp = *tc == '@' ? FALSE : TRUE;
+}
+
+/*
+**	Set a short integer cap.
+*/
+#if __STD_C
+static void setshort(short* ip, char* tc)
+#else
+static void setshort(ip,tc)
+short	*ip;
+char	*tc;
+#endif
+{
+	if(*ip != UNDEFINT || *tc != '#')
+		return;
+
+	if(*tc++ == '@')
+	{	*ip = 0;
+		return;
+	}
+
+	*ip = 0;
+	while(*tc >= '0' && *tc <= '9')
+		*ip = (*ip * 10) + (*tc++ - '0');
+}
+
+
+/*
+**	Set a string termcap
+*/
+#if __STD_C
+static void setstr(char** sp, char* tc, char** area)
+#else
+static void setstr(sp,tc,area)
+char	**sp, *tc, **area;
+#endif
+{
+	/* if already defined or invalid */
+	if(*sp != UNDEFSTR || (*tc != '=' && *tc != '@'))
+		return;
+
+	/* string is to be removed */
+	if(*tc++ == '@')
+	{	*sp = NIL(char*);
+		return;
+	}
+
+	/* start decoding */
+	*sp = *area;
+	tcdecode(tc,area);
+}
+
+
+/*
+**	Parse termcap entry
+*/
+#define CAP(a,b)	((a)*256+(b))
+
+#if __STD_C
+static void tc_parse(char* entry)
+#else
+static void tc_parse(entry)
+char	*entry;
+#endif
+{
+	char		*ar;
+
+	/* initialize fields to undefined states */
+	undeftc(TRUE);
+
+	/* set the name field */
+	ar = cur_tc->_names = cur_tc->_area;
+	while(*entry != ':' && *entry != '\0')
+		*ar++ = *entry++;
+	*ar++ = '\0';
+
+	/* do all field */
+	while(*entry != '\0')
+	{
+		reg int	cap = CAP(*entry,*(entry+1));
+		switch(cap)
+		{
+/*---BOOLS---*/
+		}
+		switch(cap)
+		{
+/*---NUMS---*/
+		}
+		switch(cap)
+		{
+			case CAP('b','s') : setstr(&(T_cub1),"=\b",&ar); goto next;
+/*---STRS1---*/
+		}
+		switch(cap)
+		{
+/*---STRS2---*/
+		}
+		switch(cap)
+		{
+/*---STRS3---*/
+		}
+
+		/* skip to next entry */
+	next:
+		while(*entry != ':' && *entry != '\0')
+			++entry;
+		if(*entry == ':')
+			++entry;
+	}
+
+	/* set undef fields to normal values */
+	undeftc(FALSE);
+}
+
+
+
+/*
+	Add to entry
+*/
+#if __STD_C
+static int tc_add(char* tc)
+#else
+static int tc_add(tc)
+char	*tc;
+#endif
+{
+	reg int		n, rv;
+
+	/* place to start copying */
+	if(ensize > 0 && *tc != ':')
+	{
+		entry[ensize] = ':';
+		n = ensize+1;
+	}
+	else	n = ensize;
+
+	/* do the copying */
+	for(; *tc != '\0' && *tc != '\n' && n < (TCSIZE-1); ++tc, ++n)
+		entry[n] = *tc;
+
+	/* buffer overflow */
+	if(n >= (TCSIZE-1))
+	{
+		ensize = TCSIZE;
+		return TRUE;
+	}
+
+	/* check to see if need continuing */
+	if(*tc == '\n' && *(tc-1) == '\\')
+	{
+		n -= 2;
+		rv = TRUE;
+	}
+	else
+	{
+		--n;
+		rv = FALSE;
+	}
+
+	if(entry[n] == ':')
+	{
+		entry[n] = '\0';
+		ensize = n;
+	}
+	else
+	{
+		entry[n+1] = '\0';
+		ensize = n+1;
+	}
+
+	return rv;
+}
+
+
+/*
+**	Read the entry for 'term' from 'filep'.
+**	Return 1 for found, 0 for not found.
+*/
+#if __STD_C
+static int tc_getent(char* term, FILE* filep)
+#else
+static int tc_getent(term,filep)
+char	*term;
+FILE	*filep;
+#endif
+{
+	reg int		n, rv;
+	char		*cp, *lp, buf[256];
+
+	fseek(filep,0L,0);
+	rv = FALSE;
+	for(;;)
+	{
+		/* read a line */
+		if(!fgets(buf,256,filep) )
+			break;
+
+		/* comment or body */
+		if(buf[0] == '#' || buf[0] == '\t')
+			continue;
+
+		/* match names */
+		if(!_matchname(term,buf))
+			continue;
+
+		/* find the end of the name fields, except the long name */
+		lp = buf;
+		for(cp = buf; *cp != '\0'; ++cp)
+			if(*cp == ':' || *cp == '\n')
+				break;
+			else if(*cp == '|')
+				lp = cp;
+		if(lp == buf)
+			lp = cp;
+
+		/* save the names */
+		names[nmsize] = '|';
+		for(cp = buf, n = nmsize+1; cp < lp && n < NMSIZE ; ++cp, ++n)
+			names[n] = *cp;
+
+		/* buffer overflow */
+		if(n >= NMSIZE)
+			return FALSE;
+		names[n] = '\0';
+		nmsize = n;
+
+		/* if have not got the name field yet */
+		if(!gotname)
+		{
+			cp = buf;
+			gotname = TRUE;
+		}
+		else
+		{
+			/* remove name field */
+			for(cp = lp; *cp != '\0'; ++cp)
+				if(*cp == ':' || *cp == '\n')
+					break;
+		}
+
+		/* read to the end of the entry */
+		rv = TRUE;
+		for(;;)
+		{
+			/* copy the line into entry buffer */
+			if(!tc_add(cp))
+				goto done;
+
+			/* buffer overflow */
+			if(ensize >= TCSIZE)
+				return FALSE;
+
+			/* get a new line */
+			if(!fgets(buf,256,filep) )
+				goto done;
+
+			for(cp = buf; *cp != '\0' && *cp != '\n'; ++cp)
+				if(*cp != '\t' && *cp != ' ')
+					break;
+			if(*cp == '\0' || *cp == '\n')
+				goto done;
+		}
+	}
+done :
+	return rv;
+}
+
+
+#if __STD_C
+int _tcread(TERMCAP* tc, char* term)
+#else
+int _tcread(tc,term)
+TERMCAP	*tc;
+char	*term;
+#endif
+{
+	reg int		n;
+	reg char	*cp;
+	FILE		*tcfp;
+	TERMCAP		*savtc;
+	char		iobuf[BUFSIZ], nm[NMSIZE], en[TCSIZE];
+
+	if(!term || !term[0])
+		return ERR;
+
+	/* initialize */
+	names = nm;
+	entry = en;
+	names[0] = entry[0] = '\0';
+	nmsize = ensize = 0;
+
+	tcfp = NIL(FILE*);
+	gotname = FALSE;
+
+	/* get the TERMCAP string */
+	cp = getenv("TERMCAP");
+	if(cp && cp[0])
+	{
+		/* defining a termcap base */
+		if(cp[0] == '/')
+			tcfp = fopen(cp,"r");
+
+		/* can be used only if this is the default terminal */
+		else if(_matchname(term,cp))
+		{
+			tc_add(cp);
+			gotname = TRUE;
+		}
+	}
+
+	if(!tcfp && !(tcfp = fopen(TCBASE,"r")) )
+		goto gotentry;
+	setbuf(tcfp,iobuf);
+
+	/* processing termcap entry */
+	for(;;)
+	{
+		/* check for 'tc' */
+		if((n = ensize-1) > 0)
+		{
+			/* see if it's a 'tc' */
+			for(; n >= 0; --n)
+				if(entry[n] == ':')
+					break;
+			if(entry[n+1] != 't' || entry[n+2] != 'c')
+				goto gotentry;
+
+			/* yep, it is */
+			entry[n] = '\0';
+			ensize = n;
+			term = entry+n+4;
+
+			/* no recursion allowed in termcap */
+			if(_matchname(term,names))
+				goto gotentry;
+		}
+
+		/* get entry */
+		if(!tc_getent(term,tcfp))
+			goto gotentry;
+	}
+gotentry :
+	if(tcfp)
+		fclose(tcfp);
+	if(ensize <= 0 || ensize >= TCSIZE || nmsize >= NMSIZE)
+		return ERR;
+
+	if(_f_unused)
+		tc->_area = &(_f_strs[0]);
+	else if(!(tc->_area = (char *) malloc(ensize*sizeof(char))) )
+		return ERR;
+
+	savtc = cur_tc;
+	cur_tc = tc;
+	tc_parse(entry);
+	cur_tc = savtc;
+	return OK;
+}
+!
+
+ed - <<!
+E $TMP.CC
+/---UNDEFS---/
+.r $TMP.ibool
+.r $TMP.inum
+.r $TMP.istr
+/---BOOLS---/
+.r $TMP.bool
+/---NUMS---/
+.r $TMP.num
+/---STRS1---/
+.r $TMP.str1
+/---STRS2---/
+.r $TMP.str2
+/---STRS3---/
+.r $TMP.str3
+w $TMP.c
+q
+!
+
+cmp -s $TMP.c $OUT || mv $TMP.c $OUT

@@ -1,0 +1,115 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.04 [en] (WinNT; I) [Netscape]">
+   <TITLE>Telnet Access for Local/Domain Users in U/Win</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#808080" ALINK="#FF0000">
+
+<CENTER>&nbsp;</CENTER>
+
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="480" >
+<TR>
+<TD>
+<CENTER><B><FONT FACE="Verdana"><FONT SIZE=+1>Managing Access for Local/Domain
+Users</FONT></FONT></B></CENTER>
+
+<CENTER><B><FONT FACE="Verdana"><FONT SIZE=+1>in UWIN Telnet Server</FONT></FONT></B></CENTER>
+
+
+<P><FONT SIZE=-1>&nbsp;</FONT>&nbsp;
+<BR><FONT SIZE=-1><B><FONT FACE="Verdana">Previous implementation</FONT></B>&nbsp;</FONT>&nbsp;
+<BR><FONT SIZE=-1><FONT FACE="Verdana">In the previous implementation,
+the <B>UWIN UMS Service </B>generated the /etc/passwd file.</FONT> <FONT FACE="Verdana">The
+UMS Service queried the Local System and the Primary Domain Controller
+for all the users, and created entries for every local as well as domain
+user in the /etc/passwd file.</FONT> <FONT FACE="Verdana">This caused a
+severe network activity if there were a large number of users in the domain.</FONT>&nbsp;</FONT>&nbsp;
+<BR><FONT SIZE=-1>&nbsp;</FONT>&nbsp;
+<BR><FONT SIZE=-1><B><FONT FACE="Verdana">New Implementation</FONT></B>&nbsp;</FONT>&nbsp;
+<BR><FONT SIZE=-1><FONT FACE="Verdana">The UMS service upon startup queries
+the Local system and creates entries for all the local users in the /etc/passwd
+file. The /etc/passwd file now no longer contains entries for domain users.
+Whenever a domain user tries to login (through telnet/rlogin/etc.), the
+Primary Domain Controller is queried for that user at run-time. A <B>new
+entry</B> for that user is created in the /etc/passwd file. In this manner,
+the entry is <B>cached</B> for the present session. The Domain Controller
+is not queried for subsequent logins by the user. The local /etc/passwd
+file is used for further queries.</FONT>&nbsp;</FONT>&nbsp;
+<BR><FONT SIZE=-1><FONT FACE="Verdana">However, on next reboot of the system,
+the /etc/passwd file is regenerated and all the previously cached domain
+entries are lost.</FONT>&nbsp;</FONT>&nbsp;
+
+<P><FONT SIZE=-1><FONT FACE="Verdana">The UMS service after generating
+the /etc/passwd file, appends the entries made into the <B>/etc/passwd.add</B>
+file onto the /etc/passwd file. Using the /etc/passwd.add file passwd entries
+can be cached and written into the /etc/passwd file. The user is responsible
+for the entries made into the /etc/passwd.add file.</FONT>&nbsp;</FONT>&nbsp;
+
+<P><FONT SIZE=-1><B><FONT FACE="Verdana">Restricting Access to Local/Domain
+Users?</FONT></B>&nbsp;</FONT>&nbsp;
+<BR><FONT SIZE=-1><FONT FACE="Verdana">For U/Win systems with a large number
+of Local and Domain users, there can be a need to restrict Telnet Access
+to some users. This feature can be used to prevent undesired access to
+the resources of the U/Win system by users.</FONT>&nbsp;</FONT>&nbsp;
+
+<P><FONT SIZE=-1><FONT FACE="Verdana">The user information is stored in
+/etc/login.deny and /etc/login.allow files.</FONT>&nbsp;</FONT>&nbsp;
+<CENTER><IMG SRC="telnet.gif" ALT="telnet_access" BORDER=0 HEIGHT=650 WIDTH=550></CENTER>
+<FONT SIZE=-1><FONT FACE="Verdana">The administrator is allowed access
+at all times, irrespective of whether the entry is present in the deny
+file or not.</FONT>&nbsp;</FONT>&nbsp;
+
+<P><FONT SIZE=-1><FONT FACE="Verdana">The /etc/login.deny file carries
+precedence over the /etc/login.allow file, i.e. the telnet server checks
+the login.deny file first for the username. If found, the user is denied
+access, even if his entry is present in the /etc/login.allow file. If the
+name is not found in the login.deny file, the login.allow file is searched.
+If the name is found in the login.allow file then the user is granted access.</FONT>&nbsp;</FONT>&nbsp;
+
+<P><FONT SIZE=-1><FONT FACE="Verdana">The default action is to deny access.
+This means that if the username is absent in both the files or if both
+the files are absent, then the user is denied access.</FONT>&nbsp;</FONT>&nbsp;
+
+<P><FONT SIZE=-1><FONT FACE="Verdana">The following wildcards can be used
+to specify users :-</FONT>&nbsp;</FONT>&nbsp;
+<TABLE BORDER CELLSPACING=0 CELLPADDING=3 >
+<TR>
+<TD ALIGN=CENTER><FONT FACE="Verdana"><FONT SIZE=-1>*/*</FONT></FONT></TD>
+
+<TD><FONT FACE="Verdana"><FONT SIZE=-1>all domain users</FONT></FONT></TD>
+</TR>
+
+<TR>
+<TD ALIGN=CENTER><FONT FACE="Verdana"><FONT SIZE=-1>*</FONT></FONT></TD>
+
+<TD><FONT FACE="Verdana"><FONT SIZE=-1>all users on the local machine</FONT></FONT></TD>
+</TR>
+
+<TR>
+<TD ALIGN=CENTER><FONT FACE="Verdana"><FONT SIZE=-1>xxx/*</FONT></FONT></TD>
+
+<TD><FONT FACE="Verdana"><FONT SIZE=-1>all users on domain "xxx"</FONT></FONT></TD>
+</TR>
+
+<TR>
+<TD ALIGN=CENTER><FONT FACE="Verdana"><FONT SIZE=-1>*/xxx</FONT></FONT></TD>
+
+<TD><FONT FACE="Verdana"><FONT SIZE=-1>the user "xxx" from any domain</FONT></FONT></TD>
+</TR>
+</TABLE>
+<I><FONT FACE="Verdana"><FONT SIZE=-1>Shivjit Mohapatra</FONT></FONT></I>&nbsp;
+<BR><I><FONT FACE="Verdana"><FONT SIZE=-1>Wipro Technology Solutions</FONT></FONT></I>&nbsp;
+<BR><FONT FACE="Verdana"><FONT SIZE=-1><A HREF="mailto:uwin@wipro.com">uwin@wipro.com</A>&nbsp;</FONT></FONT>
+
+<P>
+<HR ALIGN="CENTER" SIZE="3" COLOR="BLUE"><B><FONT FACE="Verdana"><FONT SIZE=-1>Last
+Modified: Friday, May 29, 1998</FONT></FONT></B>&nbsp;
+<BR><FONT FACE="Verdana"><FONT SIZE=-1>&copy; 1998, Wipro Limited.&nbsp;</FONT></FONT></TD>
+</TR>
+</TABLE>
+
+<CENTER>&nbsp;</CENTER>
+&nbsp;
+</BODY>
+</HTML>

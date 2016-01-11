@@ -1,0 +1,36 @@
+
+HAVE_CONFIG_H==1
+LEX = flex
+
+.SOURCE:	bc dc lib Test doc
+.SOURCE.h:	h
+
+$(LIBDIR)	:INSTALLDIR:	libmath.b
+$(MANDIR)1	:INSTALLDIR:	dc.1 bc.1
+
+bc/bc::	main.c bc.y scan.l execute.c load.c storage.c util.c global.c getopt.c \
+	getopt1.c number.c -lfl
+
+dc/dc::	dc.c misc.c eval.c stack.c array.c numeric.c string.c getopt.c \
+	getopt1.c number.c
+
+config.h: \
+	configure configure.in config.h.in Makefile.am Makefile.in \
+	doc/Makefile.in doc/Makefile.am dc/Makefile.in dc/Makefile.am \
+	bc/Makefile.in bc/Makefile.am lib/Makefile.in lib/Makefile.am \
+	acconfig.h aclocal.m4
+		$(*:O=1:P=A) --prefix=/usr
+
+::	Makefile bc/Makefile dc/Makefile doc/Makefile lib/Makefile
+
+::	AUTHORS COPYING INSTALL README NEWS ChangeLog Examples missing \
+	mkinstalldirs vfprintf.c bc/sbc.y doc/bc.1 doc/dc.1 doc/dc.info \
+	doc/texinfo.tex doc/dc.texi bc/fix-libmath_h install-sh stamp-h.in
+
+::	Test/BUG.bc Test/TESTS.bc Test/array.b Test/arrayp.b Test/aryprm.b \
+	Test/atan.b Test/checklib.b Test/div.b Test/exp.b Test/fact.b \
+	Test/jn.b Test/ln.b Test/mul.b Test/raise.b Test/signum Test/sine.b \
+	Test/sqrt.b Test/sqrt1.b Test/sqrt2.b Test/testfn.b Test/timetest \
+	Examples/ckbook.b Examples/pi.b Examples/primes.b Examples/twins.b
+
+::	libmath.b libmath.h

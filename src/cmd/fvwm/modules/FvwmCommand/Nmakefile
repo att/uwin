@@ -1,0 +1,7 @@
+include ../../fvwm.mk
+
+BINDIR = $(LIBEXECDIR)
+
+FvwmCommand :: FvwmCommand.c fifos.c
+
+FvwmCommandS :: FvwmCommandS.c fifos.o

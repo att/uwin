@@ -1,0 +1,7 @@
+include "../inetutils.mk"
+
+$(ETCDIR) :INSTALLDIR: in.rexecd
+
+in.rexecd :: rexecd.c rexecd.8 -linetutils
+
+:: Makefile.in

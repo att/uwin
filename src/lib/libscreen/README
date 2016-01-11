@@ -1,0 +1,15 @@
+This directory contains the source for the <screen> library.
+Read the top part of the makefile for setting installation parameters.
+
+An early version of <screen> became SysVr3.1 <curses> which begot
+many current version of <curses>. This version supports both termcap
+and terminfo.  It also provides a number of functions beyond <curses>:
+	wmenu:	pop-up/static menus
+	wview:	viewing texts in windows
+	wunview: dumping a window into a text file in a format suitable
+		for nroff/troff or line printers.
+	wedit:	editing texts in windows.
+
+The subdirectory Screen_x contains the source for the tput command.
+
+Phong Vo, kpv@research.att.com

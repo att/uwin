@@ -1,0 +1,10 @@
+include ../../lesstif.mk
+
+VERSION = 2.1
+
+.SOURCE.h:      .. ../../include/Motif-2.1
+
+Dt :LIBRARY: 	DtPrintSetupBox.c  DtPrintSetupData.c
+
+::	Makefile.in Makefile.am
+

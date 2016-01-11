@@ -1,0 +1,16 @@
+DllMain@12
+pthread_count DATA
+ptw32_cleanupKey DATA
+ptw32_concurrency DATA
+ptw32_cond_list_head DATA
+ptw32_cond_list_lock DATA
+ptw32_cond_list_tail DATA
+ptw32_cond_test_init_lock DATA
+ptw32_interlocked_compare_exchange DATA
+ptw32_mutex_test_init_lock DATA
+ptw32_processInitialized DATA
+ptw32_rwlock_test_init_lock DATA
+ptw32_selfThreadKey DATA
+ptw32_spinlock_test_init_lock DATA
+ptw32_threadStart@4
+ptw32_InterlockedCompareExchange@12

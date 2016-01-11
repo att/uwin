@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META name="generator" content="mm2html (AT&T Labs Research) 2005-01-11">
+<TITLE> general FAQ </TITLE>
+<META name="author" content="uwin-users">
+</HEAD>
+<BODY bgcolor=white link=slateblue vlink=teal >
+<TABLE border=0 align=center width=96%>
+<TBODY><TR><TD valign=top align=left>
+<!--INDEX--><!--/INDEX-->
+<P>
+<P><HR><CENTER><FONT color=red><FONT face=courier><H3><A name="general FAQ">general FAQ</A></H3></FONT></FONT></CENTER>
+<OL>
+
+<LI>
+What is UWIN?
+<P>
+UWIN is a UNIX to Windows Integration Toolkit that gives you almost all
+the features of a traditional UNIX operating system on Windows NT,
+Windows XP, Windows ME, and Windows 95/98.
+<P>
+
+<LI>
+Why did we write UWIN?
+<P>
+We needed a UNIX layer to port the AST Toolkit to Windows so
+that applications using the AST toolkit would run on Windows platforms
+without the need to recode or to support multiple versions of the software.
+At the time we started UWIN, there were no alternatives.  Now there
+are alternatives such as Cygwin and Unix System Services, but neither
+meet our needs as closely as UWIN does.
+<P>
+
+<LI>
+Which is the latest version of UWIN available?
+<P>
+Version 4.0 is the latest version of UWIN.
+<P>
+
+<LI>
+Who are the authors of UWIN?
+<P>
+Most of the POSIX library was created David Korn, author of the KornShell
+at AT&amp;T Laboratories.  Portions of the code were developed under contract
+by Wipro, Ltd, in India.  The AST Toolkit which provides most of the UNIX
+utilities are part of the AST Toolkit developed primarly by Glenn Fowler,
+David Korn, and Phong Vo or AT&amp;T Laboratories.  A few of the utilities
+were built from GNU or BSD source code.
+<P>
+
+<LI>
+Are there separate versions of UWIN for different versions of Windows?
+<P>
+No, the same UWIN binaries should work with all versions of Windows.
+<P>
+
+<LI>
+What are the licensing terms for UWIN?
+<P>
+Starting with release 4.0, most of UWIN base package is available under
+the CPL 1.0 license which is an Open Source License approved by the
+Open Source consortium.  The vt100 emulator uses an MIT license,
+and a few utilities use BSD or GPL licenses.  All of these are
+Open Source license.  Earlier versions of UWIN had separate
+educational and commercial licenses.
+<P>
+
+<LI>
+Can closed source applications use UWIN?
+<P>
+The CPL license does not require you to make your source code available
+in order to use CPL software.  The GPL license requires you to make
+source code available for any binaries that use GPL code.  As long
+as you do not use any GPL code, you can use UWIN without making
+your source code available. 
+<P>
+
+<LI>
+Why is UWIN split into packages?
+<P>
+The primary reason for splitting into packages was to reduce the
+size for users that do not require everyting.  For example, users
+that don't do software development do not need the development package.
+Not everyone requires the X11, groff,  or perl software either.
+The license for these add-on packages might differ depending on where
+the sofware has been derived from.  In addition, once the base package
+is installed, the installation of other packages can use standard UNIX
+tools for installing these additional packages.
+<P>
+
+<LI>
+What is UWIN Base package?
+<P>
+UWIN Base package consists of the UWIN runtime libraries, shells,
+utilities, daemons and services. It provides a virtual UNIX environment
+on Windows.  Most of the utilities were developed by AT&amp;T and conform to
+POSIX.2 and X/Open.  A few utilities were compiled from GNU and BSD
+source code.
+<P>
+
+<LI>
+What is UWIN Development pagkage?
+<P>
+UWIN Development package adds application development support on UWIN.
+It consists of header files, libraries and development utilities like cc,
+make, rcs, etc. It can be used to build UWIN applications and/or to build
+native applications.  The UWIN Development package requires the UWIN base
+package to be installed on the system.
+<P>
+
+<LI>
+What are some other add-on packages?
+<P>
+The X11 base package provides a number of X11 client applications
+as well as an X11 server.  The X11 development package provides
+include files and libraries needed to build X11 applications.
+The perl package is a compilation of perl 5.8.  The groff package
+is a compilation of the GNU groff utilities.
+<P>
+
+<LI>
+Is UWIN supported?
+<P>
+Currently UWIN is unsupported.  However since UWIN is used
+internally at AT&amp;T, we need to maintain it for internal use.
+By providing UWIN under an Open Source license, we are hoping
+that some organization(s) will provide support for UWIN.
+<P>
+
+<LI>
+Where do I report bugs in UWIN?
+<P>
+There are two mailing groups for UWIN that you can use for this
+purpose as well as to get more UWIN information. The
+uwin-users@research.att.com group is more general, wherease the
+uwin-developers@research.att.com is for users that are developing
+applications that run under UWIN.  In addition, problems that
+are related to the AST Toolkit, and not UWIN specific, can be
+posted on the ast mailing group.  We are happy to receive bug
+fixes from users and will merge them into our base software.
+<P>
+
+<LI>
+Is source code available?
+<P>
+Yes, the source code as a separate package.  It requires the
+version 4.0 or later development kit to build UWIN.  Some
+parts of UWIN require the Microsoft Visual C/C++ compiler to
+build.  The compiler can be downloaded from the Microsoft site.
+<P>
+
+<LI>
+Does UWIN require the POSIX subsystem on Windows NT or XP?
+<P>
+No. UWIN does not require POSIX subsystem. UWIN APIs are implemented
+using Win32 APIs and therefore interacts only with the WIN32 subsystem
+of Windows.
+<P>
+
+<LI>
+Does UWIN conform to the X/Open standards?
+<P>
+While UWIN contains nearly all of the X/Open 95 interaces,
+UWIN Version 4.0 has not been tested for X/Open Conformance.
+<P>
+
+<LI>
+Does UWIN handle UNIX permissions?
+<P>
+UNIX permissions are handled on Windows NT/2000/XP only. The UNIX
+permissions are implemented in terms of the NT security permissions.
+Administrator has only some of the root privileges. Setuid and setgid
+programs can be created for a user provided that UCS for that user is
+installed.
+<P>
+
+<LI>
+Can UWIN handle upper and lower case distinction?
+<P>
+Case distinction is not handled by default, but any part of the
+file system can be mounted as case sensitive both in Windows NT/XP and
+Windows 95/98 using loop back mounts.  The performance of the system
+might be impacted somewhat and the names for some files might be
+different in UWIN than with the native system.
+<P>
+
+<LI>
+Are UNIX ttys and links supported?
+<P>
+Yes, but they are not accessible outside UWIN. Hard links are
+supported for Windows NT/2000/XP and Windows 95/98 but are accessible
+outside UWIN only on Windows/NT NTFS file systems.  Symlinks are
+accessible as shortcuts outside of UWIN.
+<P>
+
+<LI>
+Are tape devices supported?
+<P>
+Tape devices are supported for Windows NT/2000/XP only. You can use the
+tar command to create and restore tape archives.
+<P>
+
+<LI>
+Are ptys supported?
+<P>
+Yes. The master pty is /usr/dev/ptym&#0091;0-9A-F&#0093; and the slave pty
+is /usr/dev/ptys&#0091;0-9A-F&#0093;.
+<P>
+
+<LI>
+Does UWIN work with Samba?
+<P>
+Yes, UWIN will work with the Samba file system but on some versions of
+Samba file permissions are not supported.
+<P>
+
+<LI>
+Is the /proc directory supported?
+<P>
+Yes, a number of features of the /proc file system are supported by
+UWIN.
+<P>
+
+<LI>
+Can I access "Windows Registry" using UWIN?
+<P>
+The Windows Registry can be accessed as a virtual file system
+that is mounted at /reg from UWIN  Keys that contain subkeys
+are directories.  Without a trailing /, each registry key is a
+file whose contents are the value of this registry key.
+<P>
+
+<LI>
+Can I take a binary from UNIX to UWIN.
+<P>
+No. UWIN does not provide binary level compatibility. But in most
+cases the UNIX code can be taken to UWIN and compiled to get a
+binary (.exe) working on Windows.
+<P>
+
+</OL>
+<P>
+<HR>
+<TABLE border=0 align=center width=96%>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right><A href="mailto:uwin-users@research.att.com?subject=general FAQ">UWIN users mailgroup</A></TD>
+</TR>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right>Information and Software Systems Research</TD>
+</TR>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right>AT&amp;T Research</TD>
+</TR>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right>Florham Park NJ</TD>
+</TR>
+<TR>
+<TD align=left></TD>
+<TD align=center></TD>
+<TD align=right>December 28, 2004</TD>
+</TR>
+</TABLE>
+<P>
+
+</TD></TR></TBODY></TABLE>
+
+</BODY>
+</HTML>

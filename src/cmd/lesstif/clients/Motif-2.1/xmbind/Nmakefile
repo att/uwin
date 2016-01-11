@@ -1,0 +1,12 @@
+include ../../../lesstif.mk
+
+.SOURCE:	../../Motif-1.2
+
+.SOURCE.h:      ../../../include/Motif-2.1
+
+.SOURCE.a:      ../../../lib/Xm-2.1
+
+xmbind::	xmbind.c -lXm  -Bstatic -lXt -Bdynamic
+
+::	Makefile.in Makefile.am
+

@@ -1,0 +1,91 @@
+# Configuration-derived make variables for inetutils
+#
+# Copyright (C) 1995, 1996, 1997 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+
+SHELL = /bin/sh
+
+VPATH = $(srcdir)
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+includedir = @includedir@
+libdir = @libdir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+sysconfdir = @sysconfdir@
+localstatedir = @localstatedir@
+sharedstatedir = @sharedstatedir@
+mandir = @mandir@
+man1dir = $(mandir)/man1
+man5dir = $(mandir)/man5
+man8dir = $(mandir)/man8
+
+INSTALL = @INSTALL@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+AR = @AR@
+RANLIB = @RANLIB@
+CC = @CC@
+YACC = @YACC@
+DEFS = @DEFS@
+LIBS = @LIBS@
+CFLAGS = @CFLAGS@
+LDFLAGS = @LDFLAGS@
+RM = @RM@
+MKINSTDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+LIBCURSES = @LIBCURSES@
+LIBAUTH = @LIBAUTH@
+LIBTERMCAP = @LIBTERMCAP@
+LIBCRYPT = @LIBCRYPT@
+LIBUTIL = @LIBUTIL@
+LIBGLOB = @LIBGLOB@
+
+NCURSES_INCLUDE = @NCURSES_INCLUDE@
+
+CPPFLAGS += $(DEFS) -I$(srcdir) -I../include $(CPPFLAGS-$(<F))
+LDLIBS += -L../libinetutils -linetutils $(LIBS)
+
+RULES = $(top_srcdir)/rules.make
+
+# Link or copy the file $$DISTFILE (a shell variable) into $(DISTDIR)/$$FILE
+define _LINK_DISTFILE
+  if test -d $$DISTFILE; then					 \
+    echo mkdir $(DISTDIR)/$$FILE; mkdir $(DISTDIR)/$$FILE;	 \
+  else								 \
+    { ln 2>/dev/null $$DISTFILE $(DISTDIR)/$$FILE		 \
+      && echo ln $$DISTFILE $(DISTDIR)/$$FILE; }		 \
+    || { echo cp -p $$DISTFILE $(DISTDIR)/$$FILE		 \
+        ; cp -p $$DISTFILE $(DISTDIR)/$$FILE; };		 \
+  fi
+endef
+
+# Link or copy every file in $(DISTFILES) + Makefile.in from $(srcdir)
+# and any file in $(OPT_DISTFILE) that exists in the current directory,
+# into $(DISTDIR)
+define LINK_DISTFILES
+  @for FILE in Makefile.in $(DISTFILES); do \
+    DISTFILE=$(srcdir)/$$FILE; $(_LINK_DISTFILE); \
+  done
+  @for FILE in $(OPT_DISTFILES) ""; do \
+    test "$$FILE" -a -e "$$FILE" && { DISTFILE="$$FILE"; $(_LINK_DISTFILE); } || :; \
+  done
+endef
+
+@PATHDEFS_MAKE@

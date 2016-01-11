@@ -1,0 +1,127 @@
+/*
+ * nmakefile for openssl 0.9.8i command
+ */
+
+:PACKAGE:	crypto:library
+
+MONOLITH	== 1
+L_ENDIAN	== 1
+OPENSSL_THREADS	== 1
+TERMIOS		== 1
+
+CCFLAGS		= $(CC.OPTIMIZE)
+
+.SOURCE :	test
+
+openssl :: \
+	app_rand.c	  apps.c	    asn1pars.c	      ca.c \
+	ciphers.c	  cms.c		    crl.c	      crl2p7.c \
+	dgst.c		  dh.c		    dhparam.c	      dsa.c \
+	dsaparam.c	  ec.c		    ecparam.c	      enc.c \
+	engine.c	  errstr.c	    gendh.c	      gendsa.c \
+	genrsa.c	  nseq.c	    ocsp.c	      openssl.c \
+	passwd.c	  pkcs12.c	    pkcs7.c	      pkcs8.c \
+	prime.c		  rand.c	    req.c	      rsa.c \
+	rsautl.c	  s_cb.c	    s_client.c	      s_server.c \
+	s_socket.c	  s_time.c	    sess_id.c	      smime.c \
+	speed.c		  spkac.c	    verify.c	      version.c \
+	x509.c		  -lssl
+
+$(LIBDIR)/ssl :INSTALLDIR: openssl.cnf
+
+:: $(".":P=L=*:O=N) \
+	md4.c		  winrand.c	    apps.h.orig	      s_socket.c.orig
+
+:TEST: bftest.c
+:TEST: bntest.c
+	set +x
+	{
+		$(*)
+		echo quit
+	} 2>/dev/null |
+	bc |
+	{
+		integer tp=0 tf=0 p=0 f=0
+		t=
+		while	read line
+		do	case $line in
+			test*)	if	(( p || f ))
+				then	if	(( p ))
+					then	t="$t passed $p"
+						(( tp += p ))
+						(( p = 0 ))
+					fi
+					if	(( f ))
+					then	t="$t FAILED $f"
+						(( tf += f ))
+						(( f = 0 ))
+					fi
+					print -u2 $t
+				fi
+				t=$line
+				;;
+			0)	(( p++ ))
+				;;
+			*)	(( f++ ))
+				;;
+			esac
+		done
+		if	(( p || f ))
+		then	if	(( p ))
+			then	t="$t passed $p"
+				(( tp += p ))
+			fi
+			if	(( f ))
+			then	t="$t FAILED $f"
+				(( tf += f ))
+			fi
+			print -u2 $t
+		fi
+		t="$$(( tp + tf )) tests"
+		if (( tf ))
+		then	t="$t, $tf FAILED"
+		fi
+		print -u2 $t
+	}
+
+:TEST: casttest.c
+:TEST: destest.c
+:TEST: dhtest.c
+:TEST: dsatest.c
+:TEST: ecdhtest.c
+:TEST: ecdsatest.c
+:TEST: ectest.c
+:TEST: enginetest.c
+:TEST: evp_test.c evptests.txt
+:TEST: exptest.c
+:TEST: hmactest.c
+:TEST: ideatest.c
+:TEST: igetest.c
+:TEST: md2test.c
+:TEST: md4test.c
+:TEST: md5test.c
+:TEST: mdc2test.c
+:TEST: randtest.c
+:TEST: rc2test.c
+:TEST: rc4test.c
+:TEST: rc5test.c
+:TEST: rmdtest.c
+:TEST: rsa_test.c
+:TEST: sha1test.c
+:TEST: sha256t.c
+:TEST: sha512t.c
+:TEST: shatest.c
+:TEST: ssltest.c -test_cipherlist
+
+:TEST: tcrl.sh testcrl.pem
+:TEST: testenc.sh
+:TEST: testgen.sh test.cnf testca.pem dsa512.pem
+:TEST: testss.sh openssl.cnf CAss.cnf Uss.cnf P1ss.cnf P2ss.cnf
+:TEST: testssl.sh :: testss :: server2.pem keyU.ss certU.ss certCA.ss
+:TEST: testsslproxy.sh :: testss :: keyP1.ss certP1.ss intP1.ss : keyP2.ss certP2.ss intP2.ss
+:TEST: tpkcs7.sh testp7.pem
+:TEST: tpkcs7d.sh pkcs7-1.pem
+:TEST: treq.sh openssl.cnf testreq2.pem
+:TEST: trsa.sh testrsa.pem
+:TEST: tsid.sh testsid.pem
+:TEST: tx509.sh testx509.pem : v3-cert1.pem : v3-cert2.pem

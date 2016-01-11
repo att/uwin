@@ -1,0 +1,7 @@
+Thanks to all the people that have fixed or reported bugs in inetutils!
+
+In particular:
+  Kaveh R. Ghazi	 (Much porting work, esp. sunos/solaris)
+  Alain Magloire	 (snprintf replacement & security fixes)
+  Bernhard Rosenkraenzer (Linux port)
+  NIIBE Yutaka		 (Security fixes & making talk finally work)

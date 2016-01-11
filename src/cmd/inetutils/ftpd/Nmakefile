@@ -1,0 +1,9 @@
+include "../inetutils.mk"
+
+.SOURCE : ../ftp
+
+$(ETCDIR) :INSTALLDIR: in.ftpd
+
+in.ftpd :: ftpd.c ftpcmd.y popen.c ftpd.8 -linetutils
+
+:: Makefile.in

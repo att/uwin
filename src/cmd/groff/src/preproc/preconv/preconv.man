@@ -1,0 +1,161 @@
+.ig
+Copyright (C) 2006 Free Software Foundation, Inc.
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be included in
+translations approved by the Free Software Foundation instead of in
+the original English.
+..
+.
+.TH PRECONV @MAN1EXT@ "@MDATE@" "Groff Version @VERSION@"
+.
+.
+.SH NAME
+preconv \- convert encoding of input files to something GNU troff understands
+.
+.
+.SH SYNOPSIS
+.B preconv
+[
+.B \-dhrv
+]
+[
+.BI \-e encoding
+]
+[
+.IR files \|.\|.\|.\|
+]
+.
+.PP
+It is possible to have whitespace between the
+.B \-e
+command line option and its parameter.
+.
+.
+.SH DESCRIPTION
+.B preconv
+reads
+.I files
+and converts its encoding(s) to a form GNU
+.BR troff (@MAN1EXT)
+can process, sending the data to standard output.
+Currently, this means ASCII characters and `\e[uXXXX]' entities, where
+`XXXX' is a hexadecimal number with four to six digits, representing a
+Unicode input code.
+Normally,
+.B preconv
+should be invoked with the
+.B \-k
+and
+.B \-K
+options of
+.BR groff .
+.
+.
+.SH OPTIONS
+.TP
+.B \-d
+Emit debugging messages to standard error (mainly the used encoding).
+.
+.TP
+.BI \-e encoding
+Specify input encoding explicitly, overriding all other methods.
+This corresponds to
+.BR groff 's
+.BI \-K encoding
+option.
+Without this switch,
+.B preconv
+uses the algorithm described below to select the input encoding.
+.
+.TP
+.B \-h
+Print help message.
+.
+.TP
+.B \-r
+Do not add .lf requests.
+.
+.TP
+.B \-v
+Print version number.
+.
+.
+.SH USAGE
+.B preconv
+tries to find the input encoding with the following algorithm.
+.
+.IP 1.
+If the input encoding has been explicitly specified with option
+.BR \-e ,
+use it.
+.
+.IP 2.
+Otherwise, check whether the input starts with a
+.I Byte Order Mark
+(BOM, see below).
+If found, use it.
+.
+.IP 3.
+Finally, check whether there is a known
+.I coding tag
+(see below) in either the first or second input line.
+If found, use it.
+.
+.IP 4.
+If everything fails, use a default encoding as given by the current locale,
+or `latin1' if the locale is set to `C', `POSIX', or empty.
+.
+.PP
+Note that the
+.B groff
+program supports a
+.B GROFF_ENCODING
+environment variable which is eventually expanded to option
+.BR \-k .
+.
+.SS "Byte Order Mark"
+The Unicode Standard defines character U+FEFF as the the Byte Order Mark
+(BOM).
+On the other hand, value U+FFFE is guaranteed not be a Unicode character at
+all.
+This allows to detect the byte order within the data stream (either
+big-endian or lower-endian), and the MIME encodings `UTF-16' and `UTF-32'
+mandate that the data stream starts with U+FEFF.
+Similarly, the data stream encoded as `UTF-8' might start with a BOM (to
+ease the conversion from and to UTF-16 and UTF-32).
+In all cases, the byte order mark is
+.I not
+part of the data but part of the encoding protocol; with other words,
+.BR preconv 's
+output doesn't contain it.
+.
+.PP
+Note that U+FEFF not at the start of the input data actually is emitted;
+it has then the meaning of a `zero width no-break space' character \[en]
+something not needed normally in
+.BR groff .
+.
+.SS "Coding Tags"
+To be written.
+.
+.SS "Iconv Issues"
+To be written.
+.
+.
+.SH "SEE ALSO"
+.BR groff (@MAN1EXT@)
+.
+.\" Local Variables:
+.\" mode: nroff
+.\" End:

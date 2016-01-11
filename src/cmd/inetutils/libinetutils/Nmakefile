@@ -1,0 +1,14 @@
+include "../inetutils.mk"
+
+inetutils $(VERSION) :LIBRARY: __progname.c cleansess.c \
+	getusershell.c localhost.c login.c logout.c logwtmp.c \
+	logwtmpko.c setenv.c setsig.c stub_tgetent.c ttymsg.c version.c \
+	xmalloc.c xstrdup.c iruserok.c argcv.c
+
+.. :INSTALLDIR: config.h confpaths.h crypt.h syslog-int.h version.h
+../arpa :INSTALLDIR: tftp.h
+../protocols :INSTALLDIR: talkd.h
+
+::	login_tty.c memmove.c memset.c daemon.c openpty.c forkpty.c revoke.c \
+	alloca.c err.c snprintf.c syslog.c Makefile.in strdup.c strerror.c \
+	herror.c hstrerror.c getopt.c getoptl.c Makefile.in

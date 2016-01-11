@@ -1,0 +1,47 @@
+CAP=$1 TMP=t$$ OUT=tifnames.c
+
+trap "status=\$?; rm -f $TMP.*; exit \$status" 0 1 2
+
+ed - <<!
+E $CAP
+g/^#.*/d
+g/,[ 	]*.*/s//",/
+g/^[a-zA-Z]/s//	"&/
+/--- begin bool/
+c
+#include	"termhdr.h"
+
+
+char*	boolfnames[] =
+{
+.
+/--- end bool/
+c
+	NIL(char*)
+};
+.
+/--- begin num/
+c
+char*	numfnames[] =
+{
+.
+/--- end num/
+c
+	NIL(char*)
+};
+.
+/--- begin str/
+c
+char*	strfnames[] =
+{
+.
+/--- end str/
+c
+	NIL(char*)
+};
+.
+w $TMP.c
+q
+!
+
+cmp -s $TMP.c $OUT || mv $TMP.c $OUT

@@ -1,0 +1,3 @@
+include "../inetutils.mk"
+
+rcp :: rcp.c util.c -linetutils rcp.1

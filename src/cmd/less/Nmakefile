@@ -1,0 +1,25 @@
+HAVE_CONFIG_H == 1
+
+less ::	less.1 defines.h main.c screen.c brac.c ch.c charset.c \
+	cmdbuf.c command.c decode.c edit.c filename.c forwback.c \
+	help.c ifile.c input.c jump.c line.c linenum.c \
+	lsystem.c mark.c optfunc.c option.c opttbl.c os.c \
+	output.c position.c prompt.c search.c signal.c \
+	tags.c ttyin.c version.c -lcurses
+
+lesskey :: lesskey.1 lesskey.c version.c
+
+lessecho :: lessecho.c version.c
+
+defines.h: configure configure.in Makefile.in acconfig.h
+	$(*:O=1:P=A) --prefix=1
+
+:: COPYING ChangeLog NEWS INSTALL README Makefile stamp-h.in \
+	defines.ds defines.h.in defines.h.top defines.o2 defines.o9 defines.wn \
+	Makefile.aut Makefile.dsb Makefile.dsg Makefile.dsm Makefile.o2e \
+	Makefile.o9c Makefile.o9u Makefile.wnb Makefile.wnm install.sh \
+	install-sh mkfuncs.awk mkhelp.c regexp.c mkinstalldirs less.hlp \
+	pckeys.h regexp.h
+
+less.1		:LINK:	less.nro
+lesskey.1	:LINK:	lesskey.nro

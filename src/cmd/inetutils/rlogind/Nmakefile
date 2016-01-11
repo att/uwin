@@ -1,0 +1,5 @@
+include "../inetutils.mk"
+
+$(ETCDIR) :INSTALLDIR: in.rlogind
+
+in.rlogind :: rlogind.c -linetutils rlogind.8

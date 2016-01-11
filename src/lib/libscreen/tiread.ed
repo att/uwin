@@ -1,0 +1,165 @@
+CAP=$1 TMP=t$$ OUT=tiread.c
+
+trap "status=\$?; rm -f $TMP.*; exit \$status" 0 1 2
+
+cat > $TMP.CC <<'!'
+#include	"termhdr.h"
+
+/*
+**	Getting terminal description from a terminfo data base
+*/
+
+#define getshort(p)	((p[0]&0377)==0377 ? -1 : (p[0]&0377)+((p[1]&0377)*256))
+
+#if __STD_C
+int _tiread(TERMCAP* tc, char* term)
+#else
+int _tiread(tc,term)
+TERMCAP	*tc;
+char	*term;
+#endif
+{
+	register int	n, namelen, boolnum, intnum, strsnum, strssiz;
+	int		tifd;
+	TERMCAP		*savtc;
+	char		buf[TCSIZE], *ti, *cp, **ss, **se;
+	bool		*bs, *be;
+	short		*ns, *ne;
+	char		*tipath = TIBASE;
+
+	if(!term )
+		return ERR;
+
+	/* get the base of terminfo */
+	if(!(ti = getenv("TERMINFO")) )
+		ti = tipath;
+	else if(strcmp(ti,"unknown") == 0 || strcmp(ti,"/unknown") == 0)
+		return ERR;
+
+	for(;;)
+	{
+		/* construct the path name to the data file */
+		strcpy(buf,ti);
+		cp = buf + strlen(buf);
+		if(*(cp-1) != '/')
+			*cp++ = '/';
+		*cp++ = term[0];
+		*cp++ = '/';
+		strcpy(cp,term);
+
+		/* try opening data file */
+		if((tifd = open(buf,0)) >= 0)
+			break;
+		else if(ti == tipath)
+			return ERR;
+		else	ti = tipath;
+	}
+
+	/* read it */
+	n = read(tifd,buf,sizeof(buf));
+	close(tifd);
+	if(n <= 0 || n >= sizeof(buf))
+		return ERR;
+
+	/* go pass header */
+	cp = buf; cp += 2;
+
+	/* get various numbers */
+	namelen = getshort(cp); cp += 2;
+	boolnum = getshort(cp); cp += 2;
+	intnum  = getshort(cp); cp += 2;
+	strsnum = getshort(cp); cp += 2;
+	strssiz = getshort(cp); cp += 2;
+
+	if(_f_unused)
+		ti = tc->_area = &(_f_strs[0]);
+	else if(!(ti = tc->_area = (char *) malloc(strssiz+namelen+1)) )
+		return ERR;
+
+	/* set names of terminal */
+	tc->_names = ti;
+	for(; namelen > 0; --namelen)
+		*ti++ = *cp++;
+
+	/* set capabilities */
+	savtc = cur_tc;
+	cur_tc = tc;
+/*---BOOLS---*/
+
+	for(; boolnum > 0; --boolnum)
+	{
+		n = (int) (*cp++);
+		if(bs <= be)
+			*bs++ = n;
+	}
+
+	/* force even alignment */
+	if(((unsigned int) cp) & 1)
+		++cp;
+
+/*---NUMS---*/
+
+	for(; intnum > 0; --intnum)
+	{
+		n = getshort(cp); cp += 2;
+		if(ns <= ne)
+			*ns++ = n;
+	}
+
+/*---STRS---*/
+
+	for(; strsnum > 0; --strsnum)
+	{
+		n = getshort(cp); cp += 2;
+		if(ss <= se)
+			*ss++ = n == -1 ? NIL(char*) : ti+n;
+	}
+	for(; strssiz > 0; --strssiz)
+		*ti++ = *cp++;
+
+	cur_tc = savtc;
+	return OK;
+}
+!
+
+ed - <<!
+E $CAP
+g/^#.*/d
+g/^[a-zA-Z0-9_]*,	*"/s///
+g/".*/s///
+/--- begin bool/
+1,.d
+1s/.*/	bs = \&(T_&);/
+/--- end bool/
+-2
+2,.d
+2s/.*/	be = \&(T_&);/
+1,2w $TMP.bool
+/--- begin num/
+1,.d
+1s/.*/	ns = \&(T_&);/
+/--- end num/
+-2
+2,.d
+2s/.*/	ne = \&(T_&);/
+1,2w $TMP.num
+/--- begin str/
+1,.d
+1s/.*/	ss = \&(T_&);/
+/--- end str/
+-2
+2,.d
+2s/.*/	se = \&(T_&);/
+1,2w $TMP.str
+E $TMP.CC
+/---BOOLS---/
+.r $TMP.bool
+/---NUMS---/
+.r $TMP.num
+/---STRS---/
+.r $TMP.str
+w $TMP.c
+q
+!
+
+cmp -s $TMP.c $OUT || mv $TMP.c $OUT

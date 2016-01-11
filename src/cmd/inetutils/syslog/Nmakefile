@@ -1,0 +1,7 @@
+:PACKAGE: ast
+
+include "../inetutils.mk"
+
+syslog :: syslog.c -linetutils syslog.1
+
+:: Makefile.in

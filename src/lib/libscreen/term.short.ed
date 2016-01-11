@@ -1,0 +1,71 @@
+CAP=$1 TMP=t$$ OUT=term.short.h
+
+trap "status=\$?; rm -f $TMP.*; exit \$status" 0 1 2
+
+# Create short names for terminfo/termcap entries
+
+ed - <<!
+E $CAP
+g/^#.*/d
+/--- begin bool/
+1,.d
+/--- end bool/
+.,\$d
+1,\$s/"/cur_tc->_b._/
+1,\$s/".*//
+1,\$s/,/	/
+1,\$s/^/#define /
+w $TMP.bool
+q
+!
+
+ed - <<!
+E $CAP
+g/^#.*/d
+/--- begin num/
+1,.d
+/--- end num/
+.,\$d
+1,\$s/"/cur_tc->_n._/
+1,\$s/".*//
+1,\$s/,/	/
+1,\$s/^/#define /
+w $TMP.num
+q
+!
+
+ed - <<!
+E $CAP
+g/^#.*/d
+/--- begin str/
+1,.d
+/--- end str/
+.,\$d
+1,100s/"/cur_tc->_s1._/
+101,200s/"/cur_tc->_s2._/
+201,\$s/"/cur_tc->_s3._/
+1,\$s/".*//
+1,\$s/,/	/
+1,\$s/^/#define /
+w $TMP.str
+q
+!
+
+cat $TMP.bool $TMP.num $TMP.str > $TMP.long
+
+ed - <<!
+E $TMP.long
+g/.*->_b./s///
+g/^_.*/s/_.*/#define T&		cur_tc->_b.&/
+g/.*->_n./s///
+g/^_.*/s/_.*/#define T&		cur_tc->_n.&/
+g/.*->_s1./s///
+g/^_.*/s/_.*/#define T&		cur_tc->_s1.&/
+g/.*->_s2./s///
+g/^_.*/s/_.*/#define T&		cur_tc->_s2.&/
+g/.*->_s3./s///
+g/^_.*/s/_.*/#define T&		cur_tc->_s3.&/
+w $TMP.h
+!
+
+cmp -s $TMP.h $OUT || mv $TMP.h $OUT

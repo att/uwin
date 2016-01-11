@@ -1,0 +1,201 @@
+:PACKAGE: --target-prefix=@ X11
+
+:YACCPLUSPLUS:
+
+ID =			groff
+VERSION =		1.19.3
+
+HAVE_CONFIG_H ==	1
+__GETOPT_PREFIX ==	$(ID)_
+
+.SOURCE.h : src/include
+
+.SOURCE : src/roff/groff src/roff/nroff src/roff/troff src/preproc/eqn \
+	src/preproc/grn src/preproc/html src/preproc/pic src/preproc/preconv \
+	src/preproc/refer src/preproc/soelim src/preproc/tbl \
+	src/libs/libbib src/libs/libdriver src/libs/libgroff src/libs/libxutil \
+	src/utils/addftinfo src/utils/afmtodit src/utils/hpftodit \
+	src/utils/indxbib src/utils/lkbib src/utils/lookbib \
+	src/utils/pfbtops src/utils/tfmtodit src/utils/xtotroff \
+	src/devices/grodvi src/devices/grolbp src/devices/grops \
+	src/devices/grolj4 src/devices/grotty src/devices/grohtml \
+	man tmac contrib/hdtbl contrib/mm contrib/mom contrib/pdfmark
+
+addftinfo :: addftinfo.man addftinfo.cpp guess.cpp -l$(ID)
+
+afmtodit :: afmtodit.pl
+
+eqn :: eqn.man box.cpp delim.cpp src/preproc/eqn/lex.cpp limit.cpp list.cpp \
+	src/preproc/eqn/main.cpp mark.cpp other.cpp over.cpp pile.cpp \
+	script.cpp special.cpp sqrt.cpp text.cpp eqn_tab.y -l$(ID)
+
+$(ID) :: groff.man ditroff.man groff_char.man groff_diff.man groff_font.man \
+	groff_out.man groff_tmac.man roff.man \
+	groff_man.man=5 groff_mdoc.man=5 groff_me.man=5 groff_ms.man=5 \
+	groff_trace.man=5 groff_www.man=5 \
+	groff.cpp pipeline.c -l$(ID)
+
+grn :: grn.man src/preproc/grn/main.cpp hdb.cpp hgraph.cpp hpoint.cpp -l$(ID)
+
+grodvi :: grodvi.man dvi.cpp -l$(ID)-driver -l$(ID)
+
+grolbp :: grolbp.man lbp.cpp -l$(ID)-driver -l$(ID)
+
+grolj4 :: grolj4.man lj4_font.man lj4.cpp -l$(ID)-driver -l$(ID)
+
+grops :: grops.man ps.cpp psrm.cpp -l$(ID)-driver -l$(ID)
+
+grotty :: tty.cpp -l$(ID)-driver -l$(ID)
+
+hpftodit :: hpftodit.man hpftodit.cpp hpuni.cpp -l$(ID)
+
+indxbib :: indxbib.man indxbib.cpp signal.c -lbib -l$(ID)
+
+lkbib :: lkbib.man lkbib.cpp -lbib -l$(ID)
+
+lookbib :: lookbib.man lookbib.cpp -lbib -l$(ID)
+
+pfbtops :: pfbtops.man pfbtops.c -l$(ID)
+
+pic :: src/preproc/pic/main.cpp src/preproc/pic/common.cpp \
+	src/preproc/pic/lex.cpp object.cpp tex.cpp troff.cpp \
+	pic_tab.y -l$(ID)
+
+post-grohtml :: html-table.cpp html-text.cpp output.cpp \
+	post-html.cpp -l$(ID)-driver -l$(ID)
+
+pre-grohtml :: pre-html.cpp pushback.cpp -l$(ID)
+
+preconv :: preconv.man preconv.cpp -l$(ID)
+
+refer :: refer.man command.cpp label.y ref.cpp refer.cpp token.cpp -lbib -l$(ID)
+
+soelim :: soelim.cpp -l$(ID)
+
+tbl :: src/preproc/tbl/main.cpp table.cpp -l$(ID)
+
+tfmtodit :: tfmtodit.man tfmtodit.cpp -l$(ID)
+
+troff :: column.cpp dictionary.cpp div.cpp env.cpp src/roff/troff/input.cpp \
+	majorminor.cpp mtsm.cpp node.cpp number.cpp reg.cpp \
+	-l$(ID)
+
+xtotroff :: xtotroff.man xtotroff.c -lxutil -lXt -l$(ID)
+
+$(ID) :LIBRARY: \
+	assert.cpp change_lf.cpp cmap.cpp color.cpp \
+	cset.cpp device.cpp errarg.cpp error.cpp fatal.cpp filename.cpp \
+	fmod.c font.cpp fontfile.cpp geometry.cpp getcwd.c getopt.c \
+	getopt1.c glyphuni.cpp htmlhint.cpp hypot.cpp iftoa.c \
+	invalid.cpp itoa.c lf.cpp lineno.cpp localcharset.c \
+	macropath.cpp matherr.c maxfilename.cpp maxpathname.cpp \
+	mksdir.cpp mkstemp.cpp nametoindex.cpp new.cpp paper.cpp \
+	prime.cpp progname.c ptable.cpp putenv.c quotearg.c \
+	relocate.cpp relocate.cpp.orig searchpath.cpp spawnvp.c \
+	strcasecmp.c strerror.c string.cpp strncasecmp.c strsave.cpp \
+	strtol.c symbol.cpp tmpfile.cpp tmpfile.cpp.orig tmpname.cpp \
+	unicode.cpp uniglyph.cpp uniuni.cpp version.cpp
+
+$(ID)-driver :LIBRARY: src/libs/libdriver/input.cpp printer.cpp
+
+bib :LIBRARY: src/libs/libbib/common.cpp index.cpp linear.cpp map.c search.cpp
+
+xutil :LIBRARY: DviChar.c XFontName.c xmalloc.c
+
+.SOURCE : tmac
+
+pnmtops_nosetpage = pnmtops
+
+$(LIBDIR)/$(ID) :INSTALLDIR: eign
+
+$(LIBDIR)/$(ID)/tmac :INSTALLDIR: man.tmac mandoc.tmac andoc.tmac \
+	an-old.tmac an-ext.tmac ms.tmac me.tmac mdoc.tmac pic.tmac \
+	a4.tmac papersize.tmac 62bit.tmac ec.tmac safer.tmac trace.tmac \
+	ps.tmac psold.tmac pspic.tmac psatk.tmac dvi.tmac tty.tmac \
+	tty-char.tmac latin1.tmac latin2.tmac latin5.tmac latin9.tmac \
+	cp1047.tmac unicode.tmac X.tmac Xps.tmac lj4.tmac lbp.tmac \
+	html.tmac html-end.tmac devtag.tmac europs.tmac composite.tmac \
+	eqnrc troffrc troffrc-end trans.tmac hyphen.us hyphenex.us \
+	fr.tmac hyphen.fr sv.tmac hyphen.sv de.tmac den.tmac hyphen.det \
+	hyphen.den hyphenex.det s.tmac an.tmac man.local mdoc.local \
+	m.tmac mm.tmac mmse.tmac mom.tmac mse.tmac pdfmark.tmac spdf.tmac \
+	mwww.tmac
+
+$(LIBDIR)/$(ID)/tmac :INSTALLDIR: e.tmac doc.tmac doc-old.tmac \
+	doc-common doc-ditroff doc-nroff doc-syms mdoc.local \
+	hdmisc.tmac hdtbl.tmac om.tmac
+		sed -f $("strip.sed":T=F) $(>) > 1.$(tmp).1
+		if	cmp -s 1.$(tmp).1 $(<)
+		then	rm -f 1.$(tmp).1
+		else	mv 1.$(tmp).1 $(<)
+		fi
+
+$(LIBDIR)/$(ID)/tmac :INSTALLDIR: www.tmac
+		sed -e "s;@PNMTOPS_NOSETPAGE@;$(pnmtops_nosetpage);g" $(>) > 1.$(tmp).1
+		if	cmp -s 1.$(tmp).1 $(<)
+		then	rm -f 1.$(tmp).1
+		else	mv 1.$(tmp).1 $(<)
+		fi
+
+$(LIBDIR)/$(ID)/tmac/mdoc :INSTALLDIR: doc-common doc-ditroff doc-nroff doc-syms
+		sed -f $("strip.sed":T=F) $(>) > 1.$(tmp).1
+		if	cmp -s 1.$(tmp).1 $(<)
+		then	rm -f 1.$(tmp).1
+		else	mv 1.$(tmp).1 $(<)
+		fi
+
+$(LIBDIR)/$(ID)/tmac/mm :INSTALLDIR: mm/0.MT mm/4.MT mm/5.MT mm/locale mm/ms.cov \
+	mm/se_locale mm/se_ms.cov
+
+:FONT: ascii \
+	B BI I R
+
+:FONT: cp1047 \
+	B BI I R
+
+:FONT: dvi \
+	B BI CW CWI EX H HB HI I MI R S SA SB
+
+:FONT: html \
+	R I B BI CR CI CB CBI S
+
+:FONT: latin1 \
+	B BI I R
+
+:FONT: lbp \
+	HB HBI HI HR TB TBI TI TR
+
+:FONT: lj4 \
+	AB ABI AI AR ALBB ALBR AOB AOI AOR CB CBI CI CR GB GBI GI \
+	GR LGB LGI LGR OB OBI OI OR TB TBI TI TR TNRB TNRBI TNRI \
+	TNRR UB UBI UI UR UCB UCBI UCI UCR CLARENDON CORONET \
+	MARIGOLD S SYMBOL WINGDINGS
+
+:FONT: ps download prologue text.enc \
+	AB ABI AI AR BMB BMBI BMI BMR CB CBI CI CR EURO HB HBI HI HNB \
+	HNBI HNI HNR HR NB NBI NI NR PB PBI PI PR S SS TB TBI TI TR \
+	ZCMI ZD ZDR
+
+:FONT: utf8 \
+	B BI I R
+
+:FONT: X100 \
+	CB CBI CI CR HB HBI HI HR NB NBI NI NR S TB TBI TI TR
+
+:FONT: X100-12 \
+	CB CBI CI CR HB HBI HI HR NB NBI NI NR S TB TBI TI TR
+
+:FONT: X75 \
+	CB CBI CI CR HB HBI HI HR NB NBI NI NR S TB TBI TI TR
+
+:FONT: X75-12 \
+	CB CBI CI CR HB HBI HI HR NB NBI NI NR S TB TBI TI TR
+
+:: BUG-REPORT COPYING ChangeLog ChangeLog.115 ChangeLog.116 ChangeLog.117 \
+	ChangeLog.118 FDL INSTALL INSTALL.gen LICENSES MANIFEST MORE.STUFF \
+	Makefile Makefile.ccpg Makefile.comm Makefile.cpg Makefile.dev \
+	Makefile.in Makefile.init Makefile.lib Makefile.man Makefile.old \
+	Makefile.sub NEWS PROBLEMS PROJECTS README README.MinGW REVISION \
+	TODO VERSION aclocal.m4 arch configure configure.ac contrib doc \
+	font gendef.sh install-sh m4 man mdate.sh mkinstalldirs stamp-h \
+	stamp-h.in test-groff test-groff.in tmac

@@ -1,0 +1,7 @@
+include ../../fvwm.mk
+
+BINDIR = $(LIBEXECDIR)
+
+:ALL:
+
+$(GTK:+FvwmGtk) :: FvwmGtk.c dialog.c expand.c gtkpixmapmenuitem.c menu.c windowlist.c

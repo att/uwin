@@ -1,0 +1,17 @@
+CCFLAGS = $(CC.OPTIMIZE)
+
+awk :: awk.1 ytab.y lex.c b.c main.c proctab.c parse.c lib.c run.c tran.c -lm
+
+ytab.y :LINK: awkgram.y
+
+nawk :LINK: awk 
+
+proctab.c : maketab
+	$(*:P=A) > $(<)
+
+:INSTALLDIR: maketab
+
+maketab	:: maketab.c 
+
+:: LICENSE README FIXES makefile missing95.c buildmac buildwin.bat \
+	ytab.h ytab.c proctab.c

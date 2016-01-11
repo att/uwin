@@ -1,0 +1,8 @@
+:PACKAGE:		X11
+
+ID =			LessTif
+VERSION =		0.95.0
+INSTALLROOT :=		$(INSTALLROOT)/X11
+
+HAVE_CONFIG_H ==	1
+MWM_DDIR ==		"/usr/lib/X11/mwm"

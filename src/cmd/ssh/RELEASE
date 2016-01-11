@@ -1,0 +1,1 @@
+09-09-24 config.h change to use bsd compatible strmode instead of libast strmode

@@ -1,0 +1,92 @@
+# mkmsvcrtlib(1) microsoft iso image info for msvcrt.lib #
+# @(#)msvcrt.tab (at&t research) 2011-05-05 #
+
+extract=(
+	name=msvcrt
+	package='Windows Driver Kit Version 7.1.0'
+	url=http://download.microsoft.com/download/4/A/2/4A25C7D5-EFBE-4182-B6A9-AE6850409A78/GRMWDK_EN_7600_1.ISO
+	size=301056000
+	update=2011-03-24
+	lib=(
+		(
+			arch=win32.i386
+			bits=32
+			cab=wdk/libs_x86fre_cab001.cab
+			file=_msvcrt.lib_00025
+		)
+		(
+			arch=win32.i386-64
+			bits=64
+			cab=wdk/libs_x64fre_cab001.cab
+			file=_msvcrt.lib_00024
+		)
+		(
+			arch=win32.ia64
+			cab=wdk/libs_ia64fre_cab001.cab
+			file=_msvcrt.lib_00024
+		)
+	)
+)
+
+function msvcrt_adjust # name arch org lib
+{
+	typeset name=$1 arch=$2 org=$3 lib=$4
+	typeset bits d mach
+	integer n
+
+	trap "rm -f ?.lib $name.lib *.@(c|obj|sym)" EXIT
+	cp $org o.lib
+	fix=${org%.org}.fix
+	case $arch in
+	win32.i386)
+		mach=X86
+		bits=--target=32
+		for d in $(lib -nologo -machine:$mach -list $org | egrep '\\(chandler4gs\.obj|ftol2c\.obj)')
+		do	ar --delete $bits o.lib "$d"
+			(( n++ ))
+		done
+		(( n >= 2 )) || return
+		print "/* xp vintage $arch $name.dll compatibility functions */
+
+unsigned char**   _mbctype;
+
+__declspec(dllimport) int _except_handler3(void*, void*, void*, void*); 
+
+int _except_handler4(void* a1, void* a2, void* a3, void* a4)
+{
+	return _except_handler3(a1, a2, a3, a4);
+}
+
+__declspec(dllimport) long _ftol(double); 
+
+long _ftol2(double n)
+{
+	return _ftol(n);
+}
+
+long _ftol2_sse(double n)
+{
+	return _ftol(n);
+}" > $mach.c
+		ncc $bits -c -o $mach.obj $mach.c || return
+		ar --create --replace $bits a.lib $mach.obj || return
+		print $'_environ DATA char**\n__environ DATA char**' > $name.sym
+		mkimplib $bits $name.sym || return
+		ar --create --replace $bits n.lib a.lib o.lib $name.lib || return
+		;;
+	win32.i386-64)
+		mach=X64
+		bits=--target=64
+		print $'_environ DATA char**\n__environ DATA char**' > $name.sym
+		mkimplib $bits $name.sym || return
+		ar --create --replace $bits n.lib o.lib $name.lib || return
+		;;
+	*)	print -u2 architecture $arch not supported
+		return
+		;;
+	esac
+	if	! cmp -s n.lib $lib
+	then	[[ -f $lib ]] && mv $lib ${lib%.lib}.old
+		mv n.lib $lib || return
+	fi
+}

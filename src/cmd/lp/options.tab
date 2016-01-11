@@ -1,0 +1,142 @@
+short	Orientation	Orientation of the paper
+{
+DMORIENT_PORTRAIT	Portrait
+DMORIENT_LANDSCAPE	Landscape
+}
+
+short	PaperSize	Size of the paper
+{
+DMPAPER_LETTER			Letter, 8 1/2- by 11-inches
+DMPAPER_LEGAL			Legal, 8 1/2- by 14-inches
+DMPAPER_A4			A4 Sheet, 210- by 297-millimeters
+DMPAPER_CSHEET			C Sheet, 17- by 22-inches
+DMPAPER_DSHEET			D Sheet, 22- by 34-inches
+DMPAPER_ESHEET			E Sheet, 34- by 44-inches
+DMPAPER_LETTERSMALL		Letter Small, 8 1/2- by 11-inches
+DMPAPER_TABLOID			Tabloid, 11- by 17-inches
+DMPAPER_LEDGER			Ledger, 17- by 11-inches
+DMPAPER_STATEMENT		Statement, 5 1/2- by 8 1/2-inches
+DMPAPER_EXECUTIVE		Executive, 7 1/4- by 10 1/2-inches
+DMPAPER_A3			A3 sheet, 297- by 420-millimeters
+DMPAPER_A4SMALL			A4 small sheet, 210- by 297-millimeters
+DMPAPER_A5			A5 sheet, 148- by 210-millimeters
+DMPAPER_B4			B4 sheet, 250- by 354-millimeters
+DMPAPER_B5			B5 sheet, 182- by 257-millimeter paper
+DMPAPER_FOLIO			Folio, 8 1/2- by 13-inch paper
+DMPAPER_QUARTO			Quarto, 215- by 275-millimeter paper
+DMPAPER_10X14			10- by 14-inch sheet
+DMPAPER_11X17			11- by 17-inch sheet
+DMPAPER_NOTE			Note, 8 1/2- by 11-inches
+DMPAPER_ENV_9			#9 Envelope, 3 7/8- by 8 7/8-inches
+DMPAPER_ENV_10			#10 Envelope, 4 1/8- by 9 1/2-inches
+DMPAPER_ENV_11			#11 Envelope, 4 1/2- by 10 3/8-inches
+DMPAPER_ENV_12			#12 Envelope, 4 3/4- by 11-inches
+DMPAPER_ENV_14			#14 Envelope, 5- by 11 1/2-inches
+DMPAPER_ENV_DL			DL Envelope, 110- by 220-millimeters
+DMPAPER_ENV_C5			C5 Envelope, 162- by 229-millimeters
+DMPAPER_ENV_C3			C3 Envelope, 324- by 458-millimeters
+DMPAPER_ENV_C4			C4 Envelope, 229- by 324-millimeters
+DMPAPER_ENV_C6			C6 Envelope, 114- by 162-millimeters
+DMPAPER_ENV_C65			C65 Envelope, 114- by 229-millimeters
+DMPAPER_ENV_B4			B4 Envelope, 250- by 353-millimeters
+DMPAPER_ENV_B5			B5 Envelope, 176- by 250-millimeters
+DMPAPER_ENV_B6			B6 Envelope, 176- by 125-millimeters
+DMPAPER_ENV_ITALY		Italy Envelope, 110- by 230-millimeters
+DMPAPER_ENV_MONARCH		Monarch Envelope, 3 7/8- by 7 1/2-inches
+DMPAPER_ENV_PERSONAL		6 3/4 Envelope, 3 5/8- by 6 1/2-inches
+DMPAPER_FANFOLD_US		US Std Fanfold, 14 7/8- by 11-inches
+DMPAPER_FANFOLD_STD_GERMAN	German Std Fanfold, 8 1/2- by 12-inches
+DMPAPER_FANFOLD_LGL_GERMAN	German Legal Fanfold, 8 1/2- by 13-inches
+}
+
+short	PaperLength	Length of the paper in tenths of a millimeter
+short	PaperWidth	Width of the paper in tenths of a millimeter
+short	Scale		Scaling factor in %
+short	Copies		Number of copies
+short	DefaultSource	Default paper source
+{
+DMBIN_ONLYONE		Only one
+DMBIN_LOWER		Lower paper bin
+DMBIN_MIDDLE		Middle paper bin
+DMBIN_MANUAL		Manual paper feed
+DMBIN_ENVELOPE		Envelope bin
+DMBIN_ENVMANUAL		Manual envelope feed
+DMBIN_AUTO 		Automatic
+DMBIN_TRACTOR		Tractor
+DMBIN_SMALLFMT		Small paper format bin
+DMBIN_LARGEFMT 		Large paper format bin
+DMBIN_LARGECAPACITY	Large capacity
+DMBIN_CASSETTE		Cassette
+DMBIN_FORMSOURCE 	Form source
+}
+
+short	PrintQuality	Printer resolution
+{
+DMRES_HIGH		High resolution
+DMRES_MEDIUM		Medium resolution
+DMRES_LOW		Low resolution
+DMRES_DRAFT		Draft quality
+*
+}
+
+short	Color		Switch between color and  monochrome on color printers
+{
+DMCOLOR_COLOR		Color mode
+DMCOLOR_MONOCHROME 	Monochrome mode
+}
+
+short	Duplex		Select double-sided printing
+{
+DMDUP_SIMPLEX		Do not print double-sided
+DMDUP_HORIZONTAL	Horizontal orientation
+DMDUP_VERTICAL 		Vertical orientation
+}
+
+short	YResolution	Y-resolution in DPI of the printer
+short	TTOption	Specify how TrueType fonts are printed
+{
+DMTT_BITMAP	Prints TrueType fonts as graphics
+DMTT_DOWNLOAD	Downloads TrueType fonts as soft fonts
+DMTT_SUBDEV	Substitute device fonts for TrueType fonts
+}
+
+short	Collate		Specify collation when printing multiple copies
+{
+DMCOLLATE_TRUE	Collate when printing multiple copies
+DMCOLLATE_FALSE	Do not collate when printing multiple copies
+}
+
+DWORD	ICMMethod	Specify how ICM is handled
+{
+DMICMMETHOD_NONE	Specifies that ICM is disabled
+DMICMMETHOD_SYSTEM	Specifies that ICM is handled by Windows
+DMICMMETHOD_DRIVER	Specifies that ICM is handled by the device driver
+DMICMMETHOD_DEVICE	Specifies that ICM is handled by the destination device
+*
+}
+
+DWORD	ICMIntent	Specify color matching method
+{
+DMICM_SATURATE		Color matching should optimize for color saturation
+DMICM_CONTRAST		Color matching should optimize for color contrast
+DMICM_COLORIMETRIC	Color matching should optimize to match the exact color requested
+*
+}
+
+DWORD	MediaType	Specify type of media being printed on
+{
+DMMEDIA_STANDARD	Plain paper
+DMMEDIA_GLOSSY		Glossy paper
+DMMEDIA_TRANSPARENCY	Transparent film
+*
+}
+
+DWORD	DitherType	Specify how dithering is to be done
+{
+DMDITHER_NONE		No dithering
+DMDITHER_COARSE		Dithering with a coarse brush
+DMDITHER_FINE		Dithering with a fine brush
+DMDITHER_LINEART	Line art dithering
+DMDITHER_GRAYSCALE	Device does grayscaling
+*
+}

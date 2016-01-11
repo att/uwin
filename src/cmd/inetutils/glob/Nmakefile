@@ -1,0 +1,7 @@
+include "../inetutils.mk"
+
+glob :LIBRARY: glob.c fnmatch.c
+
+
+::	CVS ChangeLog Makefile.ami Makefile.in SCOPTIONS SMakefile configure \
+	configure.bat configure.in

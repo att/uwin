@@ -1,0 +1,1205 @@
+#!@PERL@
+
+# Filter this script to pod2man to get a man page:
+#   pod2man -c "FVWM Utilities" fvwm-menu-headlines | nroff -man | less -e
+
+require 5.002;
+use strict;
+use vars qw($siteInfo @smonths @lmonths %smonthHash %lmonthHash);
+use vars qw($entityMap $errorMenuContent);
+use Getopt::Long;
+use Socket;
+use POSIX qw(strftime);
+use Time::Local;
+
+my $version = "@VERSION@";
+
+local $siteInfo = {
+	'freshmeat' => {
+		'name' => "FreshMeat",
+		'host' => "freshmeat.net",
+		'path' => "/backend/recentnews.txt",
+		'func' => \&processFreshMeat,
+		'flds' => 'headline, date, url',
+	},
+	'slashdot' => {
+		'name' => "Slashdot",
+		'host' => "slashdot.org",
+		'path' => "/slashdot.xml",
+		'func' => \&processSlashdot,
+		'flds' => 'title, url, time, author, department, topic, comments, section, image',
+	},
+	'linuxtoday' => {
+		'name' => "LinuxToday",
+		'host' => "linuxtoday.com",
+		'path' => "/lthead.txt",
+		'func' => \&processLinuxToday,
+		'flds' => 'headline, url, date',
+	},
+	# Segfault is empty now
+	'old-segfault' => {
+		'name' => "Old-Segfault",
+		'host' => "segfault.org",
+		'path' => "/stories.txt",
+		'func' => \&processSegfault,
+		'flds' => 'headline, url, date, author_name, author_email, type',
+	},
+	# AppWatch was closed by ZDNet
+	'old-appwatch' => {
+		'name' => "Old-AppWatch",
+		'host' => "www.appwatch.com",
+		'path' => "/appwatch.rdf",
+		'func' => \&processPoorRdf,
+		'flds' => 'title, link, description',
+	},
+	'linuxapps' => {
+		'name' => "LinuxApps",
+		'host' => "www.linuxapps.com",
+		'path' => "/backend/linux_basic.txt",
+		'func' => \&processLinuxApps,
+		'flds' => 'headline, date, url',
+	},
+	# JustLinux does not seem to exist any more
+	'old-justlinux' => {
+		'name' => "Old-JustLinux",
+		'host' => "www.justlinux.com",
+		'path' => "/backend/discussion.rdf",
+		'func' => \&processPoorRdf,
+		'flds' => 'title, link',
+	},
+	'daemonnews' => {
+		'name' => "DaemonNews",
+		'host' => "daily.daemonnews.org",
+		'path' => "/ddn.rdf.php3",
+		'func' => \&processPoorRdf,
+		'flds' => 'title, link',
+	},
+	'gnome-news' => {
+		'name' => "GNOME-News",
+		'host' => "news.gnome.org",
+		'path' => "/rdf",
+		'func' => \&process_GNOME_KDE_News,
+		'flds' => 'title, link',
+	},
+	'kde-news' => {
+		'name' => "KDE-News",
+		'host' => "news.kde.org",
+		'path' => "/rdf",
+		'func' => \&process_GNOME_KDE_News,
+		'flds' => 'title, link',
+	},
+	# FreeKDE is temporarily (?) off
+	'old-freekde' => {
+		'name' => "Old-FreeKDE",
+		'host' => "freekde.org",
+		'path' => "/freekdeorg.rdf",
+		'func' => \&processFreeKDE,
+		'flds' => 'title, link',
+	},
+	'rootprompt' => {
+		'name' => "RootPrompt",
+		'host' => "rootprompt.org",
+		'path' => "/rss/",
+		'func' => \&processRootPrompt,
+		'flds' => 'title, link, description',
+	},
+	'newsforge' => {
+		'name' => "NewsForge",
+		'host' => "newsforge.com",
+		'path' => "/newsforge.xml",
+		'func' => \&processSlashdot,
+		'flds' => 'title, url, time, author, department, topic, comments, section, image',
+	},
+	'kuro5hin' => {
+		'name' => "Kuro5hin",
+		'host' => "www.kuro5hin.org",
+		'path' => "/backend.rdf",
+		'func' =>  \&processKuro5hin,
+		'flds' => 'title, link, description',
+	},
+	'bbspot' => {
+		'name' => "BBSpot",
+		'host' => "bbspot.com",
+		'path' => "/bbspot.rdf",
+		'func' => \&processPoorRdf,
+		'flds' => 'title, link',
+	},
+	'linuxfr' => {
+		'name' => "LinuxFr",
+		'host' => "linuxfr.org",
+#		'path' => "/short.php3",
+		'path' => "/backend.rss",
+		'func' => \&processLinuxFr,
+#		'flds' => 'headline, url, author_name, author_email, type',
+		'flds' => 'title, link',
+	},
+	'thinkgeek' => {
+		'name' => "ThinkGeek",
+		'host' => "www.thinkgeek.com",
+		'path' => "/thinkgeek.rdf",
+		'func' => \&processPoorRdf,
+		'flds' => 'title, link',
+	},
+	'cnn' => {
+		'name' => "CNN",
+		'host' => "www.cnn.com",
+		'path' => "/desktop/content.html",
+		'func' => \&processCNN,
+		'flds' => 'headline, url',
+	},
+	# to be removed
+	'bbc-world' => {
+		'name' => "BBC-World (obsolete)",
+		'host' => "news.bbc.co.uk",
+		'path' => "/low/english/world/default.stm",
+		'func' => \&processOldBBC,
+		'flds' => 'headline, url, abstract',
+	},
+	# to be removed
+	'bbc-scitech' => {
+		'name' => "BBC-SciTech (obsolete)",
+		'host' => "news.bbc.co.uk",
+		'path' => "/low/english/sci/tech/default.stm",
+		'func' => \&processOldBBC,
+		'flds' => 'headline, url, abstract',
+	},
+	'bbc' => {
+		'name' => "BBC",
+		'host' => "news.bbc.co.uk", 'host0' => "tickers.bbc.co.uk",
+		'path' => "/tickerdata/story2.dat",
+		'func' => \&processBBC,
+		'flds' => 'story, headline, url',
+	},
+};
+
+# Site specific parsers may use these constants to convert month to unix time.
+local @smonths = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+local @lmonths = qw(January February March April May June July August September October November December);
+local (%smonthHash, %lmonthHash) = ();
+foreach (0 .. 11) { $smonthHash{$smonths[$_]} = $_; $lmonthHash{$lmonths[$_]} = $_; }
+
+my $TIMEFIELDS_DATE_TIME = 1;
+my $TIMEFIELDS_ONLY_DATE = 2;
+my $TIMEFIELDS_NONE = 3;
+
+my $home  = $ENV{'HOME'} || '/tmp';
+my $fvwmUserDir = $ENV{'FVWM_USERDIR'} || "$home/.fvwm";
+$fvwmUserDir = $home unless -d $fvwmUserDir;
+my $workHome = "$fvwmUserDir/.fvwm-menu-headlines";
+
+require "$workHome/extension.pl" if -r "$workHome/extension.pl";
+
+my $info  = undef;
+my $defaultSite = 'freshmeat';
+my $site  = undef;
+my $name  = undef;
+my $title = undef;
+my $itemF = '%h\t%[(%Y-%m-%d %H:%M)]';
+my $execF = q(netscape -remote 'openURL(%u, new-window)' || netscape '%u');
+my $commF = undef;
+my $iconT = '';
+my $iconI = '';
+my $iconH = '';
+my $iconE = '';
+my $wmIcons = 0;
+
+my $proxy = undef;
+my $port  = 80;
+my $frontpage = undef;
+
+my @time  = localtime();
+my $menuFile = undef;
+my $fakeFile = undef;
+my $timeout = 20;
+my $endl = "\r\n";  # this is preferable for http sockets to "\n"
+
+GetOptions(
+	"help|h|?"  => \&showHelp,
+	"version|V" => \&showVersion,
+	"info:s"    => \$info,
+	"site=s"    => \$site,
+	"name=s"    => \$name,
+	"title=s"   => \$title,
+	"item=s"    => \$itemF,
+	"exec=s"    => \$execF,
+	"command=s"    => \$commF,
+	"icon-title=s" => \$iconT,
+	"icon-item=s"  => \$iconI,
+	"icon-home=s"  => \$iconH,
+	"icon-error=s" => \$iconE,
+	"wm-icons"  => \$wmIcons,
+	"proxy=s"   => \$proxy,
+	"frontpage:s" => \$frontpage,
+	"file:s"    => \$menuFile,
+	"fake:s"    => \$fakeFile,
+	"timeout=i" => \$timeout,
+) || wrongUsage();
+wrongUsage() if @ARGV;
+
+if (defined $info) {
+	if ($info) {
+		my $_info = $siteInfo->{lc($info)};
+		die "Unsupported site '$info'; try --info.\n" unless $_info;
+		my $host0 = $_info->{'host0'} || $_info->{'host'};
+		print
+			"Site Name:\n\t$_info->{'name'}\n",
+			"Home Page:\n\thttp://$_info->{'host'}/\n",
+			"Headlines:\n\thttp://$host0$_info->{'path'}\n",
+			"Headline fields:\n\t$_info->{'flds'}\n";
+	} else {
+		print "All supported sites:\n\t", join(", ", &getAllSiteNames()),
+			"\n\nSpecify a site name after --info to get a site headlines info.\n";
+	}
+	exit(0);
+}
+
+$site  ||= $defaultSite; $site = lc($site);
+die "Unsupported site '$site'; try --info.\n" unless exists $siteInfo->{$site};
+#$name ||= "MenuHeadlines$siteInfo->{$site}->{'name'}";
+$name  ||= $site;
+$title ||= "$siteInfo->{$site}->{'name'} Headlines";
+
+my $siteName = $siteInfo->{$site}->{'name'};
+my $siteHost = $siteInfo->{$site}->{'host'};
+my $sitePath = $siteInfo->{$site}->{'path'};
+my $siteFunc = $siteInfo->{$site}->{'func'};
+
+$commF ||= "Exec $execF";
+
+$title =~ s/\\t/\t/g;
+$itemF =~ s/\\t/\t/g;
+$commF =~ s/\\t/\t/g;
+
+if ($wmIcons) {
+	$iconT ||= "";
+	$iconI ||= "menu/information.xpm";
+	$iconH ||= "menu/home.xpm";
+	$iconE ||= "menu/choice-no.xpm";
+}
+
+my $iconTStr = $iconT? "%$iconT%": "";
+my $iconIStr = $iconI? "%$iconI%": "";
+my $iconHStr = $iconH? "%$iconH%": "";
+my $iconEStr = $iconE? "%$iconE%": "";
+
+if (defined $proxy && $proxy =~ /^(.+):(\d+)$/) {
+	$proxy = $1;
+	$port = $2;
+}
+
+# Three cases:
+#   1) no --file option or value '-' specified (STDOUT is used)
+#   2) no or empty menu file in --file specified (the default name is used)
+#   3) non-empty menu file specified (use it)
+$menuFile = undef if defined $menuFile && $menuFile eq '-';
+if ($menuFile) {
+	$menuFile =~ s:^~(/|$):$home$1:;
+	$menuFile =~ m:^(.+)/[^/]+$:; $workHome = $1 || ".";
+} elsif (defined $menuFile) {
+	$menuFile = "$workHome/$site.menu";
+}
+
+my $content = "";
+
+$content .= qq(DestroyMenu $name\n);
+$content .= qq(AddToMenu $name "$iconTStr$title" Title\n);
+local $errorMenuContent = $content;
+
+my $frontpageEntry = "";
+if (defined $frontpage) {
+	my $cmd = &expandAllWidthSpecifiers($commF, {'u' => "http://$siteHost/"});
+	$frontpageEntry = qq(+ "$iconHStr$siteName Frontpage" $cmd\n);
+	$errorMenuContent .= qq($frontpageEntry\n+ "" Nop\n);
+}
+
+$errorMenuContent .= "+ `$iconEStr<msg>` DestroyMenu $name\n";
+
+if (defined $frontpage && $frontpage !~ /^b/) {
+	$content .= qq($frontpageEntry\n+ "" Nop\n);
+}
+
+unless (defined $fakeFile) {
+	# network connection portion is pretty much stolen from 'man perlipc'
+	$siteHost = $siteInfo->{$site}->{'host0'}
+		if defined $siteInfo->{$site}->{'host0'};
+	my $host = $proxy || $siteHost;
+	my $iaddr = inet_aton($host) || &dieNet("Can't resolve host $host");
+	my $paddr = sockaddr_in($port, $iaddr);
+	my $proto = getprotobyname('tcp');
+	my $redirectDepth = 0;
+
+HTTP_CONNECTION:
+	local $SIG{ALRM} = sub { die "timeout\n"; };
+	alarm($timeout);
+	eval {
+		socket(SOCK, PF_INET, SOCK_STREAM, $proto) &&
+		connect(SOCK, $paddr)
+	} || &dieNet("Can't connect host $host");
+	alarm(0);
+	select(SOCK); $| = 1; select(STDOUT);
+
+	# do http request
+	my $httpHeaders = "$endl" .
+			"Host: $siteHost$endl" .
+			"Connection: close$endl" .
+			"User-Agent: fvwm-menu-headlines/$version$endl$endl";
+	if (defined $proxy) {
+		print SOCK "GET http://$siteHost$sitePath HTTP/1.1$httpHeaders";
+	} else {
+		print SOCK "GET $sitePath HTTP/1.1$httpHeaders";
+	}
+
+	unless (readLine() =~ m{HTTP/1\.\d (\d+) \w+}) {
+		&dieNet("Invalid HTTP response from http://$siteHost$sitePath", 0);
+	}
+	my $status = $1;
+	if ($status eq "302" && ++$redirectDepth < 5) {
+		# redirection
+		while (1) {
+			my $line = readLine();
+			$line =~ s/[\n\r]+$//s;
+			last unless $line;
+			if ($line =~ m{Location: http://\Q$siteHost\E(/.*)}i) {
+				$sitePath = $1;
+				goto HTTP_CONNECTION;
+			}
+		}
+	}
+	&dieNet("Unexpected HTTP response $status from http://$siteHost$sitePath", 0)
+		unless $status eq "200";
+
+	# skip http response headers
+	while (readLine() !~ /^\r?\n?$/s) {}
+} else {
+	if ($fakeFile) {
+		$fakeFile =~ s:^~(/|$):$home$1:;
+	} else {
+		$fakeFile = "$workHome/$site.in";
+	}
+	open(SOCK, "<$fakeFile") || &dieSys("Can't open $fakeFile");
+}
+
+my $entries = &$siteFunc;
+
+close(SOCK) || &dieNet("Error closing socket");
+
+foreach (@$entries) {
+	my $text = &expandAllWidthSpecifiers($itemF, $_);
+	my $comm = &expandAllWidthSpecifiers($commF, $_);
+	$text =~ s/"/\\"/g;
+	$content .= qq(+ "$iconIStr$text" $comm\n);
+}
+
+if (defined $frontpage && $frontpage =~ /^b/) {
+	$content .= qq(+ "" Nop\n$frontpageEntry);
+}
+
+if (defined $menuFile) {
+	unless (-d $workHome) {
+		mkdir($workHome, 0775) || &dieSys("Can't create $workHome");
+	}
+	open(MENU_FILE, ">$menuFile") || &dieSys("Can't open $menuFile");
+	print MENU_FILE $content;
+	close(MENU_FILE) || &dieSys("Can't close $menuFile");
+} else {
+	print $content;
+}
+
+exit();
+
+# ---------------------------------------------------------------------------
+
+sub readLine {
+	local $SIG{ALRM} = sub { die "timeout\n"; };
+	alarm($timeout);
+	my $line = eval { <SOCK> };
+	if ($@) {
+		&dieNet("Timeout of $timeout seconds reached") if $@ eq "timeout\n";
+		&dieNet($@);
+	}
+	alarm(0);
+	print STDERR $line if $ENV{"DEBUG_DUMP_RESPONSE"};
+	return $line;
+}
+
+sub readAllLines {
+	local $SIG{ALRM} = sub { die "timeout\n"; };
+	alarm($timeout * 2);
+	my $lines = eval { join('', <SOCK>) };
+	if ($@) {
+		&dieNet("Timeout of $timeout seconds reached") if $@ eq "timeout\n";
+		&dieNet($@);
+	}
+	alarm(0);
+	print STDERR $lines if $ENV{"DEBUG_DUMP_RESPONSE"};
+	return $lines;
+}
+
+# make unix time from year (2001 or 101), mon (0..11), day, hour, min, sec
+sub makeTime {  # ($$$$$$$)
+	my ($hourD, $year, $mon, $day, $hour, $min, $sec) = @_;
+	$hourD ||= 0;
+	my $type = $TIMEFIELDS_DATE_TIME;
+
+	unless (defined $hour || defined $min) {
+		unless ($year || $day) {
+			$type = $TIMEFIELDS_NONE;
+			return [ 0, $type ];
+		} else {
+			$type = $TIMEFIELDS_ONLY_DATE;
+		}
+	}
+
+	$year = 1973 unless $year && $year > 0;  # it's my year :-)
+	$mon  = 0 unless $mon && $mon > 0 && $mon <= 11;
+	$day  = 1 unless $day && $day > 0 && $day <= 31;
+	$hour = 12 unless $hour && $hour >= 0 && $hour < 24;
+	$min  = 0 unless $min && $min >= 0 && $min < 60;
+	$sec  = 0 unless $sec && $sec >= 0 && $sec < 60;
+
+	return [
+		timegm($sec, $min, $hour, $day, $mon, $year) - $hourD * 60 * 60,
+		$type
+	];
+}
+
+sub setEntryAliasesAndTime ($$$$) {
+	my $entry = shift;
+	my $aliases = shift;
+	my $timeSub = shift;
+	my $hOffset = shift;
+
+	my ($alias, $orig);
+	while (($alias, $orig) = each %$aliases) {
+		$entry->{$alias} = !$orig? "":
+			ref($orig) eq 'CODE'? &{$orig}($entry): $entry->{$orig};
+		$entry->{$alias} = "" unless defined $entry->{$alias};
+	}
+
+	$entry->{'_'} = makeTime($hOffset, &{$timeSub}($entry->{'d'}));
+}
+
+BEGIN {
+	$entityMap = {
+		'gt'    => '>',
+		'lt'    => '<',
+		'quot'  => '"',
+		'amp'   => '&',
+	};
+}
+
+sub processXml ($$$$) {
+	my $entryTag = shift;
+	my $aliases = shift;
+	my $timeSub = shift;
+	my $hOffset = shift;
+	my @entries = ();
+
+	my $doc = readAllLines();
+
+	ENTRY:
+	foreach ($doc =~ m!<$entryTag\b[^>]*>(.*?)</$entryTag>!sg) {
+		# replace &#039; with single quote and &quot; with double quote
+		s/&(?:(\w+)|#(\d+));/ $1? $entityMap->{$1} || "{$1}": chr($2) /ge;
+
+		my $entry = {};
+
+		foreach (m!(<.*?>.*?</.*?>)!sg) {
+			m!<(.*?)>\s*(.*?)\s*</(.*?)>!s;
+			# ignore incorect fields or throw error?
+			next unless $1 && $2 && $3;
+			next if $1 ne $3;
+			$entry->{$1} = $2;
+		}
+
+		setEntryAliasesAndTime($entry, $aliases, $timeSub, $hOffset);
+		push @entries, $entry;
+	}
+	return \@entries;
+}
+
+sub processText ($$$$) {
+	my $fields = shift;
+	my $aliases = shift;
+	my $timeSub = shift;
+	my $hOffset = shift;
+	my @entries = ();
+
+	ENTRY:
+	while (1) {
+		my $entry = {};
+		foreach (@$fields) {
+			my $line = readLine();
+			last ENTRY unless defined $line;
+			next if $_ eq '_ignore_';
+
+			chomp($line);
+			$line =~ s/"/\\"/g;
+#			$line =~ s/<.*?>//g;
+#			$line =~ s/&\w{1,5}?;/ /g;
+			$entry->{$_} = $line;
+		}
+
+		setEntryAliasesAndTime($entry, $aliases, $timeSub, $hOffset);
+		push @entries, $entry;
+	}
+	return \@entries;
+}
+
+sub processSlashdot () {
+	return processXml(
+		'story',
+		{ 'h' => 'title', 'u' => 'url', 'd' => 'time' },
+		sub ($) {
+			$_[0] =~ /(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)/;
+			($1, ($2 || 0) - 1, $3, $4, $5, $6);
+		}, +0,
+	);
+}
+
+sub processFreshMeat () {
+	return processText(
+		[ qw( headline date url ) ],
+		{ 'h' => 'headline', 'u' => 'url', 'd' => 'date' },
+		sub ($) {
+			$_[0] =~ /^(?:\w+, )?(\w+) (\d+)\w* (\d+),? (\d+):(\d+)/;
+			($3, $lmonthHash{$1}, $2, $4, $5, 0);
+		}, -5 + (abs((localtime())[4] - 5.5) < 3),
+	);
+}
+
+sub processLinuxToday () {
+	my $line;
+	while ($line = readLine()) {
+		last if $line =~ /linuxtoday.com/;         # skip the text note
+		last if $line =~ /&&/ and readLine() x 3;  # if it was replaced
+	}
+	return processText(
+		[ qw( _ignore_ headline url date ) ],
+		{ 'h' => 'headline', 'u' => 'url', 'd' => 'date' },
+		sub ($) {
+			$_[0] =~ /(\w+) (\d+), (\d+), (\d+):(\d+):(\d+)/;
+			($3, $smonthHash{$1}, $2, $4, $5, $6);
+		}, +0,
+	);
+}
+
+sub processSegfault () {
+	my $line;
+	while ($line = readLine()) {
+		last if $line =~ /^%%/;  # skip the text note
+	}
+	return processText(
+		[ qw( headline url date author_name author_email type _ignore_ ) ],
+		{ 'h' => 'headline', 'u' => 'url', 'd' => 'date' },
+		sub ($) {
+			$_[0] =~ /(\d+) (\w+) (\d+):(\d+):(\d+) (\d+)/;
+			($6, $smonthHash{$2}, $1, $3, $4, $5);
+		}, -8 + (abs((localtime())[4] - 5.5) < 3),
+	);
+}
+
+sub processPoorRdf () {
+	return processXml(
+		'item',
+		{ 'h' => 'title', 'u' => 'link', 'd' => undef },
+		sub ($) {
+			# this site's rdf does not supply the time, how weird...
+			#(gmtime())[5,4,3,2,1,0];
+			()
+		}, +0,
+	);
+}
+
+sub processLinuxApps () {
+	return processText(
+		[ qw( headline date url ) ],
+		{ 'h' => 'headline', 'u' => 'url', 'd' => 'date' },
+		sub ($) {
+			$_[0] =~ /(\w+) (\d+) (\d+):(\d+):(\d+) \w+ (\d+)/;
+			($6, $smonthHash{$1}, $2, $3, $4, $5);
+		}, -5,
+	);
+}
+
+sub process_GNOME_KDE_News () {
+	my $linkToTime = sub ($) { $_[0]->{'link'} =~ m|/(\d+)/?$|; $1; };
+	return processXml(
+		'item',
+		{ 'h' => 'title', 'u' => 'link', 'd' => $linkToTime },
+		sub ($) {
+			(gmtime($_[0]))[5,4,3,2,1,0];
+		}, +0,
+	);
+}
+
+sub processFreeKDE () {
+	my $linkToDate = sub ($) {
+		$_[0]->{'link'} =~ m|/(\d\d/\d\d/\d\d)/|; $1? "20$1": '';
+	};
+	return processXml(
+		'item',
+		{ 'h' => 'title', 'u' => 'link', 'd' => $linkToDate },
+		sub ($) {
+			$_[0] =~ m|(\d+)/(\d+)/(\d+)|;
+			($1, ($2 || 0) - 1, $3);
+		}, +0,
+	);
+}
+
+sub processRootPrompt () {
+	my $descToDate = sub ($) {
+		$_[0]->{'description'} =~ /^(\d+ \w{3} \d{4}):/; $1;
+	};
+	return processXml(
+		'item',
+		{ 'h' => 'title', 'u' => 'link', 'd' => $descToDate },
+		sub ($) {
+			$_[0] =~ /(\d+) (\w+) (\d+)/;
+			($3, $smonthHash{$2}, $1);
+		}, +0,
+	);
+}
+
+sub processKuro5hin () {
+	my $linkToDate = sub ($) {
+		$_[0]->{'link'} =~ m|sid=(\d\d\d\d/\d{1,2}/\d{1,2})/|; $1;
+	};
+	return processXml(
+		'item',
+		{ 'h' => 'title', 'u' => 'link', 'd' => $linkToDate },
+		sub ($) {
+			$_[0] =~ m|(\d+)/(\d+)/(\d+)|;
+			($1, ($2 || 0) - 1, $3);
+		}, +0,
+	);
+}
+
+sub processLinuxFr () {
+	my $linkToDate = sub ($) {
+		$_[0]->{'link'} =~ m|/(\d\d\d\d/\d\d/\d\d)/|; $1;
+	};
+	my $hackForUrl = sub ($) {
+		# hack for netscape -remote openURL
+		my $u = $_[0]->{'link'};
+		$u =~ s|,|\%2c|g; $u;
+	};
+	return processXml(
+		'item',
+		{ 'h' => 'title', 'u' => $hackForUrl, 'd' => $linkToDate },
+		sub ($) {
+			$_[0] =~ m|(\d+)/(\d+)/(\d+)|;
+			($1, ($2 || 0) - 1, $3);
+		}, +0,
+	);
+}
+
+sub processLinuxFr_old () {
+	my $linkToDate = sub ($) {
+		$_[0]->{'url'} =~ m|/(\d\d\d\d/\d\d/\d\d)/|; $1;
+	};
+	my $hackForUrl = sub ($) {
+		# hack for netscape -remote openURL
+		my $u = $_[0]->{'url'};
+		$u =~ s|,|\%2c|g; $u;
+	};
+	my $line;
+	while ($line = readLine()) {
+		last if $line =~ /^%%/;  # skip the text note
+	}
+	return processText(
+		[ qw( headline url author_name author_email type _ignore_ ) ],
+		{ 'h' => 'headline', 'u' => $hackForUrl, 'd' => $linkToDate },
+		sub ($) {
+			$_[0] =~ m|(\d+)/(\d+)/(\d+)|;
+			($1, ($2 || 0) - 1, $3);
+		}, +0,
+	);
+}
+
+sub processCNN () {
+	my $contents = readAllLines();
+	my @entries = ();
+
+	my $linkToDate = sub ($) {
+		$_[0]->{'url'} =~ m|/(\d\d\d\d).*?(/\d\d/\d\d)/|; "$1$2";
+	};
+
+	$contents =~ s{<a href="(/.*?)".*?>(.*?)</a>}{
+		my $entry = {};
+		$entry->{'url'} = "http://www.cnn.com$1";
+		$entry->{'headline'} = $2;
+		setEntryAliasesAndTime(
+			$entry,
+			{ 'h' => 'headline', 'u' => 'url', 'd' => $linkToDate },
+			sub ($) {
+				$_[0] =~ m|(\d+)/(\d+)/(\d+)|?
+					($1, ($2 || 0) - 1, $3):
+					();
+			}, -5,
+		);
+		push @entries, $entry;
+		""
+	}sige;
+
+	return \@entries;
+}
+
+sub processOldBBC () {
+	my $contents = readAllLines();
+	$contents =~ s!\r\n...\r\n!!sg;  # they insert this randomly!
+	$contents =~ s!\s*<(br|/h3|h3|span[^>]*|/span|img [^>]+)>[ \t\r]*\n?!!sig;
+	my @entries = ();
+
+	$contents =~ s{\s+<a href="(/[^"]+?)">\s*([^\s][^<]+?)\s*</a>\s*([^<]+?)\s*(?:\n|<br )}{
+		my $entry = {};
+		my $path = $1;
+		$entry->{'headline'} = $2;
+		$entry->{'abstract'} = $3;
+		$path =~ s|^(/\d+)?/low/|$1/hi/|;
+		$entry->{'url'} = "http://news.bbc.co.uk$path";
+		setEntryAliasesAndTime(
+			$entry,
+			{ 'h' => 'headline', 'u' => 'url', 'd' => undef },
+			sub ($) {
+				();  # no time...
+			}, +0,
+		);
+		push @entries, $entry;
+		""
+	}sige;
+
+	return \@entries;
+}
+
+sub processBBC () {
+	readAllLines() =~ /STORY 1\nHEADLINE Last update at (\d+:\d+)\nURL \n(.*)$/s;
+	my ($time, $contents) = ($1, $2);
+	dieNet("Parse error. Did BBC site change format?", "") unless defined $time;
+	my @entries = ();
+
+	$contents =~ s{STORY (\d+)\nHEADLINE (.*?)\nURL (.*?)\n}{
+		my $entry = {};
+		my $date = undef;
+		$entry->{'story'} = $1;
+		my $headline = $2;
+		my $url = $3;
+		if ($headline =~ /^(.+?)  (\d+ \w+ \d+)$/) {
+			$headline = $1;
+			$date = $2 . " $time";
+		}
+		$entry->{'headline'} = $headline;
+		$url =~ s|^(http://.*?/).*/-/(.*)$|$1$2|;
+		$url = "http://news.bbc.co.uk/" if $url eq "";
+		$entry->{'url'} = $url;
+		$entry->{'date'} = $date;
+		setEntryAliasesAndTime(
+			$entry,
+			{ 'h' => 'headline', 'u' => 'url', 'd' => 'date' },
+			sub ($) {
+				return () unless defined $_[0] &&
+	         $_[0] =~ /^(\d+) (\w+) (\d+) (\d+):(\d+)/;
+	         ($3, $lmonthHash{$2}, $1, $4, $5);
+			}, +0,
+		);
+		push @entries, $entry;
+		""
+	}sige;
+
+	return \@entries;
+}
+
+# ---------------------------------------------------------------------------
+
+sub dieSys ($) {
+	my $msg = shift;
+	$msg = "$0: $msg: [$!]\n";
+
+	print STDERR $msg
+#		# be quiet in non interactive shells?
+#		if ($ENV{'SHLVL'} || 0) == 1 || defined($ENV{'PS1'})
+		;
+	exit(-1);
+}
+
+sub dieNet ($;$) {
+	my $msg = shift;
+	my $checkNetworkMsg = @_? "": "; check network connection";
+
+	#dieSys($msg);
+	$errorMenuContent =~ s/<msg>/$msg$checkNetworkMsg/;
+	print $errorMenuContent;
+	exit(-1);
+}
+
+# like strftime, but gets unix time, instead of sec/min/hour/day/mon/year.
+sub formatTime ($$) {
+	my ($fmt, $timePair) = @_;
+
+	$timePair = [] unless ref($timePair) eq 'ARRAY';
+	my ($time, $type) = @$timePair;
+	$time ||= time();
+	$type ||= $TIMEFIELDS_NONE;
+
+	if ($type == $TIMEFIELDS_NONE) {
+		return "";
+	} elsif ($type == $TIMEFIELDS_ONLY_DATE) {
+		$fmt =~ s/[:\. -]?%[HIklMprSTX][:\. -]?//g;
+		$fmt =~ s/%c/%a %b %d %Z %Y/g;
+	}
+
+	return strftime($fmt, localtime($time));
+}
+
+# Substitutes all %N1*N2x in $name by properly stripped and justified $values.
+# $name example: %[%d %b %y %H:%M], %*-7(some text), %-32*30h, %{url}.
+# $values is a hash of named values to substitute.
+sub expandAllWidthSpecifiers ($$) {
+	my ($name, $values) = @_;
+	$name =~ s/%(-?\d+)?(\*(-?)(\d+))?(\w|{\w+}|\(.*?\)|\[.*?\])/
+		my $tag = substr($5, 0, 1);
+		my $arg = length($5) == 1? $5: substr($5, 1, -1);
+		my $value =
+			$tag eq '('? $arg:
+			$tag eq '['? formatTime($arg, $values->{'_'}):
+			$values->{$arg};
+		$value = "(%$5 is not defined)" unless defined $value;
+		$value = !$2 || $4 <= 3 || $4 > length($value)? $value: $3?
+			"..." . substr($value, -$4 + 3, $4 - 3):
+			substr($value, 0, $4 - 3) . "...";
+		$1? sprintf("%$1s", $value): $value;
+	/ge;
+	return $name;
+}
+
+sub getAllSiteNames () {
+	return sort map { $siteInfo->{$_}->{'name'} } keys %$siteInfo;
+}
+
+sub showHelp {
+	$site  ||= $defaultSite;
+	#$name ||= "MenuHeadlines$siteInfo->{$site}->{'name'}";
+	$name  ||= $site;
+	$title ||= "$siteInfo->{$site}->{'name'} Headlines";
+
+	print "A perl script which builds headlines menu for fvwm.\n";
+	print "Supported sites: ", join(', ', getAllSiteNames()), "\n\n";
+	print "Usage: $0 [OPTIONS]\n";
+	print "Options:\n";
+	print "\t--help           show this help and exit\n";
+	print "\t--version        show the version and exit\n";
+	print "\t--info=[NAME]    information about a site\n";
+	print "\t--site=NAME      headlines site, default is $site\n";
+	print "\t--name=NAME      menu name,  default is '$name'\n";
+	print "\t--title=NAME     menu title, default is '$title'\n";
+	print "\t--item=FORMAT    menu item format, default is '$itemF'\n";
+	print "\t--exec=FORMAT    exec command, default is {$execF}\n";
+	print "\t--command=FORMAT fvwm command, default is no\n";
+	print "\t--icon-title=XPM menu title icon, default is no\n";
+	print "\t--icon-item=XPM  menu item  icon, default is no\n";
+	print "\t--icon-home=XPM  menu home  icon, default is no\n";
+	print "\t--icon-error=XPM menu error icon, default is no\n";
+	print "\t--wm-icons       define icon names to use with wm-icons\n";
+	print "\t--frontpage[=V]  show frontpage item; values: top, bottom\n";
+	print "\t--proxy=host[:port] specify proxy host and port (80)\n";
+	print "\t--file[=FILE]    menu file, default is $workHome/$site.menu\n";
+	print "\t--fake[=FILE]    don't connect, read input from file\n";
+	print "\t--timeout=SECS   timeout for a line reading from a socket\n";
+	print "Short options are ok if not ambiguous: -h, -t.\n";
+	exit 0;
+}
+
+sub showVersion {
+	print "$version\n";
+	exit 0;
+}
+
+sub wrongUsage {
+	print STDERR "Try '$0 --help' for more information.\n";
+	exit -1;
+}
+
+__END__
+
+# ---------------------------------------------------------------------------
+
+=head1 NAME
+
+fvwm-menu-headlines - builds headlines menu definition for FVWM
+
+=head1 SYNOPSIS
+
+B<fvwm-menu-headlines>
+[ B<--help>|B<-h>|B<-?> ]
+[ B<--version>|B<-V> ]
+[ B<--info> [site] ]
+[ B<--site>|B<-s> site ]
+[ B<--name>|B<-n> name ]
+[ B<--title>|B<-t> title ]
+[ B<--item> item ]
+[ B<--exec>|B<-e> exec-command ]
+[ B<--command>|B<-e> fvwm-command ]
+[ B<--icon-title> icon ]
+[ B<--icon-item> icon ]
+[ B<--icon-home> icon ]
+[ B<--icon-error> icon ]
+[ B<--wm-icons> ]
+[ B<--frontpage> [where] ]
+[ B<--proxy>|B<-p> host:port ]
+[ B<--file> [file] ]
+[ B<--fake> [file] ]
+[ B<--timeout> seconds ]
+
+=head1 DESCRIPTION
+
+This configurable perl script builds an fvwm menu definition for headlines
+of popular news web sites: FreshMeat, Slashdot, LinuxToday, LinuxApps,
+DaemonNews, GNOME-News, KDE-News, RootPrompt,
+LinuxFr, ThinkGeek, CNN, BBC and more.
+
+It is possible to specify a customized menu item format, change a command
+(usually launching a browser) and add menu icons (there is a support for
+the wm-icons package).
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<--help>
+
+show the help and exit
+
+=item B<--version>
+
+show the version and exit
+
+=item B<--info> [site]
+
+if site name is given print the site specific info,
+otherwise print all site names
+
+=item B<--site> site
+
+defile a web site, headlines of which to show, this option
+also can be used together with --help to get new defaults.
+Default site: freshmeat.
+
+=item B<--name> name
+
+define menu name (default is "MenuHeadlinesFreshmeat")
+
+=item B<--title> title
+
+define menu title (default is "Freshmeat Headlines").
+
+=item B<--item> label-format
+
+=item B<--exec> command-format
+
+define format for menu item or command (what is shown and what is
+executed when the item is chosen).
+Default label is '%h\t%[(%Y-%m-%d %H:%M)]'.
+TAB can be specified as '\t', but in .fvwm2rc you should specify a double
+backslash or a real TAB.
+
+Format specifiers for a headline format:
+
+  %h - headline
+  %u - url
+  %d - date in the native format (that site backend supplied)
+  %[strftime-argument-string] - date/time, see strftime(3)
+    the date/time is represented accourding to the local time;
+    date and/or time fields that can't be guessed are stripped
+    Example: %[|%d %B %Y| %H:%M %S]
+      If site supplied only date - this becomes %[|%d %B %Y|],
+      if site supplied no date - this becomes an empty string.
+  %{name} - site specific named value, like %{comments}
+  %(text) - arbitrary text, good for escaping or aligning
+
+These specifiers can receive an optional integer size, positive for right
+adjusted string or negative for left adjusted, example: %8x; and optional
+*num or *-num, which means to leave only the first or last (if minus) num of
+chars, the num must be greater than 3, since the striped part is replaced
+with "...", example: %*30x. Both can be combined: %-10*-20x, this instructs to
+get only the 20 last characters, but if the length is less then 10 - to fill
+with up to 10 spaces on the right.
+
+=item B<--command> command-format
+
+like B<--exec> above, but enables to specify any fvwm command,
+for example, "Function FuncFvwmShowURL '%u'" not only Exec.
+
+In fact, --exec="mozilla '%u'" is equivalent
+to --command="Exec mozilla '%u'"
+
+=item B<--icon-title> icon
+
+=item B<--icon-item> icon
+
+=item B<--icon-home> icon
+
+=item B<--icon-error> icon
+
+define menu icon for title, regular item, frontpage item and error item
+respectively. Default is no menu icons (equivalent to an empty icon argument).
+
+=item B<--wm-icons>
+
+define icon names suitable for use with wm-icons package.
+Currently this is equivalent to: --icon-title '' --icon-item
+menu/information.xpm --icon-home menu/home.xpm --icon-error menu/choice-no.xpm.
+
+=item B<--frontpage> [where]
+
+add the site frontpage item to the menu.
+Optional value can be used to specify where this item will be placed in
+the menu - 'top' or 't', 'bottom' or 'b'.
+
+=item B<--proxy> host[:port]
+
+define a proxy to use.
+Example: --proxy proxy.inter.net:3128
+
+=item B<--file> [file]
+
+write the menu output to specified file. If no filename is
+given with this option (or empty filename), the default filename
+WORK_HOME/SITE.menu is used. Without this option or with '-'
+filename, the menu output is written to standard output.
+
+=item B<--fake> [file]
+
+don't connect to the host using HTTP protocol, instead,
+read from WORK_HOME/SITE.in file. The following reads input from
+freshmeat.in (downloaded http://freshmeat.net/backend/recentnews.txt) and
+saves output to segfault.menu (both files are in WORK_HOME):
+  fvwm-menu-headlines --site freshmeat --fake --file
+
+=item B<--timeout> seconds
+
+limit a line reading from a socket to this timeout,
+the default timeout is 20 seconds.
+
+=back
+
+WORK_HOME of this script is ~/.fvwm/.fvwm-menu-headlines.
+It is created if needed.
+
+Option parameters can be specified either using '=' or in the next argument.
+Short options are ok if not ambiguous: C<-h>, C<-t>; but be careful with
+short options, what is now unambiguous, can become ambiguous in the next
+versions.
+
+=head1 USAGE
+
+1. One of the ways to use this script is to define a crontab
+entry to run the script every hour or so for every monitored site:
+
+  0,30 * * * * fvwm-menu-headlines --file --site freshmeat
+  1,31 * * * * fvwm-menu-headlines --file --site linuxtoday
+  2,32 * * * * fvwm-menu-headlines --file --site slashdot
+
+Then add these lines to your fvwm configuration file:
+
+  DestroyFunc FuncFvwmMenuHeadlines
+  AddToFunc   FuncFvwmMenuHeadlines
+  + I Read "$HOME/.fvwm/.fvwm-menu-headlines/$0.menu"
+
+  DestroyMenu MenuHeadlines
+  AddToMenu   MenuHeadlines "Headlines" Title
+  + MissingSubmenuFunction FuncFvwmMenuHeadlines
+  + "FreshMeat"  Popup freshmeat
+  + "LinuxToday" Popup linuxtoday
+  + "Slashdot"   Popup slashdot
+
+2. Another way to use this script (only if you have fast network/proxy) is to
+run it every time you want to open your Headlines submenus.
+(Note, the submenu that is once created is not reloaded, use "Reset all".)
+
+In this case your fvwm configuration lines could be:
+
+  DestroyFunc FuncFvwmMenuHeadlines
+  AddToFunc   FuncFvwmMenuHeadlines
+  + I PipeRead "fvwm-menu-headlines --site $0"
+
+  DestroyMenu MenuHeadlines
+  AddToMenu   MenuHeadlines "Headlines" Title
+  + MissingSubmenuFunction FuncFvwmMenuHeadlines
+  + "FreshMeat"  Popup freshmeat
+  + "Slashdot"   Popup slashdot
+  + "LinuxToday" Popup linuxtoday
+  + "GNOME News" Popup gnome-news
+  + "KDE News"   Popup kde-news
+  + "" Nop
+  + "Reset all"  FuncResetHeadlines
+
+  DestroyFunc FuncResetHeadlines
+  AddToFunc   FuncResetHeadlines
+  + I DestroyMenu freshmeat
+  + I DestroyMenu linuxtoday
+  + I DestroyMenu slashdot
+  + I DestroyMenu gnome-news
+  + I DestroyMenu kde-news
+
+And finally, add "Popup MenuHeadlines" somewhere.
+
+3. Here is a usual usage. Use FvwmConsole or FvwmCommand to run fvwm commands
+from a shell script. Every time you want headlines from some site, execute
+(give any additional options if you want):
+
+  PipeRead "fvwm-menu-headlines --site newsforge --name MenuHeadlinesNewsForge"
+  # this may take several seconds, you may use: BusyCursor Read true
+  Popup MenuHeadlinesNewsForge
+
+=head1 HOW TO ADD SITE HEADLINES
+
+It is possible to add user defined site headlines without touching the script
+itself. Put your perl extensions to the file WORK_HOME/extension.pl.
+For each site add something similar to:
+
+  $siteInfo->{'myslashdot'} = {
+    'name' => "MySlashdot",
+    'host' => "myslashdot.org",
+    'path' => "/myslashdot.xml",
+    'func' => \&processMySlashdot,
+    # the following string is only used in --info
+    'flds' => 'time, title, department, topic, author, url',
+  };
+
+  sub processMySlashdot () {
+    return processXml(
+      'story',
+      # mandatory 'h', 'u' and 'd' aliases or undef
+      { 'h' => 'title', 'u' => 'url', 'd' => 'time' },
+      sub ($) {  # convert 'd' string to (y, m, d, H, M, S)
+        $_[0] =~ /(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)/;
+        ($1, ($2 || 0) - 1, $3, $4, $5, $6);
+      }, +0,  # timezone offset; already in UTC
+    );
+  }
+
+  1;
+
+=head1 AUTHORS
+
+This script is inspired by WMHeadlines v1.3 by:
+
+  Jeff Meininger <jeffm@boxybutgood.com>
+  (http://rive.boxybutgood.com/WMHeadlines/).
+
+Reimplemented for FVWM and heavily enhanced by:
+
+  Mikhael Goikhman <migo@homemail.com>, 16 Dec 1999.
+
+=head1 COPYING
+
+The script is distributed by the same terms as fvwm itself.
+See GNU General Public License for details.
+
+=head1 BUGS
+
+Report bugs to fvwm-bug@fvwm.org.
+
+=cut
+
+# ===========================================================================

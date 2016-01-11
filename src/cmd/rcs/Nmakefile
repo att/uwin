@@ -1,0 +1,65 @@
+/* AT&T nmake Makefile for rcs */
+
+VERSION = 5.7
+
+.SOURCE:	src
+.SOURCE.1:	man 
+.SOURCE.5:	man 
+
+has_conf_h==1
+
+:ALL:
+
+ci::	ci.c rcslex.c rcssyn.c rcsgen.c rcsedit.c rcskeys.c rcsmap.c rcsrev.c \
+	rcsutil.c rcsfnms.c maketime.c partime.c rcstime.c rcskeep.c rcsfcmp.c \
+	version.c ci.1
+
+co::	co.c rcslex.c rcssyn.c rcsgen.c rcsedit.c rcskeys.c rcsmap.c rcsrev.c \
+	rcsutil.c rcsfnms.c maketime.c partime.c rcstime.c rcskeep.c version.c \
+	co.1
+
+ident:: ident.c rcsmap.c version.c ident.1 rcsintro.1
+
+merge::	merge.c merger.c rcsfnms.c rcslex.c rcsmap.c rcsrev.c rcssyn.c \
+	rcsutil.c rcskeep.c rcskeys.c maketime.c partime.c rcstime.c version.c \
+	merge.1
+
+rcs::	rcs.c rcslex.c rcssyn.c rcsrev.c rcsutil.c rcsgen.c rcsedit.c \
+	rcskeys.c rcsmap.c rcsfnms.c rcskeep.c maketime.c partime.o rcstime.c \
+	version.c  rcs.1 rcsfile.5
+
+rcsclean::	rcsclean.c rcsedit.c rcsfcmp.c rcsfnms.c rcsgen.c rcskeys.c \
+	rcslex.c rcsmap.c rcsrev.c rcssyn.c rcsutil.c rcskeep.c maketime.c \
+	partime.c rcstime.c version.c rcsclean.1
+
+rcsdiff::	rcsdiff.c rcsutil.c rcsfnms.c rcsmap.c rcsrev.c rcssyn.c \
+	rcslex.c maketime.c partime.c rcstime.c rcskeep.c rcskeys.c version.c \
+	rcsdiff.1
+
+rcsmerge::	rcsmerge.c merger.c rcsutil.c rcsfnms.c rcsmap.c rcsrev.c \
+	rcssyn.c rcslex.c rcskeep.c rcskeys.c maketime.c partime.c rcstime.c \
+	version.c rcsmerge.1
+
+rlog::	rlog.c rcslex.c rcsmap.c rcssyn.c rcsrev.c rcsutil.c maketime.c \
+	partime.c rcstime.c rcsfnms.c rcskeep.c rcskeys.c version.c rlog.1 
+
+BIN = /usr/bin
+
+conf.h: conf.sh
+	CC=$(CC) COMPAT2=0 DIFF3="$(BIN)/diff3" DIFF3_BIN='1' \
+	DIFF="$(BIN)/diff" DIFFFLAGS='-an' DIFF_L='1' \
+	DIFF_SUCCESS=0 DIFF_FAILURE=1 DIFF_TROUBLE=2 \
+	ED="$(BIN)/ed" LDFLAGS=$(LDFLAGS) LIBS='' RCSPREFIX=$(BIN)/ \
+	SENDMAIL='"$(BIN)/mailx"' $(SHELL) -x $(*) 3>&1 >a.h 2>conf.err
+	if	$(CMP) -s a.h $(<)
+	then	$(RM) a.h
+	else	$(MV) a.h $(<)
+	fi
+
+rcsfreeze::	rcsfreeze.sh rcsfreeze.1
+
+::	rcstest TAGS ChangeLog COPYING conf.heg Makefile.in \
+	configure ChangeLog NEWS README REFS configure.in INSTALL.RCS \
+	Makefile.in rcs.ms INSTALL install-sh mkinstalldirs CREDITS \
+	COPYING rcs_func.ms man/COPYING man/rcsfile.5in man/ChangeLog \
+	man/Makefile.in src/ChangeLog src/COPYING src/Makefile.in

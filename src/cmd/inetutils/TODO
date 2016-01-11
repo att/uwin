@@ -1,0 +1,54 @@
+Add long options to programs besides telnet & ftp, especially the clients.
+The conventions used by telnet & ftp should be followed.
+
+Merge the functionality of Noah [Friedman]'s ftp client into ftp (readline
+support, &c), and add readline to the distribution.
+
+Merge changes between the bsd-lite-2 release (which is the latest bsd source
+that this code is based on) and some recent version of netbsd.
+
+Move the horrible mess of code from telnetd/sys_term.c into functions in
+libinetutils using the BSD libutil functionality (such that they can be
+elided if a system libutil exists); specifically:
+    login  -- Frob utmp &c for a new login process
+    logout -- Frob utmp &c for a newly logged out process
+    openpty -- Find a free pty, allocate and set it up, and return it
+    forkpty -- Calls openpty as well as forking a new process to use it
+and the following functions not in BSD:
+    cleanup_session -- More general cleanup for a newly logged out process
+			(calls logout and logwtmp, frobs tty perms)
+    setup_session -- More general setup for a new login process (calls login,
+			frobs tty perms, ...?)
+[logout and cleanup_session are written, but telnetd doesn't use them yet.]
+Rlogind currently depends on having the BSD functions available, so it is
+cleaner, if less portable than telnetd; once this cleanup is done, then
+rlogind will more portable, and telnetd less messy.  This is already
+partially done, but care is needed as sys_term.c does lots of stuff that I'm
+not sure is needed, but might be.
+
+Make sure that both sgtty and termios/termio are supported equally well in
+all programs (currently only termios is really tested).
+
+Add support for sysv-style ptys, whatever that is.
+
+Supply versions of the rcmd functionality needed by the r* programs.
+
+Supply a version of the syslog function for systems that don't have it.
+
+Perhaps make ftp use no-uid support on the hurd.
+
+More careful autoconfiscation -- many header files are included unconditionally
+in a lot of places, even if an autoconf test is already done for them, &c.
+
+Testing and debugging the encryption and authentication modes.
+
+Add more utilities:
+  Noah's rexec
+  Ping (BSD ping fails utterly to compile; perhaps linux's is better)
+  Tcpdump
+  routed?
+  ruptime?
+  rusers?
+  traceroute?
+  ...
+[Already in other distributions: finger/fingerd, ntp]

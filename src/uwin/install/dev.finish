@@ -1,0 +1,59 @@
+: UWIN dev package installation finish script :
+
+# @(#)$Id: dev.finish (AT&T Research) 2011-05-28 $
+
+builtin -f cmd cp mv ln rm mkdir date id cat chmod chown
+
+# install.sh works in /usr
+
+$exec chown -R $(id -u) bin/probe lib/probe
+$exec chmod u+s bin/probe lib/probe/probe
+$exec rm -f /usr/include/ast/ast_hdr.h /usr/include/ast/ast_unistd.h
+[[ $PACKAGE_msdev ]] || . /etc/profile
+for cc in cc ncc CC
+do	if	$cc -V >/dev/null 2>&1
+	then	for app in make pp
+		do	print initializing $cc C compiler information for $app
+			$exec probe -g C $app $cc
+		done
+	fi
+done
+dir=/usr/lib/msvcrt
+lib=msvcrt.lib
+tab=$dir/${lib%.*}.tab
+[[ -f $tab ]] && . $tab
+upd=${extract.update}
+msg=""
+for d in /32 /64
+do	if	[[ -d $d ]]
+	then	if	[[ ! -f $d$dir/$lib ]]
+		then	[[ $msg ]] || msg="not found"
+		else	mod=$(date -m -f%Y-%m-%d $d$dir/$lib)
+			if	[[ $mod < $upd ]]
+			then	msg="out of date"
+			fi
+		fi
+	fi
+done
+if	[[ $msg && $(cc -v) == ~(i)*microsoft* ]] && yesorno "
+$dir/$lib $msg.
+
+cc(1) using the default MS VC compiler will use the compiler specific
+/msdev/vc/lib/$lib and will produce potentially non-portable
+executables that depend on MSVCRnn.dll.
+
+UWIN executables and dlls are built using a version independent $lib
+that depends on /sys/msvcrt.dll.  MicroSoft does not allow third parties
+to redistribute this version independent $lib, but it does provide a
+free anonymous $(print -r -f $'%#i' ${extract.size})B download from which it can be constructed.  The
+process may take a few minutes even with a fast download connection.
+Refer to $dir/gen/${lib%.lib}.log if the generation fails.
+
+Do you want to generate $dir/$lib and produce executables
+that depend on /sys/msvcrt.dll"
+then	pwd=$PWD
+	$exec mkdir -p $dir/gen &&
+	$exec cd $dir/gen &&
+	$exec mkmsvcrtlib --verbose --update=$upd
+	cd $pwd
+fi

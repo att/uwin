@@ -1,0 +1,5 @@
+include ../../fvwm.mk
+
+BINDIR = $(LIBEXECDIR)
+
+FvwmM4 :: FvwmM4.c

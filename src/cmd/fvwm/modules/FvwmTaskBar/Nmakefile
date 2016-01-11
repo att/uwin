@@ -1,0 +1,5 @@
+include ../../fvwm.mk
+
+BINDIR = $(LIBEXECDIR)
+
+FvwmTaskBar :: ButtonArray.c Colors.c FvwmTaskBar.c Goodies.c List.c Mallocs.c Start.c
