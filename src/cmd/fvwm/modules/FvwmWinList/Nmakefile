@@ -1,5 +1,0 @@
-include ../../fvwm.mk
-
-BINDIR = $(LIBEXECDIR)
-
-FvwmWinList :: ButtonArray.c FvwmWinList.c List.c Mallocs.c

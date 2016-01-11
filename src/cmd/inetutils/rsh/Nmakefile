@@ -1,5 +1,0 @@
-include "../inetutils.mk"
-
-rsh :: rsh.c -linetutils rsh.1
-
-:: Makefile.in

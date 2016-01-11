@@ -1,9 +1,0 @@
-:PACKAGE: ast
-
-include "../inetutils.mk"
-
-$(ETCDIR) :INSTALLDIR: in.syslogd
-
-in.syslogd :: syslogd.c syslogd.8 syslog.conf.5 -linetutils
-
-:: Makefile.in

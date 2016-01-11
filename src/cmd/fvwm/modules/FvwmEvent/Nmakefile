@@ -1,5 +1,0 @@
-include ../../fvwm.mk
-
-BINDIR = $(LIBEXECDIR)
-
-FvwmEvent :: FvwmEvent.c

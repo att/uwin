@@ -1,5 +1,0 @@
-include ../../fvwm.mk
-
-BINDIR = $(LIBEXECDIR)
-
-FvwmPager :: FvwmPager.c x_pager.c

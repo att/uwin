@@ -1,5 +1,0 @@
-include "../inetutils.mk"
-
-rlogin :: rlogin.c -linetutils rlogin.1
-
-:: Makefile.in

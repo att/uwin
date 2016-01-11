@@ -1,5 +1,0 @@
-include "../inetutils.mk"
-
-telnet 1.3 :LIBRARY: genget.c getent.c
-
-:: Makefile.in

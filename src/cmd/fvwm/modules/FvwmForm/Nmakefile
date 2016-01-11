@@ -1,5 +1,0 @@
-include ../../fvwm.mk
-
-BINDIR = $(LIBEXECDIR)
-
-FvwmForm :: FvwmForm.c ParseCommand.c ReadXServer.c

@@ -1,5 +1,0 @@
-include ../../fvwm.mk
-
-BINDIR = $(LIBEXECDIR)
-
-FvwmWharf :: FvwmWharf.c icons.c stepgfx.c

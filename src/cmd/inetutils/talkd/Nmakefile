@@ -1,7 +1,0 @@
-include "../inetutils.mk"
-
-$(ETCDIR) :INSTALLDIR: in.talkd
-
-in.talkd :: announce.c print.c process.c table.c talkd.8 talkd.c -linetutils
-
-:: Makefile.in

@@ -1,9 +1,0 @@
-include "../inetutils.mk"
-
-.SOURCE : ../tftp
-
-$(ETCDIR) :INSTALLDIR: in.tftpd
-
-in.tftpd :: tftpd.c tftpsubs.c tftpd.8
-
-:: Makefile.in

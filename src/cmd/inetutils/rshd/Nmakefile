@@ -1,7 +1,0 @@
-include "../inetutils.mk"
-
-$(ETCDIR) :INSTALLDIR: in.rshd
-
-in.rshd :: rshd.c rshd.8 -linetutils
-
-:: Makefile.in

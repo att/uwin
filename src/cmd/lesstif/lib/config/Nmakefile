@@ -1,4 +1,0 @@
-include ../../lesstif.mk
-
-$(LIBDIR)/X11/config :INSTALLDIR: \
-	LessTif.rules LessTif.tmpl

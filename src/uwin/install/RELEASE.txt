@@ -1,8 +1,0 @@
-12-07-24 phase1.sh.sh: copy /var/log/uwin-base from $TEMP/uwin-base.log
-12-03-29 phase1.sh.sh: parse options before other uwin install running test
-11-09-06 dev.files: add png.lib -- doh
-11-08-16 uninstall.c: exit code 9 means successful uninstall.sh
-11-06-21 mksear.sh: if arch/win32.i386/ then use arch/win32.i386-64/ mtime if it exists
-11-06-10 dev.files: add /usr/include/usb.h
-11-06-10 base.files: add group.add
-11-06-10 mksear.sh: change to section 8U

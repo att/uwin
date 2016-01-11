@@ -1,5 +1,0 @@
-:MAKE:
-
-::	libinetutils.h inetutils.mk ChangeLog INSTALL Makefile.in \
-	NEWS README THANKS TODO config.guess config.make.in config.sub \
-	configure configure.in

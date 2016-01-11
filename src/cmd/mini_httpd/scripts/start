@@ -1,4 +1,0 @@
-set -x
-COMMAND=mini_httpd
-ROOT=$PWD/lib/$COMMAND
-./$COMMAND -p 4444 -d $ROOT/www -l $ROOT/log -i $ROOT/pid -c 'cgi-bin/*' ${1:+-S -E $ROOT/$COMMAND.pem}

@@ -1,7 +1,0 @@
-PACKAGE_X11=${PACKAGE_X11:-/usr/X11}
-case $1 in
-start)	if	[[ $PACKAGE_X11 && -x $PACKAGE_X11/bin/Xrun && $(ps -e) != *XWin* ]]
-	then	ksh -c "($PACKAGE_X11/bin/Xrun 2>&3- &) 3<&2 2>/dev/null"
-	fi
-	;;
-esac
